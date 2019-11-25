@@ -2,7 +2,7 @@ const mongoCollections = require("../config/mongoCollections");
 const users = mongoCollections.users;
 const md5 = require('md5')
 const utils = require('./utils')
-const ObjectID = require('mongodb').ObjectID
+const ObjectId = require('mongodb').ObjectID
 const playlistData = require('./playlist')
 const songData = require('./song')
 const likesCommentData = require('./likes-comments')
@@ -27,16 +27,19 @@ module.exports = {
         utils.isString(password, `password ${password}`)
         utils.isString(dob, `DOB ${dob}`)
 
+        // If email is invalid, throw err
         if (utils.isValidEmail(email) === false) {
             console.log(`Invalid email ${email}`)
             throw 'Invalid input'
         }
 
+        // Get all users
         let allUsers = await this.getAllUsers()
 
         // Users will be empty only at the first time while creation of collection 
         if (allUsers !== []) {
             for (let user of allUsers) {
+                // If user email already exist, don't allow to make new account with same email
                 if (user.email === email) {
                     throw `Account with Email-Id ${email} already exist`
                 }
@@ -56,11 +59,14 @@ module.exports = {
         newUser.password = md5(password)
 
         const userCollection = await users();
+
+        // Add user to db
         const insertInfo = await userCollection.insertOne(newUser);
         if (insertInfo.insertedCount === 0) throw "Could not add user";
 
         const newId = insertInfo.insertedId;
 
+        // Get user by user id
         const user = await this.getUserById(newId);
 
         return user;
@@ -68,13 +74,18 @@ module.exports = {
 
     /**
      * User login
-     * @param {*} res 
+     * @param {*} req 
      */
-    async userSignin(res) {
+    async userSignin(req) {
         let email = req.body.email
         let password = req.body.password
 
-        utils.isValidEmail(email, `email or password ${email}`)
+        // If email is invalid, throw err
+        if (utils.isValidEmail(email) === false) {
+            console.log(`Invalid email ${email}`)
+            throw 'Email or Password is invalid'
+        }
+
         utils.isString(password, `email or password ${password}`)
 
         const userCollection = await users();
@@ -192,11 +203,13 @@ module.exports = {
                     }
                 }
 
+                // get number of likes for given playlist
                 let likes = likesCommentData.getLikesById(playlistId)
-                if (!utils.isNull(likes)) {
+                if (!utils.isNumber(likes)) {
                     userObj.likes
                 }
 
+                // get all comments user has commented on given playlist
                 let comments = likesCommentData.getCommentsById(playlistId)
                 if (!utils.isNull(comments)) {
                     userObj.likes
