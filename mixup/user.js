@@ -40,6 +40,7 @@ module.exports = {
         // Get all users
         let allUsers = await this.getAllUsers()
 
+        email = email.toLowerCase()
         // Users will be empty only at the first time while creation of collection 
         if (allUsers !== []) {
             for (let user of allUsers) {
@@ -50,6 +51,9 @@ module.exports = {
             }
         }
 
+        firstName = firstName.toUpperCase()
+        lastName = lastName.toUpperCase()
+
         // Create new user object
         let newUser = {}
         newUser.firstName = firstName
@@ -58,9 +62,12 @@ module.exports = {
         newUser.dob = dob
         newUser.email = email
         newUser.createdAt = new Date().toLocaleDateString()
-        newUser.playListIds = []
+        newUser.playlistIds = []
         newUser.isDeleted = false
+        // https://www.npmjs.com/package/md5
         newUser.password = md5(password)
+        newUser.accessToken = accessToken
+        newUser.refreshToken = refreshToken
 
         const userCollection = await users();
 
@@ -93,6 +100,8 @@ module.exports = {
         utils.isString(password, `email or password ${password}`)
 
         const userCollection = await users();
+
+        email = email.toLowerCase()
 
         // get user for the given email
         const user = await userCollection.findOne({ email: email });
@@ -139,13 +148,15 @@ module.exports = {
         let lastName = req.body.lastName
         let gender = req.body.gender
         let age = req.body.age
-        let id = req.body.id
+        let userId = req.body.userId
 
-        if (!id) throw "Invalid request";
-        let user = await this.getUserById(id)
+        if (!userId) throw "Invalid request";
+
+        let user = await this.getUserById(userId)
+        if (!user) throw `User not found`
 
         const userCollection = await users();
-        const updatedUser = {}
+
         if (firstName) {
             user.firstName = firstName
         }
@@ -164,7 +175,7 @@ module.exports = {
 
         if (user) {
             user.updatedAt = new Date().toLocaleDateString()
-            const updatedInfo = await userCollection.updateOne({ _id: id }, updatedUser);
+            const updatedInfo = await userCollection.updateOne({ _id: userId }, { $set: user });
 
             if (updatedInfo.modifiedCount === 0) {
                 throw "could not update user successfully";
@@ -175,7 +186,7 @@ module.exports = {
     },
 
     /**
-     * Get a specific user
+     * Get a specific user and user's playlists details
      * @param {*} id 
      */
     async getUserById(id) {
