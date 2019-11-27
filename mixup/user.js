@@ -20,12 +20,16 @@ module.exports = {
         let dob = req.body.dob
         let email = req.body.email
         let password = req.body.password
+        let accessToken = req.body.accessToken
+        let refreshToken = req.body.refreshToken
 
         utils.isString(firstName, `first name ${firstName}`)
         utils.isString(lastName, `last name ${lastName}`)
         utils.isString(gender, `gender ${gender}`)
         utils.isString(password, `password ${password}`)
         utils.isString(dob, `DOB ${dob}`)
+        utils.isString(accessToken, `accessToken ${accessToken}`)
+        utils.isString(refreshToken, `refreshToken ${refreshToken}`)
 
         // If email is invalid, throw err
         if (utils.isValidEmail(email) === false) {
