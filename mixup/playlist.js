@@ -18,18 +18,13 @@ module.exports = {
         let userId = req.body.userId
         let playlistName = req.body.playlistName
 
-        if (!userId) {
-            console.log('Blank userId ', userId)
-            throw "Invalid Request"
-        };
+        utils.isString(userId, `userId ${userId}`)
+        utils.isString(playlistName, `playlistName ${playlistName}`)
 
-        if (!playlistName) {
-            console.log('Blank playlist name ', playlistName)
-            throw "Blank playlist name"
-        };
+        const userCollection = await users();
 
         // Get user who is creating the playlist
-        let user = await userData.getUserById(userId)
+        const user = await userCollection.findOne({ _id: ObjectID(userId) });
         if (!user) {
             throw `User not found`
         }
@@ -40,7 +35,7 @@ module.exports = {
             for (let playlistId of user.playlistIds) {
                 let userPlaylist = await this.getPlaylistById(playlistId)
                 if (userPlaylist) {
-                    if (userPlaylist.playlistName === name) {
+                    if (userPlaylist.playlistName === playlistName) {
                         throw `Playlist with the same name already exists`
                     }
                 }
@@ -56,24 +51,24 @@ module.exports = {
 
         const playlistCollection = await playlists();
 
-        // Add playlist
+        // Add playlist to db
         const insertInfo = await playlistCollection.insertOne(newPlaylist);
+
         // If insertion fails, err
         if (insertInfo.insertedCount === 0) throw "Could not add playlist";
 
-        let userCollection = await users();
-        // todo: Update playlistId in user
+        user.playlistIds.push(insertInfo.insertedId)
 
-        user.playlistIds = [insertInfo.insertedId]
+        // update playlist id in user
+        const updateUserPlaylist = await userCollection.updateOne({ _id: ObjectID(userId) }, { $set: user });
 
-        const updateUserPlaylist = await userCollection.updateOne({ _id: ObjectID(userId), user });
         if (updateUserPlaylist.modifiedCount === 0) {
             throw "could not update playlist successfully";
         }
 
         const newId = insertInfo.insertedId;
-        console.log('insertInfo.value: ', insertInfo.value)
         const playlist = await this.getPlaylistById(newId);
+
         return playlist;
     },
 
@@ -142,7 +137,7 @@ module.exports = {
      * Get a specific playlist
      * @param {*} id 
      */
-    async getPlaylist(id) {
+    async getPlaylistById(id) {
         if (!id) throw "You must provide an id to search for";
 
         const playlistCollection = await playlists();

@@ -1,7 +1,7 @@
 const userData = require("./user");
-// const animalData = require("./animals");
+const playlistData = require("./playlist");
 
 module.exports = {
   user: userData,
-  // posts: postData
+  playlist: playlistData
 };
