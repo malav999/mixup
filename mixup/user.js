@@ -20,16 +20,19 @@ module.exports = {
         let dob = req.body.dob
         let email = req.body.email
         let password = req.body.password
-        let accessToken = req.body.accessToken
-        let refreshToken = req.body.refreshToken
+        let accessToken = ""
+        let refreshToken = ""
+
+        // let accessToken = req.body.accessToken
+        // let refreshToken = req.body.refreshToken
 
         utils.isString(firstName, `first name ${firstName}`)
         utils.isString(lastName, `last name ${lastName}`)
         utils.isString(gender, `gender ${gender}`)
         utils.isString(password, `password ${password}`)
         utils.isString(dob, `DOB ${dob}`)
-        utils.isString(accessToken, `accessToken ${accessToken}`)
-        utils.isString(refreshToken, `refreshToken ${refreshToken}`)
+        // utils.isString(accessToken, `accessToken ${accessToken}`)
+        // utils.isString(refreshToken, `refreshToken ${refreshToken}`)
 
         // If email is invalid, throw err
         if (utils.isValidEmail(email) === false) {
@@ -86,6 +89,7 @@ module.exports = {
     /**
      * User login
      * @param {*} req 
+     * @returns user_id
      */
     async userSignin(req) {
         let email = req.body.email
@@ -233,6 +237,30 @@ module.exports = {
         }
 
         return userObj;
+    },
+    /**
+     * To check if the user has a access and refresh Token for spotify 
+     * @param {UserId to check token for} userId 
+     */
+    async checkSpotifyTokens(userId){
+        const userCollection = await users();
+        const user = await userCollection.findOne({ _id: userId });
+
+        if(user.accessToken != "" && user.refreshToken != ""){
+            return true;
+        }
+        else{
+            return false;
+        }
+    },
+
+    async addSpotifyTokens(userId,accessToken, refreshToken){
+        const userCollection = await users();
+        const count = await userCollection.updateOne({ _id: userId },{$set : {accessToken : accessToken, refreshToken : refreshToken}});
+        
+        if(count.modifiedCount == 0){
+            throw "Error occoured while storing access and refresh token for the spotify user"
+        }
     },
 
     /**

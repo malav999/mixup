@@ -9,13 +9,14 @@
     "cors": "^2.8.4",
     "express": "~4.16.0",
     "express-handlebars": "^3.0.0",
+    "express-session": "^1.17.0",
     "google-auth-library": "^5.5.1",
     "googleapis": "^45.0.0",
     "md5": "^2.2.1",
-    "querystring": "~0.2.0",
-    "request": "~2.83.0",
     "mongodb": "^2.1.18",
-    "node-uuid": "^1.4.7"
+    "node-uuid": "^1.4.7",
+    "querystring": "~0.2.0",
+    "request": "~2.83.0"
   },
   "scripts": {
     "start": "node app.js"

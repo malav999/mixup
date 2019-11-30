@@ -15,9 +15,25 @@ router.post("/signup", async (req, res) => {
 router.post("/signin", async (req, res) => {
   try {
     const user = await userData.userSignin(req);
-    res.json(user);
+    //add userid in req.session 
+    req.session.userId = user
   } catch (e) {
     res.json(e)
+  }
+
+
+  try{
+     //Need to check if access token and refresh token exists otherwise render log in page
+    if(await userData.checkSpotifyTokens(req.session.userId) == false){
+      //render the API log in page 
+      res.render('/pages/APILogIn');
+     }
+    else{
+      res.render('/pages/homePage')
+    }
+  }
+  catch(e){
+    console.log(e);
   }
 });
 
