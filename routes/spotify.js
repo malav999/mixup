@@ -43,7 +43,7 @@ const redirect_uri = 'http://localhost:3000/spotify/homePage';
 router.get("/login", function(req,res) {
 
     let scope = 'streaming user-read-private user-read-email user-modify-playback-state user-read-playback-state';
-    res.redirect('GET https://accounts.spotify.com/authorize?' + 
+    res.redirect('https://accounts.spotify.com/authorize?' + 
         querystring.stringify({
             response_type: 'code',
             client_id: client_id,

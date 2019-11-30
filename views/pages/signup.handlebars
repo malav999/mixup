@@ -1,0 +1,60 @@
+<div class="signup">
+     <form id = "signup-form" action = "/user/signup" method = "POST">
+            <table>
+                <tr>
+                    <th>
+                        <label for= "firstName">First Name:</label> 
+                        <input type="text" name="firstName"  id = "firstName" required>
+                    </th>
+                </tr>
+                 <tr>
+                    <th>
+                        <label for= "lastName">Last Name:</label> 
+                        <input type="text" name="lastName"  id = "lastName" required>
+                    </th>
+                </tr>
+
+                <tr>
+                    <th>
+                        <label for = "email" >Email:</label>
+                        <input type="email" name="email"  id = "email" required>
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                        <label for = "dob" >Date of birth:</label>
+                        <input type="date" name="dob"  id = "dob">
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                    <input type="radio" name="gender" value="male" id="gender"> Male
+                    <input type="radio" name="gender" value="female" id="gender"> Female
+                    </th>
+                </tr>
+                
+                <tr>
+                    <th>
+                        <label for = 'password' >Password:</label>
+                        <input type="password" name="password"  id = "password" required >
+                    </th>
+                </tr>
+                 <tr>
+                    <th>
+                        <label for = "confirmPassword" >Confirm Password:</label>
+                        <input type="password" name="confirmPassword"  id = "confirmPassword" required>
+                    </th>
+                </tr>
+
+                <tr>
+                    <th>
+                        <input type="submit" value="Login" id = "submit">
+                    </th>
+                </tr>
+            
+                
+            </table>
+        </form>
+
+    
+</div>

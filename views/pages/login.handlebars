@@ -1,0 +1,42 @@
+
+    {{!-- <h1>{{title}}</h1> --}}
+    <main class = "search">
+       
+        <form id = "login-form" action="/user/signin" method = "post">
+            
+            <table>
+                <tr>
+                    <th>
+                        <label for="email">Email: </label>
+                    </th>
+                    <th colspan="2">
+                        <label for="password">Password: </label>
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="email" name="email"  id = "email" required>
+                    </td>
+                    <td>
+                        <input type="password" name="password"  id = "password" required>
+                    </td>
+                    
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <input type="submit" value="Login" id = "submit" action="/user/signin" ><br>
+                    </td>
+                </tr>
+             </table>
+       </form>
+    </main>
+    <div class ="search">
+
+        <a href="/user/signup">New User? Signup</a>
+
+    </div>
+    
+
+
+
+ 
