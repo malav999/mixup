@@ -40,7 +40,7 @@ router.post("/signin", async (req, res) => {
       res.render('pages/APILogIn');
      }
     else{
-      res.render('/pages/homePage')
+      res.render('pages/homePage')
     }
   }
   catch(e){

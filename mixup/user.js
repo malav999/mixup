@@ -256,11 +256,19 @@ module.exports = {
 
     async addSpotifyTokens(userId,accessToken, refreshToken){
         const userCollection = await users();
+        userId = ObjectId(userId);
         const count = await userCollection.updateOne({ _id: userId },{$set : {accessToken : accessToken, refreshToken : refreshToken}});
         
         if(count.modifiedCount == 0){
             throw "Error occoured while storing access and refresh token for the spotify user"
         }
+    },
+
+    async getSpotifyToken(userId){
+        const userCollection = await users();
+        userId = ObjectId(userId);
+        userObj = await userCollection.findOne({_id : userId})
+        return userObj.accessToken;
     },
 
     /**

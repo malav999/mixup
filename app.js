@@ -42,6 +42,19 @@ app.use(session(
         maxAge: true
     }));
 
+
+
+
+
+app.get("/", async(req,res)=>{
+    if(!req.session.userId){
+        res.redirect("user/signin");
+    }
+    else{
+        //render the homepage.
+    }
+})
+
 configRoutes(app);
 
 

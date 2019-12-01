@@ -5,6 +5,7 @@ const querystring = require('querystring');
 const userData = require('../mixup/user.js');
 const cookieParser = require('cookie-parser');
 const mongodb = require('mongodb',{ useUnifiedTopology: true});
+const ObjectId = require('mongodb').ObjectID
 
 // const collection = require('./collections');
 // const tokens = collection.tokens;
@@ -104,18 +105,210 @@ router.get("/homePage", async(req,res)=>{
 );
 //---------------------------------------Authorize a spotify premium user-----------------------------------------------------------------*/
 
+
+
+
+
+
+//---------------------------------------Search with spotify------------------------------------------------------------------------------*/
     router.post("/search", async(req,res)=>{
+
+       
+        const songToSearch = req.body.searchbar;
+        // var deviceIdToPlay = "";
+        // var songToPlay = "";
+        let userId = req.session.userId;
+        userId = ObjectId(userId);
+        let spotifyToken = await userData.getSpotifyToken(userId);
+            
+          
+        var trackGet = {
+              //url: `https://api.spotify.com/v1/search?q=${songToSearch}&type=track&limit=5`
+            url: `https://api.spotify.com/v1/search?` +
+            querystring.stringify({
+                q: songToSearch,
+                type: 'track',
+                limit: '5'
+            }),
+            headers: {
+                'Authorization': `Bearer ${spotifyToken}`
+            },
+            json: true
+        };
+            
+        request.get(trackGet,async function(error, response, body){
+            let answer = await response.body;
+            console.log(answer);
+            let tracksArr = answer.tracks.items;
+            let name = []
+            let uri = []
+            tracksArr.forEach(song => {
+                name.push(song.name);
+                uri.push(song.uri);
+                
+            });
+            let tracksObj = {
+                names:name,
+                uris:uri
+            }
+            
+            
+          return tracksObj;
+        });
         
+
+    
     });
 
 
 //---------------------------------------Search with spotify------------------------------------------------------------------------------*/
 
 
+//--------------------------------------------find user device id-------------------------------------------------------------------------*/
+async function findDeviceId(userId){
+    userId = ObjectId(userId);
+    let spotifyToken = await userData.getSpotifyToken(userId);
+    var getDeviceId = {
+        url: `https://api.spotify.com/v1/me/player/devices`,
+        headers: {
+          'Authorization': `Bearer ${spotifyToken}` 
+        },
+        json: true
+    };
+    request.get(getDeviceId,async function(error, response, body){
+        
+        let deviceId = await response.body;
+        let devicesArr = await deviceId.devices;
+
+        
+            //change to mixup player
+        for(let i = 0; i < devicesArr.length; i++){
+            console.log(devicesArr[i].name);
+            if(devicesArr[i].name === "Mahir’s MacBook Pro"){
+                deviceIdToPlay = devicesArr[i].id;
+                console.log(deviceIdToPlay);
+            }
+              
+        }
+            
+            //add error handling when device not found
+    });
+    
+   
+    
+
+}
+//--------------------------------------------find user device id-------------------------------------------------------------------------*/
 
 
 
-// make page for redirect url
+
+//---------------------------------------------Play song on spotify-----------------------------------------------------------------------*/
+router.get("/play/:uri", async(req,res)=>{
+    let userId = req.session.userId;
+    let songToPlay = req.params.uri;
+    //userId = ObjectId(userId);
+    let spotifyToken = await userData.getSpotifyToken(userId);
+    let deviceIdToPlay = "";
+
+
+    var getDeviceId = {
+        url: `https://api.spotify.com/v1/me/player/devices`,
+        headers: {
+          'Authorization': `Bearer ${spotifyToken}` 
+        },
+        json: true
+    };
+
+
+    request.get(getDeviceId,async function(error, response, body){
+        let deviceId = await response.body;
+        
+        let devicesArr = await deviceId.devices;
+    
+        for(let i = 0; i < devicesArr.length; i++){
+          console.log(devicesArr[i].name);
+          if(devicesArr[i].name === "Mahir’s MacBook Pro"){
+            deviceIdToPlay = devicesArr[i].id;
+            console.log(deviceIdToPlay);
+            break;
+          }
+          
+        }
+    
+        var playOnPlayer = {
+          url: `https://api.spotify.com/v1/me/player/play?device_id=${deviceIdToPlay}`,
+          headers: {
+            'Authorization': `Bearer ${spotifyToken}`
+          },
+          body :{
+            context_uri : songToPlay
+          },
+          json: true
+        };
+      
+        request.put(playOnPlayer,async function(error, response, body){
+          console.log('song is being played');
+      
+        });
+    
+    
+      });
+    // request.get(getDeviceId,async function(error, response, body){
+        
+    //     let deviceId = await response.body;
+    //     let devicesArr = await deviceId.devices;
+
+        
+    //         //change to mixup player
+    //     for(let i = 0; i < devicesArr.length; i++){
+    //         console.log(devicesArr[i].name);
+    //         if(devicesArr[i].name === "Mahir’s MacBook Pro"){
+    //             deviceIdToPlay = devicesArr[i].id;
+    //             console.log(deviceIdToPlay);
+    //         }
+              
+    //     }
+            
+    //         //add error handling when device not found
+    // });
+    
+
+
+
+
+
+
+    // var playOnPlayer = {
+    //     url: `https://api.spotify.com/v1/me/player/play?device_id=${deviceIdToPlay}`,
+    //     headers: {
+    //       'Authorization': `Bearer ${spotifyToken}` 
+    //     },
+    //     body :{
+    //       "context_uri": songToPlay
+    //     },
+    //     json: true
+    // }
+    
+    //   request.put(playOnPlayer, async function(error, response, body){
+    //     console.log('song is being played');
+    
+    //   });
+
+
+
+
+
+
+
+
+
+})
+
+//---------------------------------------------Play song on spotify-----------------------------------------------------------------------*/  
+
+
+
 
 module.exports = router;
 
