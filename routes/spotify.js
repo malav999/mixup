@@ -91,7 +91,7 @@ router.get("/homePage", async(req,res)=>{
         try{
             let addTokens = await userData.addSpotifyTokens(userId,access_token,refresh_token);
             //add a thing to do here after tokens are successfully added
-            res.render('pages/homepage')
+            res.render('pages/homepage',{accessToken : access_token})
         }catch(e){
             //handle error correctly
             console.log(e);
@@ -228,7 +228,7 @@ router.get("/play/:uri", async(req,res)=>{
     
         for(let i = 0; i < devicesArr.length; i++){
           console.log(devicesArr[i].name);
-          if(devicesArr[i].name === "Mahir’s MacBook Pro"){
+          if(devicesArr[i].name === "MixUp player"){
             deviceIdToPlay = devicesArr[i].id;
             console.log(deviceIdToPlay);
             break;
@@ -254,7 +254,7 @@ router.get("/play/:uri", async(req,res)=>{
           console.log('song is being played');
       
         });
-    
+        res.end;
     
       });
     // request.get(getDeviceId,async function(error, response, body){
