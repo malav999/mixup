@@ -144,7 +144,7 @@ router.get("/homePage", async(req,res)=>{
             let uri = []
             tracksArr.forEach(song => {
                 name.push(song.name);
-                uri.push(song.uri);
+                uri.push(song.album.uri);
                 
             });
             let tracksObj = {
@@ -152,7 +152,7 @@ router.get("/homePage", async(req,res)=>{
                 uris:uri
             }
             
-            
+          console.log(tracksObj)  
           return tracksObj;
         });
         
@@ -237,7 +237,10 @@ router.get("/play/:uri", async(req,res)=>{
         }
     
         var playOnPlayer = {
-          url: `https://api.spotify.com/v1/me/player/play?device_id=${deviceIdToPlay}`,
+          url: `https://api.spotify.com/v1/me/player/play?` + 
+          querystring.stringify({
+            device_id : deviceIdToPlay
+          }),
           headers: {
             'Authorization': `Bearer ${spotifyToken}`
           },
