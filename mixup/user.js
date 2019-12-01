@@ -242,32 +242,32 @@ module.exports = {
      * To check if the user has a access and refresh Token for spotify 
      * @param {UserId to check token for} userId 
      */
-    async checkSpotifyTokens(userId){
+    async checkSpotifyTokens(userId) {
         const userCollection = await users();
         const user = await userCollection.findOne({ _id: userId });
 
-        if(user.accessToken != "" && user.refreshToken != ""){
+        if (user.accessToken != "" && user.refreshToken != "") {
             return true;
         }
-        else{
+        else {
             return false;
         }
     },
 
-    async addSpotifyTokens(userId,accessToken, refreshToken){
+    async addSpotifyTokens(userId, accessToken, refreshToken) {
         const userCollection = await users();
         userId = ObjectId(userId);
-        const count = await userCollection.updateOne({ _id: userId },{$set : {accessToken : accessToken, refreshToken : refreshToken}});
-        
-        if(count.modifiedCount == 0){
+        const count = await userCollection.updateOne({ _id: userId }, { $set: { accessToken: accessToken, refreshToken: refreshToken } });
+
+        if (count.modifiedCount == 0) {
             throw "Error occoured while storing access and refresh token for the spotify user"
         }
     },
 
-    async getSpotifyToken(userId){
+    async getSpotifyToken(userId) {
         const userCollection = await users();
         userId = ObjectId(userId);
-        userObj = await userCollection.findOne({_id : userId})
+        userObj = await userCollection.findOne({ _id: userId })
         return userObj.accessToken;
     },
 
@@ -277,35 +277,6 @@ module.exports = {
     async getAllUsers() {
         const userCollection = await users();
         const userArr = await userCollection.find({}).toArray();
-
-        // let userPlaylists = []
-        // let userObj = {}
-        // let userPlaylist = {}
-
-        // let song
-        // if (Array.isArray(userArr) && userArr.length > 0) {
-        //     for (let user of userArr) {
-        //         if (user.isDeleted === false) {
-        //             if (Array.isArray(user.playListIds) && user.playListIds.length > 0) {
-        //                 for (let playlistId of user.playListIds) {
-        //                     let playlist = playlistData.getPlaylist(playlistId)
-        //                     userPlaylists.list = playlist
-        //                     for (let songId of playlist.songIds) {
-        //                         let song = songData.getSongBySongId(songId)
-        //                     }
-        //                     userPlaylist.song = song
-        //                 }
-        //                 users.push(user)
-        //             }
-        //         }
-        //     }
-        // }
-
-        // if (Array.isArray(userArr) && users.length > 0) {
-        //     for (let user of users) {
-        //         user.playlist = playlistData.getPlaylistByUser(user)
-        //     }
-        // }
 
         return userArr;
     },

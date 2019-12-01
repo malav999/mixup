@@ -1,7 +1,7 @@
 /**
- * If the object is null return false
- * @param {*} obj 
- */
+* If the object is null return false
+* @param {*} obj 
+*/
 function isNull(obj) {
     if (undefined === obj || obj === null) {
         return false
