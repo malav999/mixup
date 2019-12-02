@@ -7,6 +7,7 @@ const likesCommentsData = require('./likes-comments');
 const songData = require('./song');
 const ObjectID = require('mongodb').ObjectID;
 const utils = require('./utils');
+const success = 'success'
 
 module.exports = {
 
@@ -176,5 +177,44 @@ module.exports = {
 
         return playlists;
     },
+
+    // /**
+    //  * Create song
+    //  * @param {*} req 
+    //  */
+    // async addSong(req) {
+    //     // let userId = req.body.userId
+    //     let songURI = req.body.songURI
+    //     let songName = req.body.songName
+    //     let playlistId = req.body.playlistId
+
+    //     // utils.isString(userId, `userId ${userId}`)
+    //     utils.isString(playlistId, `playlistId ${playlistId}`)
+    //     utils.isString(songURI, `songURI ${songURI}`)
+    //     utils.isString(songName, `songName ${songName}`)
+
+    //     // let newSong = {}
+    //     // newSong.songName = songName
+    //     // newSong.songURI = songURI
+    //     // // remove userId
+    //     // // newSong.userId = userId
+    //     // // newSong.playlistId = playlistId
+    //     // newSong.createdAt = new Date().toLocaleDateString()
+
+    //     const playlistCollection = await playlists();
+    //     let playlist = await playlistCollection.findOne({ _id: playlistId })
+
+    //     playlist.song = {
+    //         songName: songName,
+    //         songURI: songURI
+    //     }
+
+    //     const updateUserPlaylist = await playlistCollection.updateOne({ _id: ObjectID(userId) }, { $set: playlist });
+    //     if (updateUserPlaylist.modifiedCount === 0) {
+    //         throw "could not update song successfully";
+    //     }
+
+    //     return await playlistData.getPlaylistById(playlistId);
+    // },
 
 };
