@@ -7,6 +7,7 @@ const utils = require('./utils')
 const playlists = mongoCollections.playlists;
 const playlistData = require('./playlist')
 const success = 'success'
+const ObjectID = require('mongodb').ObjectID;
 
 module.exports = {
 
@@ -16,7 +17,7 @@ module.exports = {
      */
     async addSong(req) {
         let userId = req.body.userId
-        let songURI = req.body.songUri
+        let songURI = req.body.songURI
         let songName = req.body.songName
         let playlistId = req.body.playlistId
 
@@ -25,40 +26,50 @@ module.exports = {
         utils.isString(songURI, `songURI ${songURI}`)
         utils.isString(songName, `songName ${songName}`)
 
+        // Create new song object
         let newSong = {}
         newSong.songName = songName
         newSong.songURI = songURI
-        // remove userId
-        // newSong.userId = userId
         newSong.playlistId = playlistId
         newSong.createdAt = new Date().toLocaleDateString()
 
         const songCollection = await songs();
+
+        // Add song to db
         const insertInfo = await songCollection.insertOne(newSong);
         if (insertInfo.insertedCount === 0) throw "Could not add song";
 
         const newId = insertInfo.insertedId;
-        console.log('insertInfo.value:', insertInfo.value)
+
+        // Get song by recently created song id
         const song = await this.getSongBySongId(newId);
 
-        if (utils.isNull(song)) {
+        // If song not found, throw err
+        if (!song) {
             console.log(`Song not found for ${newId}`)
-            throw `Song not found for ${newId}`
+            throw `Song not found`
         }
 
         let playlistCollection = await playlists();
 
-        // todo: Update songId in user
-        let playlist = {}
-        playlist.songs = [song._id]
+        // Get playlist by playlistId
+        let playlist = await playlistCollection.findOne({ _id: ObjectID(playlistId) })
 
-        const updateUserSong = await playlistCollection.updateOne({ _id: ObjectID(userId), playlist });
+        // If playlist find, throw err
+        if (!playlist) {
+            console.log(`Playlist not found for id ${playlistId}`)
+            throw `Playlist not found`
+        }
 
-        if (updateUserSong.modifiedCount === 0) {
+        playlist.songs.push(song._id)
+
+        const updatePlaylist = await playlistCollection.updateOne({ _id: ObjectID(playlistId) }, { $set: playlist });
+
+        if (updatePlaylist.modifiedCount === 0) {
             throw "could not update song successfully";
         }
 
-        return song;
+        return await this.getSongBySongId(newId);
     },
 
     /**
@@ -72,7 +83,7 @@ module.exports = {
 
         const songCollection = await songs();
 
-        let song = await this.getSongById(id)
+        let song = await this.getSongBySongId(id)
 
         if (utils.isNull(song)) {
             console.log(`Song not found for ${id}`)
@@ -117,7 +128,7 @@ module.exports = {
             }
         }
 
-        return await this.getSongById(id);
+        return await this.getSongBySongId(id);
     },
 
     /**
@@ -129,13 +140,7 @@ module.exports = {
 
         const songCollection = await songs();
 
-        const song = await songCollection.findOne({ _id: id });
-
-        if (utils.isNull(song)) {
-            console.log(`No song with id ${id}`)
-            throw 'No song found'
-        }
-
+        const song = await songCollection.findOne({ _id: ObjectID(id) });
         return song;
     },
 
@@ -164,9 +169,76 @@ module.exports = {
      */
     async getAllSongs() {
         const songCollection = await songs();
-        const songs = await songCollection.find({}).toArray();
+        const allSongs = await songCollection.find({}).toArray();
 
-        return songs;
+        return allSongs;
     },
 
+    /**
+     * Search songs by given songs name on YouTube
+     * @param {*} req 
+     */
+    async searchSongYoutube(req) {
+        let songName = req.body.songName
+
+        let allSongs = await this.getAllSongs()
+
+        if (!Array.isArray(allSongs) || allSongs.length <= 0 || allSongs === []) {
+            console.log('No song found')
+            throw `No song found`
+        }
+
+        let searchResult = []
+        for (let song of allSongs) {
+            if (song.songName.includes(songName)) {
+                searchResult.push(song)
+            }
+        }
+
+        if (searchResult.length === 0) {
+            console.log('No related songs found')
+            throw `No related songs found for ${songName}`
+        }
+
+        if (searchResult.length > 5) {
+            searchResult = searchResult.slice(0, 5)
+        }
+
+        return searchResult
+    },
+
+    /**
+     * Get all songs for the given userId
+     * @param {*} req 
+     */
+    async getUserSongs(req) {
+        let userId = req.body.userId
+        utils.isString(userId, `userId ${userId}`)
+
+        let songCollection = await songs()
+
+        // Get all songs
+        let allSongs = await this.getAllSongs()
+        // If no songs found return empty
+        if (undefined === allSongs || allSongs === null || !Array.isArray(allSongs) || allSongs.length < 1) {
+            return []
+        }
+
+        let songArr = []
+
+        // Get all the songs of a specific user
+        for (let song of allSongs) {
+            let userSong = await songCollection.findOne({ userId: song.userId })
+            if (userSong) {
+                songArr.push(userSong)
+            }
+        }
+
+        // If no songs found return empty array
+        if (songArr.length < 1) {
+            return songArr
+        }
+
+        return songArr
+    }
 };
