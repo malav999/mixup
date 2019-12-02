@@ -128,7 +128,7 @@ router.get("/homePage", async(req,res)=>{
             querystring.stringify({
                 q: songToSearch,
                 type: 'track',
-                limit: '5'
+                limit: '10'
             }),
             headers: {
                 'Authorization': `Bearer ${spotifyToken}`
@@ -184,7 +184,7 @@ async function findDeviceId(userId){
             //change to mixup player
         for(let i = 0; i < devicesArr.length; i++){
             console.log(devicesArr[i].name);
-            if(devicesArr[i].name === "Mahir’s MacBook Pro"){
+            if(devicesArr[i].name === "MixUp player"){
                 deviceIdToPlay = devicesArr[i].id;
                 console.log(deviceIdToPlay);
             }
