@@ -169,9 +169,76 @@ module.exports = {
      */
     async getAllSongs() {
         const songCollection = await songs();
-        const songs = await songCollection.find({}).toArray();
+        const allSongs = await songCollection.find({}).toArray();
 
-        return songs;
+        return allSongs;
     },
 
+    /**
+     * Search songs by given songs name on YouTube
+     * @param {*} req 
+     */
+    async searchSongYoutube(req) {
+        let songName = req.body.songName
+
+        let allSongs = await this.getAllSongs()
+
+        if (!Array.isArray(allSongs) || allSongs.length <= 0 || allSongs === []) {
+            console.log('No song found')
+            throw `No song found`
+        }
+
+        let searchResult = []
+        for (let song of allSongs) {
+            if (song.songName.includes(songName)) {
+                searchResult.push(song)
+            }
+        }
+
+        if (searchResult.length === 0) {
+            console.log('No related songs found')
+            throw `No related songs found for ${songName}`
+        }
+
+        if (searchResult.length > 5) {
+            searchResult = searchResult.slice(0, 5)
+        }
+
+        return searchResult
+    },
+
+    /**
+     * Get all songs for the given userId
+     * @param {*} req 
+     */
+    async getUserSongs(req) {
+        let userId = req.body.userId
+        utils.isString(userId, `userId ${userId}`)
+
+        let songCollection = await songs()
+
+        // Get all songs
+        let allSongs = await this.getAllSongs()
+        // If no songs found return empty
+        if (undefined === allSongs || allSongs === null || !Array.isArray(allSongs) || allSongs.length < 1) {
+            return []
+        }
+
+        let songArr = []
+
+        // Get all the songs of a specific user
+        for (let song of allSongs) {
+            let userSong = await songCollection.findOne({ userId: song.userId })
+            if (userSong) {
+                songArr.push(userSong)
+            }
+        }
+
+        // If no songs found return empty array
+        if (songArr.length < 1) {
+            return songArr
+        }
+
+        return songArr
+    }
 };
