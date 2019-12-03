@@ -81,15 +81,16 @@ router.get("/homePage", async (req, res) => {
     request.post(authOptions, async function (error, response, body) {
         //Need to make a page to show error or render if any error occurs while logging in 
         if (!error && response.statusCode === 200) {
-
+            
             var access_token = body.access_token,
-                refresh_token = body.refresh_token;
+                refresh_token = body.refresh_token,
+                timeAdded = Date.now();
 
             console.log(access_token);
             console.log(refresh_token);
 
             try {
-                let addTokens = await userData.addSpotifyTokens(userId, access_token, refresh_token);
+                let addTokens = await userData.addSpotifyTokens(userId, access_token, refresh_token, timeAdded);
                 //add a thing to do here after tokens are successfully added
                 res.render('pages/homepage', { accessToken: access_token })
             } catch (e) {

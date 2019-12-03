@@ -16,7 +16,8 @@
     "mongodb": "^2.1.18",
     "node-uuid": "^1.4.7",
     "querystring": "~0.2.0",
-    "request": "~2.83.0"
+    "request": "~2.83.0",
+    "request-promise": "^4.2.5"
   },
   "scripts": {
     "start": "node app.js"
