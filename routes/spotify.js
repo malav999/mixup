@@ -6,6 +6,7 @@ const userData = require('../mixup/user.js');
 const cookieParser = require('cookie-parser');
 const mongodb = require('mongodb', { useUnifiedTopology: true });
 const ObjectId = require('mongodb').ObjectID
+const rp = require('request-promise');
 
 // const collection = require('./collections');
 // const tokens = collection.tokens;
@@ -78,7 +79,7 @@ router.get("/homePage", async (req, res) => {
     };
 
     //requests the Api endpoint to acquire Access token and refresh token
-    request.post(authOptions, async function (error, response, body) {
+    await rp.post(authOptions, async function (error, response, body) {
         //Need to make a page to show error or render if any error occurs while logging in 
         if (!error && response.statusCode === 200) {
             
@@ -113,11 +114,8 @@ router.get("/homePage", async (req, res) => {
 
 //---------------------------------------Search with spotify------------------------------------------------------------------------------*/
 router.post("/search", async (req, res) => {
-
-
-    const songToSearch = req.body.searchbar;
-    // var deviceIdToPlay = "";
-    // var songToPlay = "";
+    
+    let songToSearch = req.body.searchbar;
     let userId = req.session.userId;
     userId = ObjectId(userId);
     let spotifyToken = await userData.getSpotifyToken(userId);
@@ -137,7 +135,7 @@ router.post("/search", async (req, res) => {
         json: true
     };
 
-    request.get(trackGet, async function (error, response, body) {
+    await rp.get(trackGet, async function (error, response, body) {
         let answer = await response.body;
         console.log(answer);
         let tracksArr = answer.tracks.items;
@@ -176,7 +174,7 @@ async function findDeviceId(userId) {
         },
         json: true
     };
-    request.get(getDeviceId, async function (error, response, body) {
+    await rp.get(getDeviceId, async function (error, response, body) {
 
         let deviceId = await response.body;
         let devicesArr = await deviceId.devices;
@@ -185,7 +183,7 @@ async function findDeviceId(userId) {
         //change to mixup player
         for (let i = 0; i < devicesArr.length; i++) {
             console.log(devicesArr[i].name);
-            if(devicesArr[i].name === "MixUp player"){
+            if(devicesArr[i].name === "MixUp"){
                 deviceIdToPlay = devicesArr[i].id;
                 console.log(deviceIdToPlay);
             }
@@ -222,14 +220,14 @@ router.get("/play/:uri", async (req, res) => {
     };
 
 
-    request.get(getDeviceId, async function (error, response, body) {
+    await rp.get(getDeviceId, async function (error, response, body) {
         let deviceId = await response.body;
 
         let devicesArr = await deviceId.devices;
 
         for (let i = 0; i < devicesArr.length; i++) {
             console.log(devicesArr[i].name);
-            if (devicesArr[i].name === "MixUp player") {
+            if (devicesArr[i].name === "MixUp") {
                 deviceIdToPlay = devicesArr[i].id;
                 console.log(deviceIdToPlay);
                 break;
@@ -251,61 +249,13 @@ router.get("/play/:uri", async (req, res) => {
             json: true
         };
 
-        request.put(playOnPlayer, async function (error, response, body) {
+        await rp.put(playOnPlayer, async function (error, response, body) {
             console.log('song is being played');
 
         });
-        res.end;
+        
 
     });
-    // request.get(getDeviceId,async function(error, response, body){
-
-    //     let deviceId = await response.body;
-    //     let devicesArr = await deviceId.devices;
-
-
-    //         //change to mixup player
-    //     for(let i = 0; i < devicesArr.length; i++){
-    //         console.log(devicesArr[i].name);
-    //         if(devicesArr[i].name === "Mahir’s MacBook Pro"){
-    //             deviceIdToPlay = devicesArr[i].id;
-    //             console.log(deviceIdToPlay);
-    //         }
-
-    //     }
-
-    //         //add error handling when device not found
-    // });
-
-
-
-
-
-
-
-    // var playOnPlayer = {
-    //     url: `https://api.spotify.com/v1/me/player/play?device_id=${deviceIdToPlay}`,
-    //     headers: {
-    //       'Authorization': `Bearer ${spotifyToken}` 
-    //     },
-    //     body :{
-    //       "context_uri": songToPlay
-    //     },
-    //     json: true
-    // }
-
-    //   request.put(playOnPlayer, async function(error, response, body){
-    //     console.log('song is being played');
-
-    //   });
-
-
-
-
-
-
-
-
 
 })
 
