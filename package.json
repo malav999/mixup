@@ -17,7 +17,8 @@
     "node-uuid": "^1.4.7",
     "querystring": "~0.2.0",
     "request": "~2.83.0",
-    "request-promise": "^4.2.5"
+    "request-promise": "^4.2.5",
+    "xss": "^1.0.6"
   },
   "scripts": {
     "start": "node app.js"
