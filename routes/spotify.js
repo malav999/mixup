@@ -143,7 +143,7 @@ router.post("/search", async (req, res) => {
         let uri = []
         tracksArr.forEach(song => {
             name.push(song.name);
-            uri.push(song.album.uri);
+            uri.push("/spotify/play/" + song.album.uri);
 
         });
         let tracksObj = {
@@ -222,12 +222,12 @@ router.get("/play/:uri", async (req, res) => {
 
     await rp.get(getDeviceId, async function (error, response, body) {
         let deviceId = await response.body;
-
+        console.log(deviceId);
         let devicesArr = await deviceId.devices;
 
         for (let i = 0; i < devicesArr.length; i++) {
             console.log(devicesArr[i].name);
-            if (devicesArr[i].name === "MixUp") {
+            if (devicesArr[i].name === "MixUp Player") {
                 deviceIdToPlay = devicesArr[i].id;
                 console.log(deviceIdToPlay);
                 break;
@@ -254,7 +254,6 @@ router.get("/play/:uri", async (req, res) => {
 
         });
         
-
     });
 
 })

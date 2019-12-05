@@ -305,7 +305,7 @@ module.exports = {
 
             
             await rp.post(authOptions,async function(error, response, body) {
-                console.log("entered refresh function")
+                
                 if (!error && response.statusCode === 200) {
                     newAccessToken= response.body.access_token;
                     console.log("AccessToken after update : " + newAccessToken);
