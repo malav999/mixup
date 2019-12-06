@@ -1,63 +1,3 @@
-{{!-- <div class="signup">
-     <form id = "signup-form" action = "/user/signup" method = "POST" onsubmit="return validate()">
-            <table>
-                <tr>
-                    <th>
-                        <label for= "firstName">First Name:</label> 
-                        <input type="text" name="firstName"  id = "firstName">
-                    </th>
-                </tr>
-                 <tr>
-                    <th>
-                        <label for= "lastName">Last Name:</label> 
-                        <input type="text" name="lastName"  id = "lastName">
-                    </th>
-                </tr>
-
-                <tr>
-                    <th>
-                        <label for = "email" >Email:</label>
-                        <input type="email" name="email"  id = "email">
-                    </th>
-                </tr>
-                <tr>
-                    <th>
-                        <label for = "dob" >Date of birth:</label>
-                        <input type="date" name="dob"  id = "dob">
-                    </th>
-                </tr>
-                <tr>
-                    <th>
-                    <input type="radio" name="gender" value="male" id="gender"> Male
-                    <input type="radio" name="gender" value="female" id="gender"> Female
-                    </th>
-                </tr>
-                
-                <tr>
-                    <th>
-                        <label for = 'password' >Password:</label>
-                        <input type="password" name="password"  id = "password">
-                    </th>
-                </tr>
-                 <tr>
-                    <th>
-                        <label for = "confirmPassword" >Confirm Password:</label>
-                        <input type="password" name="confirmPassword"  id = "confirmPassword">
-                    </th>
-                </tr
-
-                <tr>
-                    <th>
-                        <input type="submit" value="Signup" id = "submit">
-                    </th>
-                </tr>
-            
-                
-            </table>
-        </form>
-
-    
-</div> --}}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -65,31 +5,89 @@
     <title>MixUp</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+
     <link rel="stylesheet" type="text/css" href="/public/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/public/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-    
+
     <link rel="stylesheet" type="text/css" href="/public/css/util.css">
-	<link rel="stylesheet" type="text/css" href="/public/css/main.css">
+    <link rel="stylesheet" type="text/css" href="/public/css/main.css">
 </head>
 
 <body>
+    <script>
+
+        var myform = document.getElementById('signup-form')
+
+        if (myform) {
+
+
+            var firstName = myform.getElementById('firstName');
+            var lastName = myform.getElementById('lastName');
+            var email = myform.getElementById('email');
+            var password = myform.getElementById('password');
+            var confirmPassword = myform.getElementById('confirmPassword');
+
+            myform.addEventListener(type = "submit", event => {
+                event.preventDefault();
+
+                if (firstName.value == "") {
+                    alert("Please enter your first name.");
+                    $('#firstName').focus();
+
+                }
+                if (lastName.value == "") {
+                    window.alert("Please enter your last name.");
+                    $('#lastName').focus();
+
+                }
+                if (email.value == "") {
+                    window.alert("Please enter your email.");
+                    $('#email').focus();
+
+                }
+                if (password.value == "") {
+                    window.alert("Please create a new password.");
+                    $('#password').focus();
+
+                }
+                if (confirmPassword.value == "") {
+                    window.alert("Enter the password again.");
+                    $('#confirmPassword').focus();
+
+                }
+
+
+                if (password.value !== confirmPassword.value) {
+                    alert('Password is not the same!');
+
+                }
+
+
+            })
+        }
+
+
+
+
+
+    </script>
 
 
     <div class="limiter">
         <div class="container-login100">
             <div class="wrap-login100">
-                <form class="signup100-form validate-form" id = "signup-form" action = "/user/signup" method = "POST" onsubmit="return validate()">
+                <form class="signup100-form validate-form" id="signup-form" action="/user/signup" method="POST">
                     <span class="signup100-form-title p-b-34">
                         MixUp
                     </span>
 
                     <div class="wrap-input100 rs1-wrap-input100 validate-input m-b-20" data-validate="Type First name">
-                        <input id="first-name" class="input100" type="text" id="firstName" name="firstName" placeholder="First Name">
+                        <input id="first-name" class="input100" type="text" id="firstName" name="firstName"
+                            placeholder="First Name">
                         <span class="focus-input100"></span>
                     </div>
                     <div class="wrap-input100 rs2-wrap-input100 validate-input m-b-20" data-validate="Type last name">
-                        <input class="input100" type="text" name="lastName" id="lastName"placeholder="Last Name">
+                        <input class="input100" type="text" name="lastName" id="lastName" placeholder="Last Name">
                         <span class="focus-input100"></span>
                     </div>
                     <div class="wrap-input100 rs3-wrap-input100 validate-input m-b-20" data-validate="Type email">
@@ -98,30 +96,32 @@
                     </div>
 
                     <div class="wrap-input100 rs4-wrap-input100 validate-input m-b-20">
-                            <input class="input100" type="date" id="dob" name="dob">
-                            <span class="focus-input100"></span>
-                        </div>
-
-                        <div class="wrap-input100 rs5-wrap-input100 validate-input m-b-20">
-                                <input class="input100" type="radio" id="gender" name="gender">Male
-                                <input class="input100" type="radio" id="gender" name="gender">Female
-                                <span class="focus-input100"></span>
-                            </div>
-                    <div class="wrap-input100 rs6-wrap-input100 validate-input m-b-20" data-validate="Type password">
-                        <input class="input100" type="password" name="pass" id="password" placeholder="Password">
+                        <input class="input100" type="date" id="dob" name="dob">
                         <span class="focus-input100"></span>
                     </div>
-                    <div class="wrap-input100 rs7-wrap-input100 validate-input m-b-20" data-validate="Type confirm password">
-                            <input class="input100" type="password" name="confirmPassword" placeholder="Confirm Password">
-                            <span class="focus-input100"></span>
-                        </div>
+
+                    <div class="wrap-input100 rs5-wrap-input100 validate-input m-b-20">
+                        <input class="input100" type="radio" id="male" name="gender">Male
+                        <input class="input100" type="radio" id="female" name="gender">Female
+                        <span class="focus-input100"></span>
+                    </div>
+                    <div class="wrap-input100 rs6-wrap-input100 validate-input m-b-20" data-validate="Type password">
+                        <input class="input100" type="password" name="password" id="password" placeholder="Password">
+                        <span class="focus-input100"></span>
+                    </div>
+                    <div class="wrap-input100 rs7-wrap-input100 validate-input m-b-20"
+                        data-validate="Type confirm password">
+                        <input class="input100" type="password" name="confirmPassword" id="confirmPassword"
+                            placeholder="Confirm Password">
+                        <span class="focus-input100"></span>
+                    </div>
 
 
                     <div class="container-login100-form-btn">
-                        <a href="/user/signin" class="login100-form-btn">
+                        <button type="submit" class="login100-form-btn"> Sign Up </button>
 
-                            Sign Up
-                        </a>
+
+
                     </div>
                 </form>
 
@@ -130,58 +130,9 @@
         </div>
     </div>
 
-<script>
-       
-   function validate(event) {
-   
-    var firstName = document.getElementById('firstName');
-    var lastName = document.getElementById('lastName');
-    var email = document.getElementById('email');
-    var password = document.getElementById('password');
-    var confirmPassword = document.getElementById('confirmPassword');
-    var form = document.getElementById('signup-form');
-    
-   if(firstName.value = " "){
-        window.alert("Please enter your first name."); 
-        firstName.focus(); 
-        return false; 
-    }
-    if(lastName.value = " "){
-        window.alert("Please enter your last name."); 
-        lastName.focus(); 
-        return false; 
-    }
-    if(email.value = " "){
-        window.alert("Please enter your email."); 
-        email.focus(); 
-        return false; 
-    }
-    if(password.value = " "){
-        window.alert("Please create a new password."); 
-        password.focus(); 
-        return false; 
-    }
-    if(confirmPassword.value = " "){
-        window.alert("Enter the password again."); 
-        confirmPassword.focus(); 
-        return false; 
-    }
-    
-
-    if (password.value !== confirmPassword.value) {
-    alert('Password is not the same!');
-    return false;
-    }
-    
 
 
-}
-   </script>
 
-   <script src="/public/jquery/jquery-3.2.1.min.js"></script>
-	<script src="/public/bootstrap/js/popper.js"></script>
-	<script src="/public/bootstrap/js/bootstrap.min.js"></script>
+</body>
 
-	{{!-- <script src="js/main.js"></script> --}}
-    </body>
-    </html>
+</html>

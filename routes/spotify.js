@@ -23,31 +23,11 @@ const client_id = '65606d7237bd4225baa410676a5a6e70'; // Your client id
 const client_secret = '16e6770ee5a941f69f8bba78c73b1be1'; // Your secret
 const redirect_uri = 'http://localhost:3000/spotify/authorized';
 
-// var generateRandomString = function(length) {
-//     var text = '';
-//     var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
-//     for (var i = 0; i < length; i++) {
-//       text += possible.charAt(Math.floor(Math.random() * possible.length));
-//     }
-//     return text;
-// };
-
-//var stateKey = 'spotify_auth_state';
-
-
-/**
- * Have your application request authorization; the user logs in and authorizes access
- */
-
-
-
-//---------------------------------------Authorize a spotify premium user-----------------------------------------------------------------*/
-router.get("/login", async (req, res, next) => {
+router.use("/", async (req, res, next) => {
     let userId = req.session.userId;
     if (!userId) {
         //user is not logged in
-        res.redirect('pages/login.handlebars');
+        res.redirect('/user/signin');
     }
     else {
         next();
@@ -74,8 +54,17 @@ router.get("/login", function (req, res) {
 
 router.get("/authorized", async (req, res) => {
 
+
     let code = req.query.code || null;
+    if (code == null) {
+        //user is not logged in
+        res.redirect("/user/signin");
+    }
     let userId = req.session.userId;
+    //user is not logged in
+    if (!userId) {
+        res.redirect("/user/signin");
+    }
 
 
     var authOptions = {
@@ -127,11 +116,7 @@ router.get("/authorized", async (req, res) => {
 
 //---------------------------------------Search with spotify------------------------------------------------------------------------------*/
 router.post("/search", async (req, res, next) => {
-    let userId = req.session.userId;
-    if (!userId) {
-        //user is not logged in
-        res.redirect('pages/login.handlebars');
-    }
+    let userId = req.session.userId; 
     let status = await userData.checkSpotifyTokens(userId);
 
     if (status === true) {
@@ -209,10 +194,7 @@ router.post("/search", async (req, res) => {
 
 router.get("/play/:uri", async (req, res, next) => {
     let userId = req.session.userId;
-    if (!userId) {
-        //user is not logged in
-        res.render('pages/login');
-    }
+    
     let status = await userData.checkSpotifyTokens(userId);
 
     if (status === true) {
@@ -220,7 +202,7 @@ router.get("/play/:uri", async (req, res, next) => {
     }
     else {
         //user is not logged in to spotify
-        res.render('pages/APILogIn');
+        res.redirect('/user/APILogIn');
     }
 
 
@@ -287,43 +269,9 @@ router.get("/play/:uri", async (req, res) => {
 
 //---------------------------------------------Play song on spotify-----------------------------------------------------------------------*/  
 
-//--------------------------------------------find user device id-------------------------------------------------------------------------*/
-async function findDeviceId(userId) {
-    userId = ObjectId(userId);
-    let spotifyToken = await userData.getSpotifyToken(userId);
-    var getDeviceId = {
-        url: `https://api.spotify.com/v1/me/player/devices`,
-        headers: {
-            'Authorization': `Bearer ${spotifyToken}`
-        },
-        json: true
-    };
-    await rp.get(getDeviceId, async function (error, response, body) {
-
-        let deviceId = await response.body;
-        let devicesArr = await deviceId.devices;
-
-
-        //change to mixup player
-        for (let i = 0; i < devicesArr.length; i++) {
-            console.log(devicesArr[i].name);
-            if (devicesArr[i].name === "MixUp") {
-                deviceIdToPlay = devicesArr[i].id;
-                console.log(deviceIdToPlay);
-            }
-
-        }
-
-        //add error handling when device not found
-    });
-
-
-
-
-}
-//--------------------------------------------find user device id-------------------------------------------------------------------------*/
-
-
+router.use("*", async(req,res)=>{
+    res.status(404).json({error:"Page not found"});
+})
 
 module.exports = router;
 

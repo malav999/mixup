@@ -13,7 +13,7 @@ const constructorMethod = app => {
   // app.use("/likesComments", animalRoutes);
 
   app.use("*", (req, res) => {
-    res.sendStatus(404);
+    res.status(404).json({error:"Page not found"});
   });
 };
 

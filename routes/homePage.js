@@ -3,6 +3,17 @@ const router = express.Router();
 const userData = require('../mixup/user')
 
 
+router.use("/", async (req, res, next) => {
+    let userId = req.session.userId;
+    if (!userId) {
+        //user is not logged in
+        res.redirect('/user/signin');
+    }
+    else {
+        next();
+    }
+});
+
 router.get("/homePage", async(req,res)=>{
     
     let userId = req.session.userId;
@@ -25,6 +36,11 @@ router.get("/homePage", async(req,res)=>{
     }
     
     
+})
+
+
+router.use("*", async(req,res)=>{
+    res.status(404).json({error:"Page not found"});
 })
 
 module.exports = router;

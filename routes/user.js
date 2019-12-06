@@ -6,11 +6,11 @@ const userData = mixup.user;
 
 
 
-router.get("/signin", async(req,res)=>{
+router.get("/signin", async (req, res) => {
   res.render('pages/login')
 })
 
-router.get("/signup", async(req,res)=>{
+router.get("/signup", async (req, res) => {
   res.render('pages/signup')
 })
 
@@ -31,22 +31,28 @@ router.post("/signin", async (req, res) => {
   } catch (e) {
     res.json(e)
   }
-      res.redirect('/homePage/homePage');
+  res.redirect('/homePage/homePage');
 
-  // try{
-  //    //Need to check if access token and refresh token exists otherwise render log in page
-  //   if(await userData.checkSpotifyTokens(req.session.userId) == false){
-  //     //render the API log in page 
-  //     res.redirect('/homePage/homePage');
-  //    }
-  //   else{
-  //     let spotifyAccessToken = await userData.getSpotifyToken(req.session.userId);
-  //     res.render('pages/homePage',{accessToken : spotifyAccessToken});
-  //   }
-  // }
-  // catch(e){
-  //   console.log(e);
-  // }
 });
+
+router.get("/APILogIn", async(req,res,next)=>{
+  let userId = req.session.userId;
+  if(!userId){
+    res.redirect("/user/signin");
+  }
+  else{
+    next();
+  }
+ 
+})
+router.get("/APILogIn", async(req,res)=>{
+  res.render("pages/APILogIn");
+})
+
+router.use("*", async(req,res)=>{
+  res.status(404).json({error:"Page not found"});
+})
+
+
 
 module.exports = router;

@@ -3,6 +3,17 @@ const router = express.Router();
 const mixup = require("../mixup");
 const songData = mixup.song;
 
+
+router.use("/", async (req, res, next) => {
+    let userId = req.session.userId;
+    if (!userId) {
+        //user is not logged in
+        res.redirect('/user/signin');
+    }
+    else {
+        next();
+    }
+});
 /**
  * Add song to user playlist
  */
@@ -31,5 +42,10 @@ router.post("/searchSong", async (req, res) => {
     }
 
 });
+
+
+router.use("*", async (req, res) => {
+    res.status(404).json({ error: "Page not found" });
+})
 
 module.exports = router;
