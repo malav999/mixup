@@ -251,6 +251,7 @@ module.exports = {
      */
     async checkSpotifyTokens(userId) {
         const userCollection = await users();
+        userId = ObjectId(userId)
         const user = await userCollection.findOne({ _id: userId });
 
         if (user.accessToken != "" && user.refreshToken != "") {

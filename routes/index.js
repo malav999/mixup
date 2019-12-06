@@ -2,12 +2,14 @@ const userRoutes = require("./user");
 const playlistRoutes = require("./playlist")
 const spotifyRoutes = require("./spotify")
 const songRoutes = require("./song")
+const homePageRoutes = require("./homePage")
 
 const constructorMethod = app => {
   app.use("/user", userRoutes);
   app.use("/playlist", playlistRoutes);
   app.use("/spotify", spotifyRoutes);
   app.use("/song", songRoutes);
+  app.use("/homePage", homePageRoutes);
   // app.use("/likesComments", animalRoutes);
 
   app.use("*", (req, res) => {

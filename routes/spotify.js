@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const mongodb = require('mongodb', { useUnifiedTopology: true });
 const ObjectId = require('mongodb').ObjectID
 const rp = require('request-promise');
+const util = require('../mixup/utils');
 
 // const collection = require('./collections');
 // const tokens = collection.tokens;
@@ -20,7 +21,7 @@ const router = express.Router();
 
 const client_id = '65606d7237bd4225baa410676a5a6e70'; // Your client id
 const client_secret = '16e6770ee5a941f69f8bba78c73b1be1'; // Your secret
-const redirect_uri = 'http://localhost:3000/spotify/homePage';
+const redirect_uri = 'http://localhost:3000/spotify/authorized';
 
 // var generateRandomString = function(length) {
 //     var text = '';
@@ -42,6 +43,18 @@ const redirect_uri = 'http://localhost:3000/spotify/homePage';
 
 
 //---------------------------------------Authorize a spotify premium user-----------------------------------------------------------------*/
+router.get("/login", async (req, res, next) => {
+    let userId = req.session.userId;
+    if (!userId) {
+        //user is not logged in
+        res.redirect('pages/login.handlebars');
+    }
+    else {
+        next();
+    }
+});
+
+
 router.get("/login", function (req, res) {
 
     let scope = 'streaming user-read-private user-read-email user-modify-playback-state user-read-playback-state';
@@ -58,8 +71,8 @@ router.get("/login", function (req, res) {
 });
 
 
-//Temporary homepage and request for AccessToken refresh token
-router.get("/homePage", async (req, res) => {
+
+router.get("/authorized", async (req, res) => {
 
     let code = req.query.code || null;
     let userId = req.session.userId;
@@ -82,7 +95,7 @@ router.get("/homePage", async (req, res) => {
     await rp.post(authOptions, async function (error, response, body) {
         //Need to make a page to show error or render if any error occurs while logging in 
         if (!error && response.statusCode === 200) {
-            
+
             var access_token = body.access_token,
                 refresh_token = body.refresh_token,
                 timeAdded = Date.now();
@@ -93,7 +106,7 @@ router.get("/homePage", async (req, res) => {
             try {
                 let addTokens = await userData.addSpotifyTokens(userId, access_token, refresh_token, timeAdded);
                 //add a thing to do here after tokens are successfully added
-                res.render('pages/homepage', { accessToken: access_token })
+                res.redirect('/homePage/homePage')
             } catch (e) {
                 //handle error correctly
                 console.log(e);
@@ -113,9 +126,34 @@ router.get("/homePage", async (req, res) => {
 
 
 //---------------------------------------Search with spotify------------------------------------------------------------------------------*/
+router.post("/search", async (req, res, next) => {
+    let userId = req.session.userId;
+    if (!userId) {
+        //user is not logged in
+        res.redirect('pages/login.handlebars');
+    }
+    let status = await userData.checkSpotifyTokens(userId);
+
+    if (status === true) {
+        next();
+    }
+    else {
+        res.render('pages/APILogIn.handlebars');
+    }
+
+
+});
+
+
 router.post("/search", async (req, res) => {
-    
+
     let songToSearch = req.body.searchbar;
+    try {
+        util.isString(songToSearch);
+    }
+    catch (e) {
+        //handle if the search is not a string
+    }
     let userId = req.session.userId;
     userId = ObjectId(userId);
     let spotifyToken = await userData.getSpotifyToken(userId);
@@ -163,46 +201,35 @@ router.post("/search", async (req, res) => {
 //---------------------------------------Search with spotify------------------------------------------------------------------------------*/
 
 
-//--------------------------------------------find user device id-------------------------------------------------------------------------*/
-async function findDeviceId(userId) {
-    userId = ObjectId(userId);
-    let spotifyToken = await userData.getSpotifyToken(userId);
-    var getDeviceId = {
-        url: `https://api.spotify.com/v1/me/player/devices`,
-        headers: {
-            'Authorization': `Bearer ${spotifyToken}`
-        },
-        json: true
-    };
-    await rp.get(getDeviceId, async function (error, response, body) {
-
-        let deviceId = await response.body;
-        let devicesArr = await deviceId.devices;
-
-
-        //change to mixup player
-        for (let i = 0; i < devicesArr.length; i++) {
-            console.log(devicesArr[i].name);
-            if(devicesArr[i].name === "MixUp"){
-                deviceIdToPlay = devicesArr[i].id;
-                console.log(deviceIdToPlay);
-            }
-
-        }
-
-        //add error handling when device not found
-    });
-
-
-
-
-}
-//--------------------------------------------find user device id-------------------------------------------------------------------------*/
 
 
 
 
 //---------------------------------------------Play song on spotify-----------------------------------------------------------------------*/
+
+router.get("/play/:uri", async (req, res, next) => {
+    let userId = req.session.userId;
+    if (!userId) {
+        //user is not logged in
+        res.render('pages/login');
+    }
+    let status = await userData.checkSpotifyTokens(userId);
+
+    if (status === true) {
+        next();
+    }
+    else {
+        //user is not logged in to spotify
+        res.render('pages/APILogIn');
+    }
+
+
+});
+
+
+
+
+
 router.get("/play/:uri", async (req, res) => {
     let userId = req.session.userId;
     let songToPlay = req.params.uri;
@@ -253,13 +280,48 @@ router.get("/play/:uri", async (req, res) => {
             console.log('song is being played');
 
         });
-        
+
     });
 
 })
 
 //---------------------------------------------Play song on spotify-----------------------------------------------------------------------*/  
 
+//--------------------------------------------find user device id-------------------------------------------------------------------------*/
+async function findDeviceId(userId) {
+    userId = ObjectId(userId);
+    let spotifyToken = await userData.getSpotifyToken(userId);
+    var getDeviceId = {
+        url: `https://api.spotify.com/v1/me/player/devices`,
+        headers: {
+            'Authorization': `Bearer ${spotifyToken}`
+        },
+        json: true
+    };
+    await rp.get(getDeviceId, async function (error, response, body) {
+
+        let deviceId = await response.body;
+        let devicesArr = await deviceId.devices;
+
+
+        //change to mixup player
+        for (let i = 0; i < devicesArr.length; i++) {
+            console.log(devicesArr[i].name);
+            if (devicesArr[i].name === "MixUp") {
+                deviceIdToPlay = devicesArr[i].id;
+                console.log(deviceIdToPlay);
+            }
+
+        }
+
+        //add error handling when device not found
+    });
+
+
+
+
+}
+//--------------------------------------------find user device id-------------------------------------------------------------------------*/
 
 
 

@@ -31,22 +31,22 @@ router.post("/signin", async (req, res) => {
   } catch (e) {
     res.json(e)
   }
+      res.redirect('/homePage/homePage');
 
-
-  try{
-     //Need to check if access token and refresh token exists otherwise render log in page
-    if(await userData.checkSpotifyTokens(req.session.userId) == false){
-      //render the API log in page 
-      res.render('pages/APILogIn');
-     }
-    else{
-      let spotifyAccessToken = await userData.getSpotifyToken(req.session.userId);
-      res.render('pages/homePage',{accessToken : spotifyAccessToken});
-    }
-  }
-  catch(e){
-    console.log(e);
-  }
+  // try{
+  //    //Need to check if access token and refresh token exists otherwise render log in page
+  //   if(await userData.checkSpotifyTokens(req.session.userId) == false){
+  //     //render the API log in page 
+  //     res.redirect('/homePage/homePage');
+  //    }
+  //   else{
+  //     let spotifyAccessToken = await userData.getSpotifyToken(req.session.userId);
+  //     res.render('pages/homePage',{accessToken : spotifyAccessToken});
+  //   }
+  // }
+  // catch(e){
+  //   console.log(e);
+  // }
 });
 
 module.exports = router;
