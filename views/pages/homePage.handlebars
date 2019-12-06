@@ -67,35 +67,101 @@ body {font-family: Arial, Helvetica, sans-serif;}
 </div>
 
 <script>
-// Get the modal
-var modal = document.getElementById("myModal");
+  // Get the modal
+  var modal = document.getElementById("myModal");
 
-// Get the button that opens the modal
-var btn1 = document.getElementById("myBtn");
-var btn2 = document.getElementById("addplaylist");
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
+  // Get the button that opens the modal
+  var btn1 = document.getElementById("myBtn");
+  var btn2 = document.getElementById("addplaylist");
+  // Get the <span> element that closes the modal
+  var span = document.getElementsByClassName("close")[0];
 
-// When the user clicks the button, open the modal 
-btn1.onclick = function() {
-  modal.style.display = "block";
-}
+  // When the user clicks the button, open the modal 
+  btn1.onclick = function () {
+    modal.style.display = "block";
+  }
 
-btn2.onclick = function(){
+  btn2.onclick = function () {
     location.href = "search.html";
-}
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-  modal.style.display = "none";
-}
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == modal) {
+  }
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function () {
     modal.style.display = "none";
   }
-}
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function (event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
 </script>
 
 </body>
 </html>
+
+{{!-- <main>
+
+  
+
+  <script src="https://sdk.scdn.co/spotify-player.js"></script>
+  <script>
+    window.onSpotifyWebPlaybackSDKReady = () => {
+      // You can now initialize Spotify.Player and use the SDK
+      {{#if accessToken}}
+      var player = new Spotify.Player({
+        name: 'MixUp Player',
+        getOAuthToken: callback => {
+
+
+          callback('{{accessToken}}');
+        },
+        volume: 0.5
+      });
+
+      player.connect().then(success => {
+        if (success) {
+          console.log('The Web Playback SDK successfully connected to Spotify!');
+        }
+      })
+
+      player.addListener('ready', ({ device_id }) => {
+        console.log('The Web Playback SDK is ready to play music!');
+        console.log('Device ID', device_id);
+      })
+
+      {{/if}}
+    };
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  <form action="/spotify/search" method="POST">
+    <label for="searchBar">Search:</label>
+    <input type="text" name="searchbar" id="searchBar">
+    <button type="submit" id="submitButton">submit</button>
+  </form>
+
+  <button id="sPlayBtn" class="Spotify">click me to play</button>
+
+  <script>
+    $(document).ready(function () {
+      let splay = document.getElementById("sPlayBtn");
+      console.log(splay)
+      $(document).on("click", ".Spotify", function () {
+        console.log("clicked")
+        $.get("/spotify/play/spotify:album:6Fr2rQkZ383FcMqFyT7yPr")
+      })
+    })
+  </script>
+
+</main> --}}
