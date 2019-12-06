@@ -12,7 +12,7 @@ const utils = require('./utils')
 module.exports = {
 
     /**
-     * Create playlist
+     * Add Like to a playlist
      * @param {*} req
      */
     async addLike(req) {
