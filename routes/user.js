@@ -40,7 +40,8 @@ router.post("/signin", async (req, res) => {
       res.render('pages/APILogIn');
      }
     else{
-      res.render('pages/homePage')
+      let spotifyAccessToken = await userData.getSpotifyToken(req.session.userId);
+      res.render('pages/homePage',{accessToken : spotifyAccessToken});
     }
   }
   catch(e){

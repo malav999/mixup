@@ -6,7 +6,11 @@ const ObjectId = require('mongodb').ObjectID
 const playlistData = require('./playlist')
 const songData = require('./song')
 const likesCommentData = require('./likes-comments')
+const request = require('request')
+const rp = require('request-promise');
 
+const client_id = '65606d7237bd4225baa410676a5a6e70'; // Your client id
+const client_secret = '16e6770ee5a941f69f8bba78c73b1be1';
 module.exports = {
 
     /**
@@ -22,6 +26,8 @@ module.exports = {
         let password = req.body.password
         let accessToken = ""
         let refreshToken = ""
+        //the exact time when access token for spotify was added in the db
+        let sTokenTimeAdded = 0;
 
         // let accessToken = req.body.accessToken
         // let refreshToken = req.body.refreshToken
@@ -71,6 +77,7 @@ module.exports = {
         newUser.password = md5(password)
         newUser.accessToken = accessToken
         newUser.refreshToken = refreshToken
+        newUser.sTokenTimeAdded = sTokenTimeAdded
 
         const userCollection = await users();
 
@@ -253,24 +260,69 @@ module.exports = {
             return false;
         }
     },
-
-    async addSpotifyTokens(userId, accessToken, refreshToken) {
+    /**
+     * adds the access and refresh token for the usero once autherized 
+     * @param {*} userId 
+     * @param {*} accessToken 
+     * @param {*} refreshToken 
+     * @param {*} timeAdded 
+     */
+    async addSpotifyTokens(userId, accessToken, refreshToken, timeAdded) {
         const userCollection = await users();
         userId = ObjectId(userId);
-        const count = await userCollection.updateOne({ _id: userId }, { $set: { accessToken: accessToken, refreshToken: refreshToken } });
+        const count = await userCollection.updateOne({ _id: userId }, { $set: { accessToken: accessToken, refreshToken: refreshToken,  sTokenTimeAdded: timeAdded} });
 
         if (count.modifiedCount == 0) {
             throw "Error occoured while storing access and refresh token for the spotify user"
         }
     },
 
+    /**
+     * returns spotify accessToken for the user 
+     * @param {userId} userId 
+     */
     async getSpotifyToken(userId) {
         const userCollection = await users();
         userId = ObjectId(userId);
         userObj = await userCollection.findOne({ _id: userId })
+        let currTime = Date.now();
+        let tokenTime = userObj.sTokenTimeAdded;
+        
+        if(currTime - tokenTime > 1800000){
+
+            let refresh_Token =  userObj.refreshToken;
+            console.log("AccessToken before update : " + userObj.accessToken)
+            var authOptions = {
+                url: 'https://accounts.spotify.com/api/token',
+                headers: { 'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64')) },
+                form: {
+                  grant_type: 'refresh_token',
+                  refresh_token: refresh_Token
+                },
+                json: true
+            };
+            let newAccessToken = 0;
+
+            
+            await rp.post(authOptions,async function(error, response, body) {
+                
+                if (!error && response.statusCode === 200) {
+                    newAccessToken= response.body.access_token;
+                    console.log("AccessToken after update : " + newAccessToken);
+                    //update access_token and time in db and rerturn it 
+                }
+            });
+            
+            const count = await userCollection.updateOne({ _id: userId }, { $set: { accessToken: newAccessToken, sTokenTimeAdded: currTime}});
+
+            return newAccessToken;
+                    
+            
+
+        }
+
         return userObj.accessToken;
     },
-
     /**
      * Get all users not removed from the system
      */
