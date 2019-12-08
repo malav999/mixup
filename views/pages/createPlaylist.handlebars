@@ -1,0 +1,32 @@
+<div>
+    <div>
+        <form method="POST" action="/pages/search">
+            <input type="search" id="searchBar" name="searchBar" value="Enter song here" />
+            <button type="submit" id="Spotify" name="Spotify">Spotify</button>
+            <button type="submit" id="YouTube" name="YouTube">YouTube</button>
+    </div>
+    </form>
+    <div>
+        {{#if hassongs}}
+        <ul class="song-list">
+            {{#each songs}}
+            <li>
+                {{this}}
+            </li>
+            <button type="button" id="add" name="add">Add</button>
+            {{/each}}
+        </ul>
+        {{/if}}
+    </div>
+    <div>
+        {{playlistname}}
+        <ul class="added-songs">
+            {{#each songs}}
+            <li>
+                {{this}}
+            </li>
+            <button type="button" id="add" name="add">Add</button>
+            {{/each}}
+        </ul>
+    </div>
+</div>
