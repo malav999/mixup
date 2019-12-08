@@ -1,108 +1,130 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body {font-family: Arial, Helvetica, sans-serif;}
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+    }
 
-/* The Modal (background) */
-.modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  padding-top: 100px; /* Location of the box */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-}
+    /* The Modal (background) */
+    .modal {
+      display: none;
+      /* Hidden by default */
+      position: fixed;
+      /* Stay in place */
+      z-index: 1;
+      /* Sit on top */
+      padding-top: 100px;
+      /* Location of the box */
+      left: 0;
+      top: 0;
+      width: 100%;
+      /* Full width */
+      height: 100%;
+      /* Full height */
+      overflow: auto;
+      /* Enable scroll if needed */
+      background-color: rgb(0, 0, 0);
+      /* Fallback color */
+      background-color: rgba(0, 0, 0, 0.4);
+      /* Black w/ opacity */
+    }
 
-/* Modal Content */
-.modal-content {
-  background-color: #fefefe;
-  margin: auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
-}
+    /* Modal Content */
+    .modal-content {
+      background-color: #fefefe;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+    }
 
-/* The Close Button */
-.close {
-  color: #aaaaaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
+    /* The Close Button */
+    .close {
+      color: #aaaaaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
 
-.close:hover,
-.close:focus {
-  color: #000;
-  text-decoration: none;
-  cursor: pointer;
-}
-</style>
+    .close:hover,
+    .close:focus {
+      color: #000;
+      text-decoration: none;
+      cursor: pointer;
+    }
+  </style>
 </head>
+
 <body>
 
-<h2>MixUp</h2>
+  <h2>MixUp</h2>
 
-<!-- Trigger/Open The Modal -->
-<button id="myBtn">Create Playlist</button>
+  <!-- Trigger/Open The Modal -->
+  <button id="myBtn">Create Playlist</button>
 
-<!-- The Modal -->
-<div id="myModal" class="modal">
+  <!-- The Modal -->
+  <div id="myModal" class="modal">
 
-  <!-- Modal content -->
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <p>Add Playlist Name</p>
-    <input type="text" placeholder="Playlist Name" id="playlistName">
-    <button id="addplaylist">Create playlist</button>
+    <!-- Modal content -->
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <p>Add Playlist Name</p>
+      <input type="text" placeholder="Playlist Name" id="playlistName" required>
+      <button id="addplaylist">Create playlist</button>
+      
+    </div>
   </div>
-</div>
 
-<script>
-  // Get the modal
-  var modal = document.getElementById("myModal");
+  <script>
+    // Get the modal
+    var modal = document.getElementById("myModal");
 
-  // Get the button that opens the modal
-  var btn1 = document.getElementById("myBtn");
-  var btn2 = document.getElementById("addplaylist");
-  // Get the <span> element that closes the modal
-  var span = document.getElementsByClassName("close")[0];
+    // Get the button that opens the modal
+    var btn1 = document.getElementById("myBtn");
+    var btn2 = document.getElementById("addplaylist");
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
 
-  // When the user clicks the button, open the modal 
-  btn1.onclick = function () {
-    modal.style.display = "block";
-  }
-
-  btn2.onclick = function () {
-    location.href = "search.html";
-  }
-  // When the user clicks on <span> (x), close the modal
-  span.onclick = function () {
-    modal.style.display = "none";
-  }
-
-  // When the user clicks anywhere outside of the modal, close it
-  window.onclick = function (event) {
-    if (event.target == modal) {
+    // When the user clicks the button, open the modal 
+    // When the user clicks the button, open the modal 
+    // When the user clicks the button, open the modal 
+    // When the user clicks the button, open the modal 
+    // When the user clicks the button, open the modal 
+    btn1.onclick = function () {
+      modal.style.display = "block";
+    }
+    //will call the create playlist route
+    btn2.onclick = function () {
+      var pName = document.getElementById("playlistName");
+      window.location.href=`http://localhost:3000/createPlaylist/createPlaylist/${pName}`;
+    }
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
       modal.style.display = "none";
     }
-  }
-</script>
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+  </script>
 
 </body>
+
 </html>
 
-{{!-- <main>
 
-  
 
-  <script src="https://sdk.scdn.co/spotify-player.js"></script>
+{{!-- <main> --}}
+
+
+
+  {{!-- <script src="https://sdk.scdn.co/spotify-player.js"></script>
   <script>
     window.onSpotifyWebPlaybackSDKReady = () => {
       // You can now initialize Spotify.Player and use the SDK
@@ -129,7 +151,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
       })
 
       {{/if}}
-    };
+  };
   </script>
 
 
@@ -151,15 +173,29 @@ body {font-family: Arial, Helvetica, sans-serif;}
 
   <button id="sPlayBtn" class="Spotify">click me to play</button>
 
+
+
+
   <script>
-    $(document).ready(function () {
-      let splay = document.getElementById("sPlayBtn");
-      console.log(splay)
-      $(document).on("click", ".Spotify", function () {
-        console.log("clicked")
-        $.get("/spotify/play/spotify:album:6Fr2rQkZ383FcMqFyT7yPr")
+    $(document).ready(function(){
+      var playBtn = $("#sPlayBtn");
+      $(playBtn).click(function(){
+        $.ajax({
+          method: 'GET',
+          url: '/spotify/play/spotify:album:6Fr2rQkZ383FcMqFyT7yPr',
+          success: function(){
+            console.log("song played successfully");
+          },
+          error: function(message){
+            window.location.href = "http://localhost:3000/user/signin";
+          }
+        })
       })
     })
   </script>
+
+
+
+  
 
 </main> --}}

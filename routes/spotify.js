@@ -44,8 +44,8 @@ router.get("/login", function (req, res) {
             client_id: client_id,
             scope: scope,
             redirect_uri: redirect_uri,
-            //state: state   
-        }));
+        })
+    );
 
 
 });
@@ -53,6 +53,7 @@ router.get("/login", function (req, res) {
 
 
 router.get("/authorized", async (req, res) => {
+
 
 
     let code = req.query.code || null;
@@ -81,6 +82,7 @@ router.get("/authorized", async (req, res) => {
     };
 
     //requests the Api endpoint to acquire Access token and refresh token
+
     await rp.post(authOptions, async function (error, response, body) {
         //Need to make a page to show error or render if any error occurs while logging in 
         if (!error && response.statusCode === 200) {
@@ -102,6 +104,9 @@ router.get("/authorized", async (req, res) => {
             }
 
         }
+        else if (error) {
+            console.log(error)
+        }
     });
 
 
@@ -116,7 +121,7 @@ router.get("/authorized", async (req, res) => {
 
 //---------------------------------------Search with spotify------------------------------------------------------------------------------*/
 router.post("/search", async (req, res, next) => {
-    let userId = req.session.userId; 
+    let userId = req.session.userId;
     let status = await userData.checkSpotifyTokens(userId);
 
     if (status === true) {
@@ -159,23 +164,29 @@ router.post("/search", async (req, res) => {
     };
 
     await rp.get(trackGet, async function (error, response, body) {
-        let answer = await response.body;
-        console.log(answer);
-        let tracksArr = answer.tracks.items;
-        let name = []
-        let uri = []
-        tracksArr.forEach(song => {
-            name.push(song.name);
-            uri.push("/spotify/play/" + song.album.uri);
+        if (!error) {
+            let answer = await response.body;
+            console.log(answer);
+            let tracksArr = answer.tracks.items;
+            let name = []
+            let uri = []
+            tracksArr.forEach(song => {
+                name.push(song.name);
+                uri.push("/spotify/play/" + song.album.uri);
 
-        });
-        let tracksObj = {
-            names: name,
-            uris: uri
+            });
+            let tracksObj = {
+                names: name,
+                uris: uri
+            }
+
+            console.log(tracksObj)
+            return tracksObj;
+        }
+        else {
+            console.log(error);
         }
 
-        console.log(tracksObj)
-        return tracksObj;
     });
 
 
@@ -194,7 +205,7 @@ router.post("/search", async (req, res) => {
 
 router.get("/play/:uri", async (req, res, next) => {
     let userId = req.session.userId;
-    
+
     let status = await userData.checkSpotifyTokens(userId);
 
     if (status === true) {
@@ -257,11 +268,19 @@ router.get("/play/:uri", async (req, res) => {
             },
             json: true
         };
+        try {
+            await rp.put(playOnPlayer, async function (error, response, body) {
+                console.log('song is being played');
 
-        await rp.put(playOnPlayer, async function (error, response, body) {
-            console.log('song is being played');
+            });
+        }
+        catch (e) {
+            console.log(e);
+            res.status(e.statusCode).json({"error" : e.error.error.reason});
 
-        });
+
+        }
+
 
     });
 
@@ -269,8 +288,8 @@ router.get("/play/:uri", async (req, res) => {
 
 //---------------------------------------------Play song on spotify-----------------------------------------------------------------------*/  
 
-router.use("*", async(req,res)=>{
-    res.status(404).json({error:"Page not found"});
+router.use("*", async (req, res) => {
+    res.status(404).json({ error: "Page not found" });
 })
 
 module.exports = router;

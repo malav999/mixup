@@ -47,7 +47,7 @@ function isString(str, message) {
         if (undefined !== message) {
             console.log('Invalid ' + message)
         }
-        throw 'Invalid input'
+        throw 'Input should be of type string'
     }
 }
 
