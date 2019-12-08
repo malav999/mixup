@@ -3,7 +3,7 @@ const router = express.Router();
 const mixup = require("../mixup");
 const likesCommentsData = mixup.likesComments;
 
-console.log(1)
+
 // router.use("/", async (req, res, next) => {
 //     let userId = req.session.userId;
 //     if (!userId) {
