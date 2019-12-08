@@ -3,6 +3,7 @@ const playlistRoutes = require("./playlist")
 const spotifyRoutes = require("./spotify")
 const songRoutes = require("./song")
 const homePageRoutes = require("./homePage")
+const likesCommentsRoutes = require("./likesComments")
 
 const constructorMethod = app => {
   app.use("/user", userRoutes);
@@ -10,10 +11,10 @@ const constructorMethod = app => {
   app.use("/spotify", spotifyRoutes);
   app.use("/song", songRoutes);
   app.use("/homePage", homePageRoutes);
-  // app.use("/likesComments", animalRoutes);
+  app.use("/likesComments", likesCommentsRoutes);
 
   app.use("*", (req, res) => {
-    res.status(404).json({error:"Page not found"});
+    res.status(404).json({ error: "Page not found" });
   });
 };
 

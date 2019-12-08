@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{{!-- <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -14,65 +14,8 @@
 </head>
 
 <body>
-    <script>
 
-        var myform = document.getElementById('signup-form')
-
-        if (myform) {
-
-
-            var firstName = myform.getElementById('firstName');
-            var lastName = myform.getElementById('lastName');
-            var email = myform.getElementById('email');
-            var password = myform.getElementById('password');
-            var confirmPassword = myform.getElementById('confirmPassword');
-
-            myform.addEventListener(type = "submit", event => {
-                event.preventDefault();
-
-                if (firstName.value == "") {
-                    alert("Please enter your first name.");
-                    $('#firstName').focus();
-
-                }
-                if (lastName.value == "") {
-                    window.alert("Please enter your last name.");
-                    $('#lastName').focus();
-
-                }
-                if (email.value == "") {
-                    window.alert("Please enter your email.");
-                    $('#email').focus();
-
-                }
-                if (password.value == "") {
-                    window.alert("Please create a new password.");
-                    $('#password').focus();
-
-                }
-                if (confirmPassword.value == "") {
-                    window.alert("Enter the password again.");
-                    $('#confirmPassword').focus();
-
-                }
-
-
-                if (password.value !== confirmPassword.value) {
-                    alert('Password is not the same!');
-
-                }
-
-
-            })
-        }
-
-
-
-
-
-    </script>
-
-
+    {{error}}
     <div class="limiter">
         <div class="container-login100">
             <div class="wrap-login100">
@@ -101,8 +44,9 @@
                     </div>
 
                     <div class="wrap-input100 rs5-wrap-input100 validate-input m-b-20">
-                        <input class="input100" type="radio" id="male" name="gender">Male
-                        <input class="input100" type="radio" id="female" name="gender">Female
+                        <input class="input100" type="radio" class="gender" id="male" name="gender" value="male">
+                        <input class="input100" type="radio" class="gender" id="female" name="gender" value="female">
+                        <input class="input100" type="radio" class="gender" id="other" name="gender" value="other">
                         <span class="focus-input100"></span>
                     </div>
                     <div class="wrap-input100 rs6-wrap-input100 validate-input m-b-20" data-validate="Type password">
@@ -126,13 +70,104 @@
                 </form>
 
                 <div class="login100-more" style="background-image: url('/public/images/bg-01.jpg');"></div>
+
+
+
             </div>
         </div>
     </div>
 
 
+    <script src="/public/js/script.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
 
 
 </body>
 
-</html>
+</html> --}}
+
+<div>
+    <form id="myForm" method="POST" action="/user/signup"><br>
+        <label for="firstName">FirstName:</label>
+        <input type="text" name="firstName" id="firstName" value="{{post.firstName}}"><br>
+        <label for="lastName">LastName:</label>
+        <input type="text" name="lastName" id="lastName" value="{{post.lastName}}"><br>
+        <label for="gender">Gender:</label>
+        <input type="radio" name="gender" class="gender" value="male" value={{post.gender}}> Male<br>
+        <input type="radio" name="gender" class="gender" value="female" value={{post.gender}}> Female<br>
+        <input type="radio" name="gender" class="gender" value="other" value={{post.gender}}> Other<br>
+        <label for="dob">D.O.B:</label>
+        <input type="date" name="dob" id="dob" value="{{post.dob}}"><br>
+        <label for="email">E-mail:</label>
+        <input type="email" name="email" id="email" value="{{post.email}}"><br>
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="password" value="{{post.password}}"><br>
+        <label for="confirmPassword">Confirm Password:</label>
+        <input type="password" name="confirmPassword" id="confirmPassword" value="{{post.confirmPassword}}"><br><br>
+        <button type="submit" id="submit">Submit</button>
+
+        {{#if hasErrors}}
+        <ul class="error-list">
+            {{#each errors}}
+            <li>
+                {{this}}
+            </li>
+            {{/each}}
+        </ul>
+        {{/if}}
+
+
+        {{!-- 
+        <script src="/public/js/script.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
+
+        <script>
+            function f_Val() {
+                var firstname = document.getElementById('firstName');
+                var lastname = document.getElementById('lastName');
+                var Email = document.getElementById('email');
+                var Password = document.getElementById('password');
+                var ConfirmPassword = document.getElementById('confirmPassword');
+
+
+                if (firstname.value == "") {
+                    window.alert("Please enter your first name.");
+                    $('#firstName').focus();
+                    return false;
+                }
+
+                if (lastname.value == "") {
+                    window.alert("Please enter your last name.");
+                    $('#lastName').focus();
+                    return false;
+                }
+
+                if (Email.value == "") {
+                    window.alert("Please enter your email.");
+                    $('#email').focus();
+                    return false;
+                }
+                if (Password.value == "") {
+                    window.alert("Please create a new password.");
+                    $('#password').focus();
+                    return false;
+                }
+                if (ConfirmPassword.value == "") {
+                    window.alert("Enter the password again.");
+                    $('#confirmPassword').focus();
+                    return false;
+                }
+                if (Password.value !== ConfirmPassword.value) {
+                    window.alert('Password is not the same!');
+                    $('#confirmPassword').focus();
+                    return false;
+                }
+                if (firstname.value && lastname.value && Email.value && Password.value && ConfirmPassword.value && Password == ConfirmPassword)
+                    return true;
+
+            }
+        </script> --}}
+
+
+</div>

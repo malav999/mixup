@@ -5,7 +5,7 @@ const utils = require('./utils')
 const ObjectId = require('mongodb').ObjectID
 const playlistData = require('./playlist')
 const songData = require('./song')
-const likesCommentData = require('./likes-comments')
+const likesCommentData = require('./likesComments')
 const request = require('request')
 const rp = require('request-promise');
 
