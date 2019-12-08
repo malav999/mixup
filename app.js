@@ -36,7 +36,8 @@ app.use(bodyParser.urlencoded());
 
 //create express session 
 app.use(session(
-    {   name: 'AuthCookie',
+    {
+        name: 'AuthCookie',
         secret: 'old town road!',
         resave: false,
         saveUninitialized: true,
@@ -47,11 +48,11 @@ app.use(session(
 
 
 
-app.get("/", async(req,res)=>{
-    if(!req.session.userId){
+app.get("/", async (req, res) => {
+    if (!req.session.userId) {
         res.redirect("user/signin");
     }
-    else{
+    else {
         //render the homepage.
     }
 })

@@ -15,12 +15,59 @@ router.get("/signup", async (req, res) => {
 })
 
 router.post("/signup", async (req, res) => {
-  try {
-    const user = await userData.addUser(req);
-    res.render('pages/login')
-  } catch (e) {
-    res.json(e)
+  let signUpData = req.body;
+  let errors = [];
+
+  if (!signUpData.firstName) {
+    errors.push("No firstname provided");
   }
+
+  if (!signUpData.lastName) {
+    errors.push("No lastname provided");
+  }
+  // !signUpData.male && !signUpData.female && !signUpData.other
+  if (!signUpData.gender) {
+    errors.push("No gender provided");
+  }
+
+  if (!signUpData.dob) {
+    errors.push("No D.O.B provided");
+  }
+
+  if (!signUpData.email) {
+    errors.push("No E-mail provided");
+  }
+
+  if (!signUpData.password) {
+    errors.push("No password provided");
+  }
+
+  if (!signUpData.confirmPassword) {
+    errors.push("No confirm password provided");
+  }
+
+  if (signUpData.password != signUpData.confirmPassword) {
+    errors.push("Confirm Password does not match with password");
+  }
+
+  if (errors.length > 0) {
+    res.render("pages/signup", {
+      errors: errors,
+      hasErrors: true,
+      post: signUpData
+    });
+
+  }
+  else {
+    try {
+      const user = await userData.addUser(req);
+      res.render('pages/login')
+    } catch (e) {
+      res.json(e)
+    }
+  }
+
+
 });
 
 router.post("/signin", async (req, res) => {
@@ -28,29 +75,30 @@ router.post("/signin", async (req, res) => {
     const user = await userData.userSignin(req);
     //add userid in req.session 
     req.session.userId = user
+    res.redirect('/homePage/homePage');
   } catch (e) {
-    res.json(e)
+    res.render('pages/login', { error: e })
   }
-  res.redirect('/homePage/homePage');
+
 
 });
 
-router.get("/APILogIn", async(req,res,next)=>{
+router.get("/APILogIn", async (req, res, next) => {
   let userId = req.session.userId;
-  if(!userId){
+  if (!userId) {
     res.redirect("/user/signin");
   }
-  else{
+  else {
     next();
   }
- 
+
 })
-router.get("/APILogIn", async(req,res)=>{
+router.get("/APILogIn", async (req, res) => {
   res.render("pages/APILogIn");
 })
 
-router.use("*", async(req,res)=>{
-  res.status(404).json({error:"Page not found"});
+router.use("*", async (req, res) => {
+  res.status(404).json({ error: "Page not found" });
 })
 
 
