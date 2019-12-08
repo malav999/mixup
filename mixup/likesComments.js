@@ -28,30 +28,33 @@ module.exports = {
 
         // If playlistId alraedy exist Update add the userId who liked the playlist
         let likesCollection = await likesComments()
-        let getPastLikesData = await likesCollection.findOne({ playlistId: playlistId })
+        let likeData = await likesCollection.findOne({ playlistId: playlistId })
+        console.log('likedata', likeData)
+        if (likeData) {
+            likeData.userIds.push(userId)
 
-        if (getPastLikesData) {
-            getPastLikesData.userIds.push(userId)
-
-            let updateLikes = await likesCollection.updateOne({ _id: ObjectID(getPastLikesData._id) }, { $set: { getPastLikesData } })
-
-            return await this.getLikesCommentsById(getPastLikesData._id)
+            let updateLikes = await likesCollection.updateOne({ _id: ObjectID(likeData._id) }, likeData)
+            console.log(12)
+            return await this.getLikesCommentsById(likeData._id)
         }
 
         // Create new like-comment object
         let newFeeds = {}
         newFeeds.playlistId = playlistId
-        // newFeeds.userId = userId
         newFeeds.userIds = [userId]
         newFeeds.createdAt = new Date().toLocaleDateString()
-
+        newFeeds.comments = []
         const likesCommentsCollection = await likesComments();
 
         // Add likes-comments
         const insertInfo = await likesCommentsCollection.insertOne(newFeeds);
         // If insertion fails, err
         if (insertInfo.insertedCount === 0) throw "Could not add like-comment";
+
         const newId = insertInfo.insertedId;
+        console.log('newId', newId)
+
+        console.log(92)
 
         return this.getLikesCommentsById(newId)
     },
@@ -95,9 +98,12 @@ module.exports = {
         if (!id) throw "You must provide an id to search for";
 
         const likesCommentsCollection = await likesComments();
-        const likesComments = await likesCommentsCollection.findOne({ id: ObjectID(id) });
+        const getLikesComments = await likesCommentsCollection.findOne({ _id: ObjectID(id) });
+        // console.log("getLikesComments", getLikesComments)
 
-        return likesComments.userIds.length;
+        if (!getLikesComments) throw 'Data not found'
+
+        return getLikesComments;
     },
 
     /**
@@ -107,45 +113,41 @@ module.exports = {
     async addComment(req) {
         let playlistId = req.body.playlistId
         let userId = req.body.userId
-        // let userName = req.body.userName
+        let userName = req.body.name
         let content = req.body.content
-        // let like = req.body.like
 
         utils.isString(playlistId, `playlistId ${playlistId}`)
+        utils.isString(userName, `userName ${userName}`)
         utils.isString(userId, `userId ${userId}`)
         utils.isString(content, `content ${content}`)
-        // utils.isString(like, `like ${like}`)
-        // utils.isString(userName, `userName ${userName}`)
-
 
         // If playlistId alraedy exist Update add the userId who liked the playlist
         let commentCollection = await likesComments()
-        let getPastCommentData = await commentCollection.findOne({ playlistId: playlistId })
+        let commentData = await commentCollection.findOne({ playlistId: playlistId })
 
-        if (getPastCommentData) {
-            let contentObj = {}
-            contentObj.userId = userId
-            contentObj.name = userName
-            contentObj.comment = comment
-            getPastCommentData.content.push(contentObj)
+        if (commentData) {
+            let commentObj = {
+                userId: userId,
+                name: userName,
+                content: content
+            }
 
-            let updateComment = await commentCollection.updateOne({ _id: ObjectID(getPastCommentData._id) }, { $set: { getPastCommentData } })
+            commentData.comments.push(commentObj)
+            await commentCollection.updateOne({ _id: ObjectID(commentData._id) }, commentData)
 
-            return await this.getLikesCommentsById(getPastCommentData._id)
+            return await this.getLikesCommentsById(commentData._id)
         }
-
-        let contentObj = {}
-        contentObj.userId = userId
-        contentObj.name = userName
-        contentObj.comment = comment
 
         // Create new like-comment object
         let newFeeds = {}
         newFeeds.playlistId = playlistId
-        // newFeeds.userId = userId
-        newFeeds.content = [contentObj]
+        newFeeds.comments = [{
+            userId: userId,
+            name: userName,
+            content: content
+        }]
         newFeeds.createdAt = new Date().toLocaleDateString()
-
+        newFeeds.userIds = []
         const likesCommentsCollection = await likesComments();
 
         // Add likes-comments
