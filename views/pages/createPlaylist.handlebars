@@ -1,11 +1,37 @@
 <div>
     <div>
-        <form method="POST" action="/pages/search">
-            <input type="search" id="searchBar" name="searchBar" value="Enter song here" />
-            <button type="submit" id="Spotify" name="Spotify">Spotify</button>
+        <form method="post" action="/spotify/search">
+            <input type="text" id="searchBar" name="searchBar" placeholder="Enter song here" />
+            <button id="Spotify" name="Spotify">Spotify</button>
             <button type="submit" id="YouTube" name="YouTube">YouTube</button>
+        </form>
     </div>
-    </form>
+
+
+    <script>
+        $(document).ready(function () {
+            var spotifySearch = $("#Spotify");
+            var searchBar = $_POST['searchBar']
+
+            $(spotifySearch).click(function () {
+
+                $.ajax({
+                    method: 'post',
+                    data: JSON.stringify({ "searchBar": searchBar }),
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: function (obj) {
+                        console.log(obj);
+                    },
+                    error: function (message) {
+                        alert("error");
+                    }
+                })
+            })
+        })
+    </script>
+
+
     <div>
         {{#if hassongs}}
         <ul class="song-list">

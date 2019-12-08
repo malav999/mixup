@@ -137,7 +137,7 @@ router.post("/search", async (req, res, next) => {
 
 router.post("/search", async (req, res) => {
 
-    let songToSearch = req.body.searchbar;
+    let songToSearch = req.body.searchBar;
     try {
         util.isString(songToSearch);
     }
@@ -180,8 +180,8 @@ router.post("/search", async (req, res) => {
                 uris: uri
             }
 
-            console.log(tracksObj)
-            return tracksObj;
+            
+            res.json(tracksObj);
         }
         else {
             console.log(error);
