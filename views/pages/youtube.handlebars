@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <div style="display:flex;justify-content:center;align-items:center;">
     <div style="width:400px;height:300px;">
-        <div data-video="JC08Fu3QfJg" data-autoplay="0" data-loop="0" id="youtube-audio"></div>
+        <div data-video="qFkNATtc3mc" data-autoplay="0" data-loop="0" id="youtube-audio"></div>
         <div style="clear:both;margin:10px;text-align:center">
 
         </div>
@@ -14,7 +14,7 @@
 
     var player;
     function onYouTubeIframeAPIReady() {
-
+        console.log('player ready')
         var ctrlq = document.getElementById("youtube-audio");
         ctrlq.innerHTML = '<img id="youtube-icon" src=""/><div id="youtube-player"></div>';
         ctrlq.style.cssText = 'width:150px;margin:2em auto;cursor:pointer;cursor:hand;display:none';
@@ -38,7 +38,7 @@
     function togglePlayButton(play) {
         document.getElementById("youtube-icon").src = play ? "https://i.imgur.com/IDzX9gL.png" : "https://i.imgur.com/quyUPXN.png";
     }
-
+    
     function toggleAudio() {
         if (player.getPlayerState() == 1 || player.getPlayerState() == 3) {
             player.pauseVideo();

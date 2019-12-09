@@ -12,13 +12,13 @@
         $(document).ready(function () {
             var spotifySearch = $("#Spotify");
             var searchBar = $('searchBar')
+            
 
             $(spotifySearch).click(function () {
 
                 $.ajax({
                     method: 'post',
                     data: JSON.stringify({ "searchBar": searchBar }),
-                    contentType: "application/json",
                     dataType: "json",
                     success: function (obj) {
                         var search_result = obj;

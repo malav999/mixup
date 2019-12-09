@@ -14,8 +14,14 @@ router.use("/", async (req, res, next) => {
     }
 });
 
-router.get("/homePage", async (req, res) => {
 
+//Temperary just to test
+router.get("/youtube",async(req,res)=>{
+    res.render("pages/youtube");
+})
+
+router.get("/homePage", async(req,res)=>{
+    
     let userId = req.session.userId;
 
     //if no session exists 

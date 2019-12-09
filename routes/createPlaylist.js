@@ -18,8 +18,8 @@ router.use("/", async (req, res, next) => {
     }
 });
 //renders the CreatePlaylist page
-router.get("/createPlaylist", async (req, res) => {
-    console.log(req.body.playlistName);
+router.post("/createPlaylist", async (req, res) => {
+    console.log(req.params.name);
     res.render('pages/createPlaylist');
 })
 
