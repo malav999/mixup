@@ -14,33 +14,44 @@ router.use("/", async (req, res, next) => {
     }
 });
 
-router.get("/homePage", async(req,res)=>{
-    
+router.get("/homePage", async (req, res) => {
+
     let userId = req.session.userId;
 
     //if no session exists 
-    if(!userId){
+    if (!userId) {
         res.render("pages/login.handlebars")
     }
-    try{
+    try {
         let status = await userData.checkSpotifyTokens(userId);
-        if(status === true){
+        if (status === true) {
             let spotifyToken = await userData.getSpotifyToken(userId);
-            res.render("pages/homePage.handlebars",{accessToken:spotifyToken})
+            res.render("pages/homePage.handlebars", { accessToken: spotifyToken })
         }
-        else{
+        else {
             res.render("pages/homePage.handlebars")
         }
-    }catch(e){
+    } catch (e) {
         //handle error
     }
-    
-    
+
+
+})
+
+router.post("/homePage", async (req, res) => {
+    let playlistname = req.body.playlistName;
+
+    if (playlistname)
+        res.render("pages/createPlaylist", { playlistName: playlistname })
+    else {
+        alert("Enter playlist name");
+    }
 })
 
 
-router.use("*", async(req,res)=>{
-    res.status(404).json({error:"Page not found"});
+
+router.use("*", async (req, res) => {
+    res.status(404).json({ error: "Page not found" });
 })
 
 module.exports = router;

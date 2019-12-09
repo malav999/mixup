@@ -99,7 +99,7 @@
     //will call the create playlist route
     btn2.onclick = function () {
       var pName = document.getElementById("playlistName");
-      window.location.href=`http://localhost:3000/createPlaylist/createPlaylist/${pName}`;
+      window.location.href = `http://localhost:3000/createPlaylist/createPlaylist`;
     }
     // When the user clicks on <span> (x), close the modal
     span.onclick = function () {
@@ -124,11 +124,11 @@
 
 
 
-  {{!-- <script src="https://sdk.scdn.co/spotify-player.js"></script>
+{{!-- <script src="https://sdk.scdn.co/spotify-player.js"></script>
   <script>
     window.onSpotifyWebPlaybackSDKReady = () => {
       // You can now initialize Spotify.Player and use the SDK
-      {{#if accessToken}}
+      { { #if accessToken} }
       var player = new Spotify.Player({
         name: 'MixUp Player',
         getOAuthToken: callback => {
@@ -150,8 +150,10 @@
         console.log('Device ID', device_id);
       })
 
-      {{/if}}
-  };
+      {
+        {
+          /if}}
+        };
   </script>
 
 
@@ -177,21 +179,21 @@
 
 
   <script>
-    $(document).ready(function(){
-      var playBtn = $("#sPlayBtn");
-      $(playBtn).click(function(){
-        $.ajax({
-          method: 'GET',
-          url: '/spotify/play/spotify:album:6Fr2rQkZ383FcMqFyT7yPr',
-          success: function(){
-            console.log("song played successfully");
-          },
-          error: function(message){
-            window.location.href = "http://localhost:3000/user/signin";
-          }
+        $(document).ready(function () {
+          var playBtn = $("#sPlayBtn");
+          $(playBtn).click(function () {
+            $.ajax({
+              method: 'GET',
+              url: '/spotify/play/spotify:album:6Fr2rQkZ383FcMqFyT7yPr',
+              success: function () {
+                console.log("song played successfully");
+              },
+              error: function (message) {
+                window.location.href = "http://localhost:3000/user/signin";
+              }
+            })
+          })
         })
-      })
-    })
   </script>
 
 

@@ -1,7 +1,7 @@
 <div>
     <div>
         <form method="post" action="/spotify/search">
-            <input type="text" id="searchBar" name="searchBar" placeholder="Enter song here" />
+            <input type="text" id="searchBar" name="searchBar" />
             <button id="Spotify" name="Spotify">Spotify</button>
             <button type="submit" id="YouTube" name="YouTube">YouTube</button>
         </form>
@@ -11,7 +11,7 @@
     <script>
         $(document).ready(function () {
             var spotifySearch = $("#Spotify");
-            var searchBar = $_POST['searchBar']
+            var searchBar = $('searchBar')
 
             $(spotifySearch).click(function () {
 
@@ -21,10 +21,12 @@
                     contentType: "application/json",
                     dataType: "json",
                     success: function (obj) {
-                        console.log(obj);
+                        var search_result = obj;
+                        var hassongs = true;
                     },
                     error: function (message) {
-                        alert("error");
+
+                        var hassongs = false;
                     }
                 })
             })
@@ -33,18 +35,18 @@
 
 
     <div>
-        {{#if hassongs}}
         <ul class="song-list">
             {{#each songs}}
             <li>
-                {{this}}
+                {{this.song}}
+
+                <button type="button" id="add" name="{{this.uri}}">Add</button>
+
             </li>
-            <button type="button" id="add" name="add">Add</button>
             {{/each}}
         </ul>
-        {{/if}}
     </div>
-    <div>
+    {{!-- <div>
         {{playlistname}}
         <ul class="added-songs">
             {{#each songs}}
@@ -54,5 +56,5 @@
             <button type="button" id="add" name="add">Add</button>
             {{/each}}
         </ul>
-    </div>
+    </div> --}}
 </div>

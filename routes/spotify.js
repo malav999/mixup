@@ -168,20 +168,22 @@ router.post("/search", async (req, res) => {
             let answer = await response.body;
             console.log(answer);
             let tracksArr = answer.tracks.items;
-            let name = []
-            let uri = []
+            let tracksObj = []
+
             tracksArr.forEach(song => {
-                name.push(song.name);
-                uri.push("/spotify/play/" + song.album.uri);
+
+                tracksObj.push({
+                    song: song.name,
+                    uri: "/spotify/play/" + song.album.uri
+                })
+
+
 
             });
-            let tracksObj = {
-                names: name,
-                uris: uri
-            }
 
-            
-            res.json(tracksObj);
+
+            res.render("pages/createPlaylist", { songs: tracksObj })
+            // res.send(`<ul><li> ${tracksObj.names}</li ></ul > `)
         }
         else {
             console.log(error);
@@ -276,7 +278,7 @@ router.get("/play/:uri", async (req, res) => {
         }
         catch (e) {
             console.log(e);
-            res.status(e.statusCode).json({"error" : e.error.error.reason});
+            res.status(e.statusCode).json({ "error": e.error.error.reason });
 
 
         }
