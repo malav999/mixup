@@ -20,5 +20,6 @@ module.exports = {
   users: getCollectionFn("users"),
   playlists: getCollectionFn("playlists"),
   songs: getCollectionFn("songs"),
-  likesComments: getCollectionFn("likesComments")
+  likesComments: getCollectionFn("likesComments"),
+  youtubeSongs: getCollectionFn("youtubeSongs")
 };

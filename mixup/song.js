@@ -1,5 +1,6 @@
 const mongoCollections = require("../config/mongoCollections");
 const songs = mongoCollections.songs;
+const youtubeSongs = mongoCollections.youtubeSongs;
 const md5 = require('md5')
 const userData = require('./user')
 const users = mongoCollections.users;
@@ -240,5 +241,37 @@ module.exports = {
         }
 
         return songArr
+    },
+
+    /**
+     * Add youtube songs (using seed file) 
+     * @param {*} songName 
+     * @param {*} songURI 
+     * @param {*} songId 
+     */
+    async addSongToYouTube(songName, songURI, songId) {
+
+        utils.isString(songURI, `songURI ${songURI}`)
+        utils.isString(songName, `songName ${songName}`)
+        utils.isString(songId, `songId ${songId}`)
+
+        let createdAt = new Date().toLocaleDateString()
+
+        const youtubeSongsCollection = await youtubeSongs();
+
+        let songObj = {}
+        songObj.songURI = songURI
+        songObj.songName = songName
+        songObj.songId = songId
+        songObj.createdAt = createdAt
+
+        let insertInfo = await youtubeSongsCollection.insertOne(songObj)
+        if (insertInfo.insertedCount === 0) throw "Could not add song";
+
+        const newId = insertInfo.insertedId;
+
+        // // Get song by recently created song id
+        const song = await this.getSongBySongId(newId);
+        return song
     }
 };
