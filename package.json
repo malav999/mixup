@@ -23,6 +23,7 @@
     "xss": "^1.0.6"
   },
   "scripts": {
+    "seed": "node ./tasks/seed.js",
     "start": "node app.js"
   }
 }
