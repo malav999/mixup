@@ -18,23 +18,23 @@ module.exports = {
     async addLike(req) {
         let playlistId = req.body.playlistId
         let userId = req.body.userId
-        // let userName = req.body.userName
-        // let content = req.body.content
 
         utils.isString(playlistId, `playlistId ${playlistId}`)
         utils.isString(userId, `userId ${userId}`)
-        // utils.isString(userName, `userName ${userName}`)
-        // utils.isString(content, `content ${content}`)
 
-        // If playlistId alraedy exist Update add the userId who liked the playlist
-        let likesCollection = await likesComments()
+        let likesCommentsCollection = await likesComments();
+        // get likes data by playlistId
         let likeData = await likesCollection.findOne({ playlistId: playlistId })
-        console.log('likedata', likeData)
+
+        // If any user has already liked or commented on a specified playlist then the data will already exits
+        // Add the given userId to like
+        // update likes
         if (likeData) {
             likeData.userIds.push(userId)
 
-            let updateLikes = await likesCollection.updateOne({ _id: ObjectID(likeData._id) }, likeData)
-            console.log(12)
+            // Update likes
+            await likesCollection.updateOne({ _id: ObjectID(likeData._id) }, likeData)
+
             return await this.getLikesCommentsById(likeData._id)
         }
 
@@ -44,17 +44,13 @@ module.exports = {
         newFeeds.userIds = [userId]
         newFeeds.createdAt = new Date().toLocaleDateString()
         newFeeds.comments = []
-        const likesCommentsCollection = await likesComments();
 
-        // Add likes-comments
+        // Add likes-comments obj
         const insertInfo = await likesCommentsCollection.insertOne(newFeeds);
-        // If insertion fails, err
+        // If insertion fails, throw err
         if (insertInfo.insertedCount === 0) throw "Could not add like-comment";
 
         const newId = insertInfo.insertedId;
-        console.log('newId', newId)
-
-        console.log(92)
 
         return this.getLikesCommentsById(newId)
     },
