@@ -15,7 +15,8 @@ function isNull(obj) {
  * @param {*} message 
  */
 function isNumber(num, message) {
-    if (undefined === num || num === null || typeof (num) !== "number") {
+    num = Number(num)
+    if (undefined === num || num === null || typeof (num) !== "number" || isNaN(num)) {
         if (undefined !== message) {
             console.log('Invalid ' + message)
         }
