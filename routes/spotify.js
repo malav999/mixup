@@ -137,7 +137,7 @@ router.post("/search", async (req, res, next) => {
 
 router.post("/search", async (req, res) => {
 
-    let songToSearch = req.body.searchBar;
+    let songToSearch = await req.body.searchBar;
     try {
         util.isString(songToSearch);
     }
@@ -163,33 +163,40 @@ router.post("/search", async (req, res) => {
         json: true
     };
 
+
     await rp.get(trackGet, async function (error, response, body) {
         if (!error) {
             let answer = await response.body;
-            console.log(answer);
-            let tracksArr = answer.tracks.items;
-            let tracksObj = []
 
-            tracksArr.forEach(song => {
+            if (answer.tracks.items != undefined) {
+                let tracksArr = answer.tracks.items;
 
-                tracksObj.push({
-                    song: song.name,
-                    uri: "/spotify/play/" + song.album.uri
-                })
+                let tracksObj = []
 
+                tracksArr.forEach(song => {
 
-
-            });
+                    tracksObj.push({
+                        song: song.name,
+                        uri: "/spotify/play/" + song.album.uri
+                    })
 
 
-            res.render("pages/createPlaylist", { songs: tracksObj })
+
+                });
+
+
+                res.render("pages/createPlaylist", { songs: tracksObj })
+            }
+
             // res.send(`<ul><li> ${tracksObj.names}</li ></ul > `)
         }
         else {
-            console.log(error);
+            //console.log(error);
         }
 
     });
+
+
 
 
 

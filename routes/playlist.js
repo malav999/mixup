@@ -18,8 +18,8 @@ router.use("/", async (req, res, next) => {
 router.post("/create", async (req, res) => {
     try {
         const playlist = await playlistData.createPlaylist(req);
-        console.log('playlist', playlist)
-        res.json(playlist);
+        req.session.playlistId = playlist._id;
+        res.render('pages/createPlaylist');
     } catch (e) {
         console.log('err', e)
         res.json(e)

@@ -2,7 +2,8 @@ const express = require("express");
 const router = express.Router();
 const userData = require('../mixup/user');
 const util = require('../mixup/utils');
-const playlist = require('../mixup/playlist');
+const request = require('request');
+const rp = require('request-promise');
 
 
 
@@ -19,7 +20,16 @@ router.use("/", async (req, res, next) => {
 });
 //renders the CreatePlaylist page
 router.post("/createPlaylist", async (req, res) => {
-    console.log(req.params.name);
+    let playlistName = req.body.playlistName;
+    try{
+        util.isString(playlistName);
+        await rp.post("http://localhost:3000/playlist/create");
+        
+    }catch(e){
+        //handle error if not string
+    }
+
+
     res.render('pages/createPlaylist');
 })
 

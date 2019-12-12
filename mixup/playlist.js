@@ -16,7 +16,7 @@ module.exports = {
      * @param {*} req
      */
     async createPlaylist(req) {
-        let userId = req.body.userId
+        let userId = req.session.userId;
         let playlistName = req.body.playlistName
 
         utils.isString(userId, `userId ${userId}`)

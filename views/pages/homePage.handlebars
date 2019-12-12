@@ -62,9 +62,9 @@
 
   <h2>MixUp</h2>
   <form id="youtubeForm" method="GET" action="/homePage/youtube">
-  <button id="youtubebtn">youtube Player</button>
+    <button id="youtubebtn">youtube Player</button>
   </form>
-  
+
   <!-- Trigger/Open The Modal -->
   <button id="myBtn">Create Playlist</button>
 
@@ -75,9 +75,9 @@
     <div class="modal-content">
       <span class="close">&times;</span>
       <p>Add Playlist Name</p>
-      <form action="/createPlaylist/createPlaylist" method="post">
-      <input type="text" placeholder="Playlist Name" id="playlistName" required>
-      <button type="submit" id="addplaylist">Create playlist</button>
+      <form action="/playlist/create" method="post">
+        <input type="text" placeholder="Playlist Name" id="playlistName" name="playlistName" required>
+        <button type="submit" id="addplaylist">Create playlist</button>
       </form>
     </div>
   </div>
@@ -101,7 +101,7 @@
       modal.style.display = "block";
     }
     //will call the create playlist route
-    
+
     // When the user clicks on <span> (x), close the modal
     span.onclick = function () {
       modal.style.display = "none";
