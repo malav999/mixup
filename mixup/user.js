@@ -20,9 +20,9 @@ module.exports = {
     async addUser(req) {
         let firstName = req.body.firstName
         let lastName = req.body.lastName
-        // let gender = req.body.gender
-        // let dob = req.body.dob
-        let age = req.body.age
+        let gender = req.body.gender
+        let dob = req.body.dob
+        // let age = req.body.age
         let email = req.body.email
         let password = req.body.password
         let accessToken = ""
@@ -36,10 +36,10 @@ module.exports = {
         utils.isString(firstName, `first name ${firstName}`)
         utils.isString(lastName, `last name ${lastName}`)
         utils.isString(password, `password ${password}`)
-        utils.isNumber(age, `age ${age}`)
-        // utils.isString(gender, `gender ${gender}`)
-        // utils.isString(dob, `DOB ${dob}`)
-        // utils.isString(accessToken, `accessToken ${accessToken}`)
+        // utils.isNumber(age, `age ${age}`)
+        utils.isString(gender, `gender ${gender}`)
+        utils.isString(dob, `DOB ${dob}`)
+        //utils.isString(accessToken, `accessToken ${accessToken}`)
         // utils.isString(refreshToken, `refreshToken ${refreshToken}`)
 
         // If email is invalid, throw err
@@ -69,9 +69,9 @@ module.exports = {
         let newUser = {}
         newUser.firstName = firstName
         newUser.lastName = lastName
-        // newUser.gender = gender
-        // newUser.dob = dob
-        newUser.age = age
+        newUser.gender = gender
+        newUser.dob = dob
+        //newUser.age = age
         newUser.email = email
         newUser.createdAt = new Date().toLocaleDateString()
         newUser.playlistIds = []

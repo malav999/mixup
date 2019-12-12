@@ -12,7 +12,7 @@
         $(document).ready(function () {
             var spotifySearch = $("#Spotify");
             var searchBar = $('searchBar')
-            
+
 
             $(spotifySearch).click(function () {
 
@@ -31,30 +31,63 @@
                 })
             })
         })
-    </script>
 
+
+    </script>
+    <script>
+        function addSong(button) {
+            btn_id = button.id;
+            let songList = document.getElementsByClassName("song_button");
+            for (let i = 0; i < songList.length; i++) {
+                if (songList[i].id == btn_id) {
+                    console.log(songList[i].name);
+                    console.log(songList[i].value);
+
+                    $(document).ready(function () {
+
+                        $.ajax({
+                            url: '/song/addSong',
+                            method: 'post',
+                            data: JSON.stringify({ "songURI": songList[i].value, "songName": songList[i].name }),
+                            dataType: "json",
+                            success: function (obj) {
+                                alert("success")
+                            },
+                            error: function (message) {
+                                alert("error");
+                            }
+                        })
+
+                    })
+                }
+            }
+        }
+    </script>
 
     <div>
         <ul class="song-list">
+
             {{#each songs}}
             <li>
                 {{this.song}}
 
-                <button type="button" id="add" name="{{this.uri}}">Add</button>
+                <button type="button" class="song_button" name="{{this.song}} value={{this.uri}}">Add</button>
 
             </li>
             {{/each}}
+
+
+            <script>
+                let songList = document.getElementsByClassName("song_button");
+                for (let i = 0; i < songList.length; i++) {
+                    songList[i].setAttribute("id", i)
+                    songList[i].setAttribute("onclick", "addSong(this)")
+                }
+
+
+            </script>
         </ul>
+
+
     </div>
-    {{!-- <div>
-        {{playlistname}}
-        <ul class="added-songs">
-            {{#each songs}}
-            <li>
-                {{this}}
-            </li>
-            <button type="button" id="add" name="add">Add</button>
-            {{/each}}
-        </ul>
-    </div> --}}
 </div>
