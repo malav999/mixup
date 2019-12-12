@@ -9,6 +9,7 @@
 
 
     <script>
+
         $(document).ready(function () {
             var spotifySearch = $("#Spotify");
             var searchBar = $('searchBar')
@@ -40,15 +41,18 @@
             let songList = document.getElementsByClassName("song_button");
             for (let i = 0; i < songList.length; i++) {
                 if (songList[i].id == btn_id) {
-                    console.log(songList[i].name);
-                    console.log(songList[i].value);
+                    //console.log(songList[i].name.value);
+                    console.log(songList[i].name)
 
+
+                    console.log(sg_name);
+                    console.log(sg_uri);
                     $(document).ready(function () {
 
                         $.ajax({
                             url: '/song/addSong',
                             method: 'post',
-                            data: JSON.stringify({ "songURI": songList[i].value, "songName": songList[i].name }),
+                            data: JSON.stringify({ "songURI": songList[i].name, "songName": sg_name }),
                             dataType: "json",
                             success: function (obj) {
                                 alert("success")
@@ -69,9 +73,10 @@
 
             {{#each songs}}
             <li>
+
                 {{this.song}}
 
-                <button type="button" class="song_button" name="{{this.song}} value={{this.uri}}">Add</button>
+                <button type="button" class="song_button" name="{{this.song}}" value="{{}}">Add</button>
 
             </li>
             {{/each}}
