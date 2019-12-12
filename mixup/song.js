@@ -17,10 +17,10 @@ module.exports = {
      * @param {*} req 
      */
     async addSong(req) {
-        let userId = req.body.userId
+        let userId = req.session.userId
         let songURI = req.body.songURI
         let songName = req.body.songName
-        let playlistId = req.body.playlistId
+        let playlistId = req.session.playlistId
 
         utils.isString(userId, `userId ${userId}`)
         utils.isString(playlistId, `playlistId ${playlistId}`)
