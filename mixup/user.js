@@ -20,8 +20,9 @@ module.exports = {
     async addUser(req) {
         let firstName = req.body.firstName
         let lastName = req.body.lastName
-        let gender = req.body.gender
-        let dob = req.body.dob
+        // let gender = req.body.gender
+        // let dob = req.body.dob
+        let age = req.body.age
         let email = req.body.email
         let password = req.body.password
         let accessToken = ""
@@ -34,9 +35,10 @@ module.exports = {
 
         utils.isString(firstName, `first name ${firstName}`)
         utils.isString(lastName, `last name ${lastName}`)
-        utils.isString(gender, `gender ${gender}`)
         utils.isString(password, `password ${password}`)
-        utils.isString(dob, `DOB ${dob}`)
+        utils.isNumber(age, `age ${age}`)
+        // utils.isString(gender, `gender ${gender}`)
+        // utils.isString(dob, `DOB ${dob}`)
         // utils.isString(accessToken, `accessToken ${accessToken}`)
         // utils.isString(refreshToken, `refreshToken ${refreshToken}`)
 
@@ -67,8 +69,9 @@ module.exports = {
         let newUser = {}
         newUser.firstName = firstName
         newUser.lastName = lastName
-        newUser.gender = gender
-        newUser.dob = dob
+        // newUser.gender = gender
+        // newUser.dob = dob
+        newUser.age = age
         newUser.email = email
         newUser.createdAt = new Date().toLocaleDateString()
         newUser.playlistIds = []
@@ -157,7 +160,7 @@ module.exports = {
     async updateUser(req) {
         let firstName = req.body.firstName
         let lastName = req.body.lastName
-        let gender = req.body.gender
+        // let gender = req.body.gender
         let age = req.body.age
         let userId = req.body.userId
 
@@ -176,9 +179,9 @@ module.exports = {
             user.lastName = lastName
         }
 
-        if (gender) {
-            user.gender = gender
-        }
+        // if (gender) {
+        //     user.gender = gender
+        // }
 
         if (age) {
             user.age = age
@@ -271,7 +274,7 @@ module.exports = {
     async addSpotifyTokens(userId, accessToken, refreshToken, timeAdded) {
         const userCollection = await users();
         userId = ObjectId(userId);
-        const count = await userCollection.updateOne({ _id: userId }, { $set: { accessToken: accessToken, refreshToken: refreshToken,  sTokenTimeAdded: timeAdded} });
+        const count = await userCollection.updateOne({ _id: userId }, { $set: { accessToken: accessToken, refreshToken: refreshToken, sTokenTimeAdded: timeAdded } });
 
         if (count.modifiedCount == 0) {
             throw "Error occoured while storing access and refresh token for the spotify user"
@@ -288,37 +291,37 @@ module.exports = {
         userObj = await userCollection.findOne({ _id: userId })
         let currTime = Date.now();
         let tokenTime = userObj.sTokenTimeAdded;
-        
-        if(currTime - tokenTime > 1800000){
 
-            let refresh_Token =  userObj.refreshToken;
+        if (currTime - tokenTime > 1800000) {
+
+            let refresh_Token = userObj.refreshToken;
             console.log("AccessToken before update : " + userObj.accessToken)
             var authOptions = {
                 url: 'https://accounts.spotify.com/api/token',
                 headers: { 'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64')) },
                 form: {
-                  grant_type: 'refresh_token',
-                  refresh_token: refresh_Token
+                    grant_type: 'refresh_token',
+                    refresh_token: refresh_Token
                 },
                 json: true
             };
             let newAccessToken = 0;
 
-            
-            await rp.post(authOptions,async function(error, response, body) {
-                
+
+            await rp.post(authOptions, async function (error, response, body) {
+
                 if (!error && response.statusCode === 200) {
-                    newAccessToken= response.body.access_token;
+                    newAccessToken = response.body.access_token;
                     console.log("AccessToken after update : " + newAccessToken);
                     //update access_token and time in db and rerturn it 
                 }
             });
-            
-            const count = await userCollection.updateOne({ _id: userId }, { $set: { accessToken: newAccessToken, sTokenTimeAdded: currTime}});
+
+            const count = await userCollection.updateOne({ _id: userId }, { $set: { accessToken: newAccessToken, sTokenTimeAdded: currTime } });
 
             return newAccessToken;
-                    
-            
+
+
 
         }
 
