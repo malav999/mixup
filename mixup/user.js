@@ -314,6 +314,7 @@ module.exports = {
 
         return userObj.accessToken;
     },
+
     /**
      * Get all users not removed from the system
      */
@@ -322,6 +323,78 @@ module.exports = {
         const userArr = await userCollection.find({}).toArray();
 
         return userArr;
+    },
+
+    /**
+     * Get a specific user and user's playlists details
+     * @param {*} id 
+     */
+    async getUserDetailsById(id) {
+        if (!id) throw "You must provide an id to search for";
+
+        const userCollection = await users();
+        const user = await userCollection.findOne({ _id: ObjectId(id) });
+
+        if (utils.isNull(user) === false) {
+            console.log(`User not found with id ${id}`)
+            throw "No user with that id";
+        }
+
+        let userObj = {}
+
+        delete user.accessToken
+        delete user.password
+        delete user.refreshToken
+        delete user.sTokenTimeAdded
+
+        userObj.user = user
+
+        if (Array.isArray(user.playlistIds) && user.playlistIds.length > 0) {
+            userObj.userPlaylists = []
+            let userPlaylist = {}
+            for (let playlistId of user.playlistIds) {
+                console.log(0)
+                let playlistCollection = await playlists()
+                let playlistObj = await playlistCollection.findOne({ _id: ObjectId(playlistId) })
+
+                if (utils.isNull(playlistObj) !== false) {
+                    console.log(1)
+                    userPlaylist.playlist = playlistObj.playlistName
+
+                    // userObj.songArr = []
+
+                    // for (let songId of playlistObj.songs) {
+                    //     console.log(2)
+                    //     let songCollection = await songs()
+                    //     let songObj = await songCollection.findOne({ _id: ObjectId(songId) })
+                    //     console.log('songObj', songObj)
+                    //     if (utils.isNull(songObj) !== false) {
+                    //         userObj.songArr.push(songObj)
+                    //     }
+                    // }
+                }
+
+                let likesCommentsCollection = await likesComments()
+
+                playlistId = playlistId.toString()
+                // get number of likes for given playlist
+                let likesCommentsObj = await likesCommentsCollection.findOne({ playlistId: playlistId })
+
+                if (utils.isNull(likesCommentsObj) !== false) {
+                    userPlaylist.likes = likesCommentsObj.userIds.length
+                }
+
+                // get all comments user has commented on given playlist
+                if ((likesCommentsObj.comments.length > 0)) {
+                    userPlaylist.comments = []
+                    for (let comm of likesCommentsObj.comments)
+                        userPlaylist.comments.push(comm.content)
+                }
+                userObj.userPlaylists.push(userPlaylist)
+            }
+        }
+
+        return userObj;
     },
 
 };

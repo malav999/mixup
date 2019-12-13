@@ -3,8 +3,15 @@ const router = express.Router();
 const mixup = require("../mixup");
 const userData = mixup.user;
 
-
-
+router.get("/get", async (req, res) => {
+  try {
+    const user = await userData.getUserDetailsById(req.query.userId);
+    res.json(user);
+  } catch (e) {
+    console.log('err', e)
+    res.json(e)
+  }
+});
 
 router.get("/signin", async (req, res) => {
   res.render('pages/login')
@@ -26,13 +33,13 @@ router.post("/signup", async (req, res) => {
     errors.push("No lastname provided");
   }
   // !signUpData.male && !signUpData.female && !signUpData.other
-  if (!signUpData.gender) {
-    errors.push("No gender provided");
-  }
+  // if (!signUpData.gender) {
+  //   errors.push("No gender provided");
+  // }
 
-  if (!signUpData.dob) {
-    errors.push("No D.O.B provided");
-  }
+  // if (!signUpData.dob) {
+  //   errors.push("No D.O.B provided");
+  // }
 
   if (!signUpData.email) {
     errors.push("No E-mail provided");
@@ -93,6 +100,7 @@ router.get("/APILogIn", async (req, res, next) => {
   }
 
 })
+
 router.get("/APILogIn", async (req, res) => {
   res.render("pages/APILogIn");
 })
@@ -100,7 +108,6 @@ router.get("/APILogIn", async (req, res) => {
 router.use("*", async (req, res) => {
   res.status(404).json({ error: "Page not found" });
 })
-
 
 
 module.exports = router;
