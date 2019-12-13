@@ -16,30 +16,31 @@ router.use("/", async (req, res, next) => {
 
 
 //Temperary just to test
-router.get("/youtube",async(req,res)=>{
+router.get("/youtube", async (req, res) => {
     res.render("pages/youtube");
 })
 
-router.get("/homePage", async(req,res)=>{
-    
+router.get("/homePage", async (req, res) => {
+
     let userId = req.session.userId;
 
     //if no session exists 
     if (!userId) {
         res.render("pages/login.handlebars")
     }
+
+
+
     try {
-        let status = await userData.checkSpotifyTokens(userId);
-        if (status === true) {
-            let spotifyToken = await userData.getSpotifyToken(userId);
-            res.render("pages/homePage.handlebars", { accessToken: spotifyToken })
-        }
-        else {
-            res.render("pages/homePage.handlebars")
-        }
+        const user = await userData.getUserDetailsById(req.session.userId);
+        console.log(user);
+        res.render("pages/homePage.handlebars", { userData: user })
     } catch (e) {
-        //handle error
+        console.log('err', e)
+
     }
+
+
 
 
 })

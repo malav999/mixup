@@ -169,6 +169,18 @@ module.exports = {
     },
 
     /**
+     * check if player added atleast one song in current playlist
+     */
+    async checkPlaylistLength(playlistId) {
+        const playlistCollection = await playlists();
+        playlistId = ObjectID(playlistId);
+        let playListArr = await playlistCollection.findOne({ _id: playlistId });
+        if (playListArr.songs.length == 0) {
+            throw "You need to add atleast one song in playlist before saving"
+        }
+    },
+
+    /**
      * Get all playlists
      */
     async getAllPlaylists() {

@@ -120,3 +120,16 @@
 
     </div>
 </div>
+
+
+{{!-- Save play list button to go back to home page after creating a new playlist --}}
+<div>
+{{#if error}}
+<p>{{error}}</p>
+{{/if}}
+<form method="GET" action="/playlist/savePlaylist">
+    <button type="submit">
+        Save playlist
+    </button>
+</form>
+</div>

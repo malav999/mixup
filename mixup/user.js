@@ -23,7 +23,7 @@ module.exports = {
     async addUser(req) {
         let firstName = req.body.firstName
         let lastName = req.body.lastName
-        let age = req.body.age
+        //let age = req.body.age
         let email = req.body.email
         let password = req.body.password
         let accessToken = ""
@@ -34,7 +34,7 @@ module.exports = {
         utils.isString(firstName, `first name ${firstName}`)
         utils.isString(lastName, `last name ${lastName}`)
         utils.isString(password, `password ${password}`)
-        utils.isNumber(age, `age ${age}`)
+        //utils.isNumber(age, `age ${age}`)
 
         // If email is invalid, throw err
         if (utils.isValidEmail(email) === false) {
@@ -63,7 +63,7 @@ module.exports = {
         let newUser = {}
         newUser.firstName = firstName
         newUser.lastName = lastName
-        newUser.age = age
+        //newUser.age = age
         newUser.email = email
         newUser.createdAt = new Date().toLocaleDateString()
         newUser.playlistIds = []
@@ -152,8 +152,8 @@ module.exports = {
     async updateUser(req) {
         let firstName = req.body.firstName
         let lastName = req.body.lastName
-        // let gender = req.body.gender
-        let age = req.body.age
+        let gender = req.body.gender
+        //let age = req.body.age
         let userId = req.body.userId
 
         if (!userId) throw "Invalid request";
@@ -171,9 +171,9 @@ module.exports = {
             user.lastName = lastName
         }
 
-        if (age) {
-            user.age = age
-        }
+        // if (age) {
+        //     user.age = age
+        // }
 
         if (user) {
             user.updatedAt = new Date().toLocaleDateString()
@@ -351,12 +351,12 @@ module.exports = {
             userObj.userPlaylists = []
             let userPlaylist = {}
             for (let playlistId of user.playlistIds) {
-                console.log(0)
+                
                 let playlistCollection = await playlists()
                 let playlistObj = await playlistCollection.findOne({ _id: ObjectId(playlistId) })
 
                 if (utils.isNull(playlistObj) !== false) {
-                    console.log(1)
+                    
                     userPlaylist.playlist = playlistObj.playlistName
 
                     // userObj.songArr = []
@@ -377,16 +377,17 @@ module.exports = {
                 playlistId = playlistId.toString()
                 // get number of likes for given playlist
                 let likesCommentsObj = await likesCommentsCollection.findOne({ playlistId: playlistId })
-
                 if (utils.isNull(likesCommentsObj) !== false) {
-                    userPlaylist.likes = likesCommentsObj.userIds.length
-                }
+                    if (utils.isNull(likesCommentsObj) !== false) {
+                        userPlaylist.likes = likesCommentsObj.userIds.length
+                    }
 
-                // get all comments user has commented on given playlist
-                if ((likesCommentsObj.comments.length > 0)) {
-                    userPlaylist.comments = []
-                    for (let comm of likesCommentsObj.comments)
-                        userPlaylist.comments.push(comm.content)
+                    // get all comments user has commented on given playlist
+                    if ((likesCommentsObj.comments.length > 0)) {
+                        userPlaylist.comments = []
+                        for (let comm of likesCommentsObj.comments)
+                            userPlaylist.comments.push(comm.content)
+                    }
                 }
                 userObj.userPlaylists.push(userPlaylist)
             }

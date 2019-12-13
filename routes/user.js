@@ -3,9 +3,10 @@ const router = express.Router();
 const mixup = require("../mixup");
 const userData = mixup.user;
 
+//to get user's playlist 
 router.get("/get", async (req, res) => {
   try {
-    const user = await userData.getUserDetailsById(req.query.userId);
+    const user = await userData.getUserDetailsById(req.session.userId);
     res.json(user);
   } catch (e) {
     console.log('err', e)
