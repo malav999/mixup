@@ -163,38 +163,42 @@ router.post("/search", async (req, res) => {
         json: true
     };
 
+    try{
+        await rp.get(trackGet, async function (error, response, body) {
 
-    await rp.get(trackGet, async function (error, response, body) {
-        if (!error) {
             let answer = await response.body;
-
-            if (answer.tracks.items != undefined) {
+            console.log(answer);
+            if (!answer.error) {
                 let tracksArr = answer.tracks.items;
-
+    
                 let tracksObj = []
-
+    
                 tracksArr.forEach(song => {
-
+    
                     tracksObj.push({
                         song: song.name,
                         uri: "/spotify/play/" + song.album.uri
                     })
-
-
-
+    
+    
+    
                 });
-
-
-                res.render("pages/createPlaylist", { songs: tracksObj })
+    
+    
+                res.status(200).render("pages/createPlaylist", { songs: tracksObj })
             }
-
+            
             // res.send(`<ul><li> ${tracksObj.names}</li ></ul > `)
-        }
-        else {
-            //console.log(error);
-        }
+    
+    
+    
+        });
+    }catch(e){
+        console.log(e.statusCode)
+        res.status(e.statusCode)
+    }
 
-    });
+    
 
 
 

@@ -41,25 +41,36 @@
             let songList = document.getElementsByClassName("song_button");
             for (let i = 0; i < songList.length; i++) {
                 if (songList[i].id == btn_id) {
-                    //console.log(songList[i].name.value);
-                    console.log(songList[i].name)
+                    
+                    
+                    let songURI = document.getElementById(btn_id).value; 
+                        
+                     
+                    console.log(songURI);
+                    //console.log(songList[i].name);
 
 
-                    console.log(sg_name);
-                    console.log(sg_uri);
+                    
+                    
                     $(document).ready(function () {
 
                         $.ajax({
                             url: '/song/addSong',
                             method: 'post',
-                            data: JSON.stringify({ "songURI": songList[i].name, "songName": sg_name }),
+                            data: { "songURI": songURI, "songName": songList[i].name },
                             dataType: "json",
                             success: function (obj) {
                                 alert("success")
                             },
-                            error: function (message) {
-                                alert("error");
+                            statusCode:{
+                                400: function(){
+                                    alert('error');
+                                }
                             }
+                            //error: function (obj) {
+                              //  alert("error")
+                                
+                            //}
                         })
 
                     })
@@ -76,7 +87,7 @@
 
                 {{this.song}}
 
-                <button type="button" class="song_button" name="{{this.song}}" value="{{}}">Add</button>
+                <button type="button" class="song_button" name="{{this.song}}" value="{{this.uri}}">Add</button>
 
             </li>
             {{/each}}
