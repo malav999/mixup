@@ -15,7 +15,9 @@ router.get("/get", async (req, res) => {
 });
 
 router.get("/signin", async (req, res) => {
+  
   res.render('pages/login')
+
 })
 
 router.get("/signup", async (req, res) => {
@@ -23,57 +25,15 @@ router.get("/signup", async (req, res) => {
 })
 
 router.post("/signup", async (req, res) => {
-  let signUpData = req.body;
-  let errors = [];
-
-  if (!signUpData.firstName) {
-    errors.push("No firstname provided");
-  }
-
-  if (!signUpData.lastName) {
-    errors.push("No lastname provided");
-  }
-  // !signUpData.male && !signUpData.female && !signUpData.other
-  // if (!signUpData.gender) {
-  //   errors.push("No gender provided");
-  // }
-
-  // if (!signUpData.dob) {
-  //   errors.push("No D.O.B provided");
-  // }
-
-  if (!signUpData.email) {
-    errors.push("No E-mail provided");
-  }
-
-  if (!signUpData.password) {
-    errors.push("No password provided");
-  }
-
-  if (!signUpData.confirmPassword) {
-    errors.push("No confirm password provided");
-  }
-
-  if (signUpData.password != signUpData.confirmPassword) {
-    errors.push("Confirm Password does not match with password");
-  }
-
-  if (errors.length > 0) {
-    res.render("pages/signup", {
-      errors: errors,
-      hasErrors: true,
-      post: signUpData
-    });
-
-  }
-  else {
+  
     try {
       const user = await userData.addUser(req);
       res.render('pages/login')
     } catch (e) {
-      res.json(e)
+      // res.json(e)
+      res.render('pages/signup',{error:e})
     }
-  }
+  // }
 
 
 });
@@ -85,11 +45,11 @@ router.post("/signin", async (req, res) => {
     req.session.userId = user
     res.redirect('/homePage/homePage');
   } catch (e) {
-    res.render('pages/login', { error: e })
+     res.render('pages/login', { error: e });
   }
-
-
 });
+
+
 
 router.get("/APILogIn", async (req, res, next) => {
   let userId = req.session.userId;
@@ -107,7 +67,8 @@ router.get("/APILogIn", async (req, res) => {
 })
 
 router.use("*", async (req, res) => {
-  res.status(404).json({ error: "Page not found" });
+    res.status(404).render('pages/error',{title: "400 Error"});
+
 })
 
 

@@ -16,7 +16,7 @@ const constructorMethod = app => {
   app.use("/likesComments", likesCommentsRoutes);
   app.use("/createPlaylist", createPlaylistRoutes);
   app.use("*", (req, res) => {
-    res.status(404).json({ error: "Page not found" });
+    res.status(404).render('pages/error',{title: "400 Error"});
   });
 };
 

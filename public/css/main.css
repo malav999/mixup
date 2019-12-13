@@ -203,6 +203,7 @@ iframe {
 
 }
 
+
 /*==================================================================
 [ login more ]*/
 .login100-more {
@@ -249,7 +250,7 @@ iframe {
   display: -ms-flexbox;
   display: flex;
   flex-wrap: wrap;
-  padding: 90px 65px 40px 65px;
+  padding: 200px 65px 40px 65px;
 }
 .signup100-form-title {
   font-family: Poppins-Regular;
@@ -507,6 +508,77 @@ input.input100 {
     opacity: 1;
   }
 }
+
+/*------------------------------------------------------------------
+[ Login with spotify ]*/
+.bg-image {
+  /* The image used */
+  background-image: url("/public/images/spotifyimage.jpg");
+  
+  /* Add the blur effect */
+  filter: blur(8px);
+  -webkit-filter: blur(8px);
+  
+  /* Full height */
+  height: 100%; 
+  
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* Position text in the middle of the page/image */
+.bg-text {
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0, 0.4); /* Black w/opacity/see-through */
+  color: white;
+  font-weight: bold;
+  border: 3px solid #f1f1f1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  width: 80%;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Search     */
+@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+
+
+.search {
+  width: 100%;
+  position: relative;
+  display: flex;
+}
+
+.searchTerm {
+  width: 100%;
+  border: 3px solid black;
+  
+  padding: 20px;
+  height: 30px;
+  width: 500px;
+  
+}
+.searchTerm:focus{
+  border-color: #00ad5f;
+  box-shadow: none; 
+  -webkit-box-shadow: none;
+}
+
+
+.wrap{
+  width: 30%;
+  position: absolute;
+  top: 20%; 
+  left: 47%;
+  transform: translate(-50%, -50%);
+}
+
 
 
 

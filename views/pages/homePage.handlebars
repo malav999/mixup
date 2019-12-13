@@ -3,6 +3,8 @@
 
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" 
+  integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <style>
     body {
       font-family: Arial, Helvetica, sans-serif;
@@ -12,11 +14,11 @@
     .modal {
       display: none;
       /* Hidden by default */
-      position: fixed;
+      position: absolute;
       /* Stay in place */
       z-index: 1;
       /* Sit on top */
-      padding-top: 100px;
+      padding-top: 150px;
       /* Location of the box */
       left: 0;
       top: 0;
@@ -55,18 +57,79 @@
       text-decoration: none;
       cursor: pointer;
     }
+    .myBtn {
+      position:absolute;
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+.playlistName{
+font-size:18pt;
+     height:48px;
+     width:400px;
+}
+.labelname{
+  font-size: large;
+  font-style: normal;
+}
+
+
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 20px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.topnav-right {
+  float: right;
+}
   </style>
 </head>
 
 <body>
 
-  <h2>MixUp</h2>
-  <form id="youtubeForm" method="GET" action="/homePage/youtube">
+  <nav class="topnav">
+  
+ 
+  <div class="topnav-right">
+    <a href="/views/pages/discoverPage.handlebars">Discover</a>
+    <a href="#">Log Out</a>
+  </div>
+</nav>
+
+
+
+  {{!-- <form id="youtubeForm" method="GET" action="/homePage/youtube">
     <button id="youtubebtn">youtube Player</button>
-  </form>
+  </form> --}}
 
   <!-- Trigger/Open The Modal -->
-  <button id="myBtn">Create Playlist</button>
+  <button id="myBtn" class="myBtn">Create Playlist</button>
 
   <!-- The Modal -->
   <div id="myModal" class="modal">
@@ -74,10 +137,13 @@
     <!-- Modal content -->
     <div class="modal-content">
       <span class="close">&times;</span>
-      <p>Add Playlist Name</p>
+      <p class="labelname">Add Playlist Name</p>
       <form action="/playlist/create" method="post">
-        <input type="text" placeholder="Playlist Name" id="playlistName" name="playlistName" required>
-        <button type="submit" id="addplaylist">Create playlist</button>
+        <input type="text" placeholder="Playlist Name" id="playlistName" name="playlistName" class="playlistName"required>
+        <button type="submit"class="myBtn" id="addplaylist">Create playlist</button>
+        <div>
+  <span style=  "color:red; font-size:x-large;">{{error}}</span>
+</div>
       </form>
     </div>
   </div>
@@ -92,10 +158,7 @@
     // Get the <span> element that closes the modal
     var span = document.getElementsByClassName("close")[0];
 
-    // When the user clicks the button, open the modal 
-    // When the user clicks the button, open the modal 
-    // When the user clicks the button, open the modal 
-    // When the user clicks the button, open the modal 
+    
     // When the user clicks the button, open the modal 
     btn1.onclick = function () {
       modal.style.display = "block";

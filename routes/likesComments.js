@@ -39,7 +39,7 @@ router.post("/addComment", async (req, res) => {
 
 
 router.use("*", async (req, res) => {
-    res.status(404).json({ error: "Page not found" });
+        res.status(404).render('pages/errorAfterLogin',{title: "400 Error"});
 })
 
 module.exports = router;

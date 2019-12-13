@@ -57,8 +57,8 @@ router.post("/homePage", async (req, res) => {
 
 
 
-router.use("*", async (req, res) => {
-    res.status(404).json({ error: "Page not found" });
+router.use("*", async(req,res)=>{
+    res.status(404).render('pages/errorAfterLogin',{title: "400 Error"});
 })
 
 module.exports = router;
