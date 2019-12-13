@@ -1,5 +1,6 @@
 const mongoCollections = require("../config/mongoCollections");
 const users = mongoCollections.users;
+const playlists = mongoCollections.playlists;
 const md5 = require('md5')
 const utils = require('./utils')
 const ObjectId = require('mongodb').ObjectID
@@ -8,6 +9,8 @@ const songData = require('./song')
 const likesCommentData = require('./likesComments')
 const request = require('request')
 const rp = require('request-promise');
+const likesComments = mongoCollections.likesComments
+const songs = mongoCollections.songs;
 
 const client_id = '65606d7237bd4225baa410676a5a6e70'; // Your client id
 const client_secret = '16e6770ee5a941f69f8bba78c73b1be1';
@@ -30,17 +33,10 @@ module.exports = {
         //the exact time when access token for spotify was added in the db
         let sTokenTimeAdded = 0;
 
-        // let accessToken = req.body.accessToken
-        // let refreshToken = req.body.refreshToken
-
         utils.isString(firstName, `first name ${firstName}`)
         utils.isString(lastName, `last name ${lastName}`)
         utils.isString(password, `password ${password}`)
-        // utils.isNumber(age, `age ${age}`)
-        utils.isString(gender, `gender ${gender}`)
-        utils.isString(dob, `DOB ${dob}`)
-        //utils.isString(accessToken, `accessToken ${accessToken}`)
-        // utils.isString(refreshToken, `refreshToken ${refreshToken}`)
+        utils.isNumber(age, `age ${age}`)
 
         // If email is invalid, throw err
         if (utils.isValidEmail(email) === false) {
@@ -69,9 +65,7 @@ module.exports = {
         let newUser = {}
         newUser.firstName = firstName
         newUser.lastName = lastName
-        newUser.gender = gender
-        newUser.dob = dob
-        //newUser.age = age
+        newUser.age = age
         newUser.email = email
         newUser.createdAt = new Date().toLocaleDateString()
         newUser.playlistIds = []
@@ -179,10 +173,6 @@ module.exports = {
             user.lastName = lastName
         }
 
-        // if (gender) {
-        //     user.gender = gender
-        // }
-
         if (age) {
             user.age = age
         }
@@ -207,7 +197,7 @@ module.exports = {
         if (!id) throw "You must provide an id to search for";
 
         const userCollection = await users();
-        const user = await userCollection.findOne({ _id: id });
+        const user = await userCollection.findOne({ _id: ObjectId(id) });
 
         if (utils.isNull(user) === false) {
             console.log(`User not found with id ${id}`)
@@ -320,9 +310,6 @@ module.exports = {
             const count = await userCollection.updateOne({ _id: userId }, { $set: { accessToken: newAccessToken, sTokenTimeAdded: currTime } });
 
             return newAccessToken;
-
-
-
         }
 
         return userObj.accessToken;
@@ -338,4 +325,3 @@ module.exports = {
     },
 
 };
-
