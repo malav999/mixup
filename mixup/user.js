@@ -23,9 +23,7 @@ module.exports = {
     async addUser(req) {
         let firstName = req.body.firstName
         let lastName = req.body.lastName
-        let gender = req.body.gender
-        let dob = req.body.dob
-        // let age = req.body.age
+        let age = req.body.age
         let email = req.body.email
         let password = req.body.password
         let accessToken = ""

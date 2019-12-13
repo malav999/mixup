@@ -16,7 +16,6 @@ const likesCommentsData = mixup.likesComments;
 // });
 
 router.post("/addLike", async (req, res) => {
-    console.log(2)
     try {
         const likesComments = await likesCommentsData.addLike(req);
         console.log('likesComments', likesComments)
@@ -28,7 +27,6 @@ router.post("/addLike", async (req, res) => {
 });
 
 router.post("/addComment", async (req, res) => {
-    console.log(2)
     try {
         const likesComments = await likesCommentsData.addComment(req);
         console.log('likesComments', likesComments)
