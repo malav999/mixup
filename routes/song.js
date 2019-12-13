@@ -33,9 +33,18 @@ router.post("/addSong", async (req, res) => {
  */
 router.post("/searchSong", async (req, res) => {
     try {
-        const song = await songData.searchSongYoutube(req);
-        console.log('song', song)
-        res.json(song);
+        const result = await songData.searchSongYoutube(req);
+        let tracksObj = [];
+        result.forEach(song => {
+            tracksObj.push({
+                song: song.songName,
+                uri: song.songURI
+            })
+        });
+
+        res.status(200).render("pages/createPlaylist", { songs: tracksObj })
+
+
     } catch (e) {
         console.log('err', e)
         res.json(e)

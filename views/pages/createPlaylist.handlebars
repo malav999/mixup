@@ -1,14 +1,27 @@
 <div>
+    <script>
+        function Search(button) {
+            var btn_id = button.id;
+            var form = document.getElementById("myForm");
+            if (btn_id == "Spotify") {
+                form.setAttribute("action", "/spotify/search")
+            }
+            if (btn_id == "YouTube") {
+                form.setAttribute("action", "/song/searchSong")
+            }
+        }
+    </script>
     <div>
-        <form method="post" action="/spotify/search">
+        <form id="myForm" method="post">
             <input type="text" id="searchBar" name="searchBar" />
-            <button id="Spotify" name="Spotify">Spotify</button>
-            <button type="submit" id="YouTube" name="YouTube">YouTube</button>
+            <button id="Spotify" name="Spotify" onclick="Search(this)">Spotify</button>
+            <button type="submit" id="YouTube" name="YouTube" onclick="Search(this)">YouTube</button>
         </form>
     </div>
 
 
-    <script>
+
+    {{!-- <script>
 
         $(document).ready(function () {
             var spotifySearch = $("#Spotify");
@@ -34,24 +47,24 @@
         })
 
 
-    </script>
+    </script> --}}
     <script>
         function addSong(button) {
             btn_id = button.id;
             let songList = document.getElementsByClassName("song_button");
             for (let i = 0; i < songList.length; i++) {
                 if (songList[i].id == btn_id) {
-                    
-                    
-                    let songURI = document.getElementById(btn_id).value; 
-                        
-                     
+
+
+                    let songURI = document.getElementById(btn_id).value;
+
+
                     console.log(songURI);
                     //console.log(songList[i].name);
 
 
-                    
-                    
+
+
                     $(document).ready(function () {
 
                         $.ajax({
@@ -62,14 +75,14 @@
                             success: function (obj) {
                                 alert("success")
                             },
-                            statusCode:{
-                                400: function(){
+                            statusCode: {
+                                400: function () {
                                     alert('error');
                                 }
                             }
                             //error: function (obj) {
-                              //  alert("error")
-                                
+                            //  alert("error")
+
                             //}
                         })
 

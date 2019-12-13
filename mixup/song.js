@@ -176,13 +176,23 @@ module.exports = {
     },
 
     /**
+     * To get youtube songs from the database
+     * @param {*} req 
+     */
+    async getYoutubeSongs() {
+        const ytSongCollection = await youtubeSongs();
+        const allSongs = await ytSongCollection.find({}).toArray();
+        return allSongs;
+    },
+
+    /**
      * Search songs by given songs name on YouTube
      * @param {*} req 
      */
     async searchSongYoutube(req) {
-        let songName = req.body.songName
+        let songName = req.body.searchBar
 
-        let allSongs = await this.getAllSongs()
+        let allSongs = await this.getYoutubeSongs();
 
         if (!Array.isArray(allSongs) || allSongs.length <= 0 || allSongs === []) {
             console.log('No song found')
@@ -213,7 +223,7 @@ module.exports = {
      * @param {*} req 
      */
     async getUserSongs(req) {
-        let userId = req.body.userId
+        let userId = req.session.userId
         utils.isString(userId, `userId ${userId}`)
 
         let songCollection = await songs()
