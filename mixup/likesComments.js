@@ -24,7 +24,7 @@ module.exports = {
 
         let likesCommentsCollection = await likesComments();
         // get likes data by playlistId
-        let likeData = await likesCollection.findOne({ playlistId: playlistId })
+        let likeData = await likesCommentsCollection.findOne({ playlistId: playlistId })
 
         // If any user has already liked or commented on a specified playlist then the data will already exits
         // Add the given userId to like
@@ -33,7 +33,7 @@ module.exports = {
             likeData.userIds.push(userId)
 
             // Update likes
-            await likesCollection.updateOne({ _id: ObjectID(likeData._id) }, likeData)
+            await likesCommentsCollection.updateOne({ _id: ObjectID(likeData._id) }, likeData)
 
             return await this.getLikesCommentsById(likeData._id)
         }
@@ -94,8 +94,8 @@ module.exports = {
         if (!id) throw "You must provide an id to search for";
 
         const likesCommentsCollection = await likesComments();
+        // Get likesComments by id
         const getLikesComments = await likesCommentsCollection.findOne({ _id: ObjectID(id) });
-        // console.log("getLikesComments", getLikesComments)
 
         if (!getLikesComments) throw 'Data not found'
 
@@ -109,7 +109,7 @@ module.exports = {
     async addComment(req) {
         let playlistId = req.body.playlistId
         let userId = req.body.userId
-        let userName = req.body.name
+        let userName = req.body.userName
         let content = req.body.content
 
         utils.isString(playlistId, `playlistId ${playlistId}`)
@@ -117,17 +117,21 @@ module.exports = {
         utils.isString(userId, `userId ${userId}`)
         utils.isString(content, `content ${content}`)
 
-        // If playlistId alraedy exist Update add the userId who liked the playlist
         let commentCollection = await likesComments()
+        // Get like-comment object by playlistId
         let commentData = await commentCollection.findOne({ playlistId: playlistId })
 
+        // If any user has already liked or commented on a specified playlist then the data will already exits
+        // update comment obj
         if (commentData) {
+            // Create a new comment object
             let commentObj = {
                 userId: userId,
                 name: userName,
                 content: content
             }
 
+            // add newly created comment obj to likes-comments
             commentData.comments.push(commentObj)
             await commentCollection.updateOne({ _id: ObjectID(commentData._id) }, commentData)
 
@@ -144,14 +148,14 @@ module.exports = {
         }]
         newFeeds.createdAt = new Date().toLocaleDateString()
         newFeeds.userIds = []
-        const likesCommentsCollection = await likesComments();
 
         // Add likes-comments
-        const insertInfo = await likesCommentsCollection.insertOne(newFeeds);
+        const insertInfo = await commentCollection.insertOne(newFeeds);
         // If insertion fails, err
         if (insertInfo.insertedCount === 0) throw "Could not add like-comment";
         const newId = insertInfo.insertedId;
 
         return this.getLikesCommentsById(newId)
-    }
+    },
+
 };
