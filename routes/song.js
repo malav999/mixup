@@ -54,7 +54,7 @@ router.post("/searchSong", async (req, res) => {
 
 
 router.use("*", async (req, res) => {
-        res.status(404).render('pages/errorAfterLogin',{title: "400 Error"});
+    res.status(404).render('pages/errorAfterLogin', { title: "400 Error" });
 })
 
 module.exports = router;
