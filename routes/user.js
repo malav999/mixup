@@ -46,7 +46,13 @@ router.post("/signin", async (req, res) => {
     const user = await userData.userSignin(req);
     //add userid in req.session 
     req.session.userId = user
-    res.redirect('/homePage/homePage');
+    let spotifyStatus = await userData.checkSpotifyTokens(user);
+    if(spotifyStatus == true){
+      res.redirect('/homePage/homePage');
+    }
+    else{
+      res.redirect("/user/APILogIn");
+    }
   } catch (e) {
     res.render('pages/login', { error: e });
   }
@@ -68,6 +74,12 @@ router.get("/APILogIn", async (req, res, next) => {
 router.get("/APILogIn", async (req, res) => {
   res.render("pages/APILogIn");
 })
+
+//to log out the user
+router.get("/logout", async(req,res)=>{
+  req.session.destroy();
+  res.redirect("/user/signin")
+});
 
 router.use("*", async (req, res) => {
   res.status(404).render('pages/error', { title: "400 Error" });
