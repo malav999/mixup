@@ -22,10 +22,10 @@ async function main() {
 	const youtubeSong11 = await song.addSongToYouTube("love will keep us alive", "https://www.youtube.com/watch?v=Kw2FVxSOhv4", "Kw2FVxSOhv4", "youtube");
 	const youtubeSong12 = await song.addSongToYouTube("lome me like you do", "https://www.youtube.com/watch?v=bgjUzhdmmF0", "bgjUzhdmmF0", "youtube");
 	const youtubeSong13 = await song.addSongToYouTube("she got her own thing that's why i love her lyrics ", "https://www.youtube.com/watch?v=9brRClzXLY0", "9brRClzXLY0", "youtube");
-	const youtubeSong14 = await song.addSongToYouTube("lover", "https://www.youtube.com/watch?v=-BjZmE2gtdo", "BjZmE2gtdo", "youtube");
+	const youtubeSong14 = await song.addSongToYouTube("lover", "https://www.youtube.com/watch?v=-BjZmE2gtdo", "-BjZmE2gtdo", "youtube");
 	const youtubeSong15 = await song.addSongToYouTube("love yourself", "https://www.youtube.com/watch?v=oyEuk8j8imI", "oyEuk8j8imI", "youtube");
-	const youtubeSong16 = await song.addSongToYouTube("come and get it", "https://www.youtube.com/watch?v=n-D1EB74Ckg", "D1EB74Ckg", "youtube");
-	const youtubeSong17 = await song.addSongToYouTube("Blank space", "https://www.youtube.com/watch?v=e-ORhEE9VVg", "ORhEE9VVg", "youtube");
+	const youtubeSong16 = await song.addSongToYouTube("come and get it", "https://www.youtube.com/watch?v=n-D1EB74Ckg", "n-D1EB74Ckg", "youtube");
+	const youtubeSong17 = await song.addSongToYouTube("Blank space", "https://www.youtube.com/watch?v=e-ORhEE9VVg", "e-ORhEE9VVg", "youtube");
 	const youtubeSong18 = await song.addSongToYouTube("You belong with me", "https://www.youtube.com/watch?v=1WJpLpP-w2g", "1WJpLpP-w2g", "youtube");
 	const youtubeSong19 = await song.addSongToYouTube("Hello", "https://www.youtube.com/watch?v=b_ILDFp5DGA", "b_ILDFp5DGA", "youtube");
 	const youtubeSong20 = await song.addSongToYouTube("Crazier", "https://www.youtube.com/watch?v=B0p4Lv0t124", "B0p4Lv0t124", "youtube");
