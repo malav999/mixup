@@ -1,10 +1,39 @@
 <script type="text/javascript" src="https://www.youtube.com/iframe_api"></script>
 <script src="https://sdk.scdn.co/spotify-player.js"></script>
+
+
+
+
+
+<div>
+    <h1>
+        {{playlistObj.playlist.playlistName}}
+    </h1>
+    {{#each playlistObj.songArr}}
+
+    <li>
+
+        <div class="play_list-song-item">
+            <br>
+
+            <p  class="song a1"> {{this.songName}}</p>
+            <p class ="songURI"  name="{{this.songURI}}"></p>      
+        </div>
+
+
+    </li>
+    {{/each}}
+
+
+
+</div>
+<button id="Playerbtn">Play</button>
 <script>
-    window.onSpotifyWebPlaybackSDKReady = () => {
+    var player;
+    window.onSpotifyWebPlaybackSDKReady =async () => {
         // You can now initialize Spotify.Player and use the SDK
         {{#if accessToken}}
-        var player = new Spotify.Player({
+            player = new Spotify.Player({
             name: 'MixUp Player',
             getOAuthToken: callback => {
 
@@ -25,14 +54,65 @@
             console.log('Device ID', device_id);
         })
 
+        player.addListener('player_state_changed', ({
+            position,
+            duration,
+            track_window: { current_track }
+            }) => {
+            player.getCurrentState().then(state => {
+            if (!state) {
+                     console.error('User is not playing music through the Web Playback SDK');
+                return;
+             }
+
+            let {
+                current_track,
+                next_tracks: [next_track]
+            } = state.track_window;
+
+            console.log("state : " + state)
+            
+            });
+            console.log('Currently Playing', current_track);
+            console.log('Position in Song', position);
+            console.log('Duration of Song', duration);
+            });
+
+
+
         {{/if}}
 
         };
+    
+    var btn = document.getElementById("Playerbtn") 
+    btn.setAttribute("onclick","playMusic()")
+        
+    async function playMusic() {
+        var tag = document.getElementsByClassName("songURI")   
+        
+    }
 
+    async function playSpotifySong(url){
+        $(document).ready(function () {
+                        $.ajax({
+                        method: "post",
+                        url: "/spotify/play",
+                        data: {uri:url},
+                        success: function () {
+                           alert("song has been played");
+                        }
+                    }).then(function(){
+                        setTimeout(async function(){
+                            await player.pause()
+                        },10000);   
+                    })
+                })
+        
+    }
 </script>
 
 
-<button id="ytPlayerbtn" onclick="playSong()">Play</button>
+
 <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
 <div id="player"></div>
 
@@ -66,9 +146,7 @@
                 //event.target.playVideo();
             }
 
-            function playSong() {
-                player.playVideo();
-            }
+          
 
             // 5. The API calls this function when the player's state changes.
             //    The function indicates that when playing a video (state=1),
@@ -84,3 +162,5 @@
                 player.stopVideo();
             }
 </script>
+</script>
+

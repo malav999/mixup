@@ -4,6 +4,8 @@ const userData = require('../mixup/user')
 const playlistData = require('../mixup/playlist')
 const mongoCollections = require("../config/mongoCollections");
 const songs = mongoCollections.songs;
+const ObjectId = require('mongodb').ObjectID;
+const utils = require('../mixup/utils')
 
 
 
@@ -44,20 +46,20 @@ router.get("/play/:playlistId", async (req, res) => {
             }
 
             var objToRtrn = {
-                playlistObj : playlistObj,
+                playlist: playlistObj,
                 songArr: songArr
             }
-            res.render("pages/playPlaylist", { accessToken: spotifyToken, playlistObj : objToRtrn})
+            res.render("pages/playPlaylist", { accessToken: spotifyToken, playlistObj: objToRtrn })
         } catch (e) {
-            
+
             console.log('err', e)
-            res.render("pages/playPlaylist",{error:e});
+            res.render("pages/playPlaylist", { error: e });
 
         }
 
     }
     else {
-        
+
         try {
             const user = await userData.getUserDetailsById(req.session.userId);
             let playlistObj = await playlistData.getPlaylistById(playlistId);
@@ -74,16 +76,17 @@ router.get("/play/:playlistId", async (req, res) => {
             }
 
             var objToRtrn = {
-                playlistObj : playlistObj,
+                playlist: playlistObj,
                 songArr: songArr
             }
-            res.render("pages/playPlaylist", { playlistObj : objToRtrn})
+            console.log(objToRtrn.playlist.playlistName)
+            res.render("pages/playPlaylist", { playlistObj: objToRtrn })
         } catch (e) {
-            
+
             console.log('err', e)
-            res.render("pages/playPlaylist",{error:e});
+            res.render("pages/playPlaylist", { error: e });
         }
-        
+
     }
 })
 

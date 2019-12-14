@@ -177,7 +177,7 @@ router.post("/search", async (req, res) => {
     
                     tracksObj.push({
                         song: song.name,
-                        uri: "/spotify/play/" + song.album.uri
+                        uri:  song.uri
                     })
     
     
@@ -216,7 +216,7 @@ router.post("/search", async (req, res) => {
 
 //---------------------------------------------Play song on spotify-----------------------------------------------------------------------*/
 
-router.get("/play/:uri", async (req, res, next) => {
+router.post("/play/post", async (req, res, next) => {
     let userId = req.session.userId;
 
     let status = await userData.checkSpotifyTokens(userId);
@@ -236,9 +236,9 @@ router.get("/play/:uri", async (req, res, next) => {
 
 
 
-router.get("/play/:uri", async (req, res) => {
+router.post("/play/", async (req, res) => {
     let userId = req.session.userId;
-    let songToPlay = req.params.uri;
+    let songToPlay = req.body.uri;
     //userId = ObjectId(userId);
     let spotifyToken = await userData.getSpotifyToken(userId);
     let deviceIdToPlay = "";
@@ -277,10 +277,11 @@ router.get("/play/:uri", async (req, res) => {
                 'Authorization': `Bearer ${spotifyToken}`
             },
             body: {
-                context_uri: songToPlay
+                uris: [songToPlay]
             },
             json: true
         };
+        console.log(playOnPlayer);
         try {
             await rp.put(playOnPlayer, async function (error, response, body) {
                 console.log('song is being played');
