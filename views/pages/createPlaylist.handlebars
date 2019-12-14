@@ -11,67 +11,70 @@
             }
         }
     </script> --}}
+
 <!doctype html>
 <html>
+
 <head>
-     <link rel="stylesheet" type="text/css" href="/public/css/main.css">
-     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-      <style>
-          .topnav {
-  overflow: hidden;
-  background-color: #333;
-}
+    <link rel="stylesheet" type="text/css" href="/public/css/main.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style>
+        .topnav {
+            overflow: hidden;
+            background-color: #333;
+        }
 
-.topnav a {
-  float: left;
-  color: #f2f2f2;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-  font-size: 20px;
-}
+        .topnav a {
+            float: left;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 20px;
+        }
 
-.topnav a:hover {
-  background-color: #ddd;
-  color: black;
-}
+        .topnav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
 
-.topnav a.active {
-  background-color: #4CAF50;
-  color: white;
-}
+        .topnav a.active {
+            background-color: #4CAF50;
+            color: white;
+        }
 
-.topnav-right {
-  float: right;
-}
-      </style>
+        .topnav-right {
+            float: right;
+        }
+    </style>
 </head>
-<body>
-     <nav class="topnav">
-  
- 
-  <div class="topnav-right">
-    <a href="/views/pages/discoverPage.handlebars">Discover</a>
-    <a href="#">Log Out</a>
-  </div>
-</nav>
 
-<div class="wrap">
-    <div class="search">
-        <form method="post" action="/spotify/search">
-            <input type="text" id="searchBar" class="searchTerm" name="searchBar" placeholder="Search"/>
-                  </div>
-                        <button class="btn btn-primary btn-lg" id="Spotify" name="Spotify">
-                            Spotify
-                        </button>
-                          &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                           &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                               &nbsp; &nbsp; &nbsp; 
-            <button class="btn btn-primary btn-lg" type="submit" id="YouTube" name="YouTube">YouTube</button>
+<body>
+    <nav class="topnav">
+
+
+        <div class="topnav-right">
+            <a href="/views/pages/discoverPage.handlebars">Discover</a>
+            <a href="#">Log Out</a>
+        </div>
+    </nav>
+
+    <div class="wrap">
+        <div class="search">
+            <form method="post" action="/spotify/search">
+                <input type="text" id="searchBar" class="searchTerm" name="searchBar" placeholder="Search" />
+        </div>
+        <button class="btn btn-primary btn-lg" id="Spotify" name="Spotify">
+            Spotify
+        </button>
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        &nbsp; &nbsp; &nbsp;
+        <button class="btn btn-primary btn-lg" type="submit" id="YouTube" name="YouTube">YouTube</button>
         </form>
     </div>
 
@@ -79,7 +82,7 @@
         $(document).ready(function () {
             var spotifySearch = $("#Spotify");
             var searchBar = $('searchBar')
-            
+
 
             $(spotifySearch).click(function () {
 
@@ -99,7 +102,7 @@
             })
         })
     </script>
-  <script>
+    <script>
         function Search(button) {
             var btn_id = button.id;
             var form = document.getElementById("myForm");
@@ -113,7 +116,7 @@
     </script>
 
     <div class="btn-group">
-        <ul >
+        <ul>
             {{#each songs}}
             <li class="song-list">
                 {{this.song}}
@@ -127,12 +130,13 @@
 
 
 </body>
+
 </html>
 
 
 
 
- <div>
+<div>
     <div>
         <form id="myForm" method="post">
             <input type="text" id="searchBar" name="searchBar" />
@@ -143,7 +147,7 @@
 
 
 
-    
+
     <script>
         function addSong(button) {
             btn_id = button.id;
@@ -220,12 +224,12 @@
 
 {{!-- Save play list button to go back to home page after creating a new playlist --}}
 <div>
-{{#if error}}
-<p>{{error}}</p>
-{{/if}}
-<form method="GET" action="/playlist/savePlaylist">
-    <button type="submit">
-        Save playlist
-    </button>
-</form>
+    {{#if error}}
+    <p>{{error}}</p>
+    {{/if}}
+    <form method="GET" action="/playlist/savePlaylist">
+        <button type="submit">
+            Save playlist
+        </button>
+    </form>
 </div>

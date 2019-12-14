@@ -3,8 +3,8 @@
 
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" 
-  integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <style>
     body {
       font-family: Arial, Helvetica, sans-serif;
@@ -57,70 +57,73 @@
       text-decoration: none;
       cursor: pointer;
     }
+
     .myBtn {
-      position:absolute;
-  background-color: #4CAF50;
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
-  cursor: pointer;
-}
-.playlistName{
-font-size:18pt;
-     height:48px;
-     width:400px;
-}
-.labelname{
-  font-size: large;
-  font-style: normal;
-}
+      position: absolute;
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+    }
+
+    .playlistName {
+      font-size: 18pt;
+      height: 48px;
+      width: 400px;
+    }
+
+    .labelname {
+      font-size: large;
+      font-style: normal;
+    }
 
 
-.topnav {
-  overflow: hidden;
-  background-color: #333;
-}
+    .topnav {
+      overflow: hidden;
+      background-color: #333;
+    }
 
-.topnav a {
-  float: left;
-  color: #f2f2f2;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-  font-size: 20px;
-}
+    .topnav a {
+      float: left;
+      color: #f2f2f2;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+      font-size: 20px;
+    }
 
-.topnav a:hover {
-  background-color: #ddd;
-  color: black;
-}
+    .topnav a:hover {
+      background-color: #ddd;
+      color: black;
+    }
 
-.topnav a.active {
-  background-color: #4CAF50;
-  color: white;
-}
+    .topnav a.active {
+      background-color: #4CAF50;
+      color: white;
+    }
 
-.topnav-right {
-  float: right;
-}
+    .topnav-right {
+      float: right;
+    }
   </style>
 </head>
 
 <body>
 
   <nav class="topnav">
-  
- 
-  <div class="topnav-right">
-    <a href="/views/pages/discoverPage.handlebars">Discover</a>
-    <a href="#">Log Out</a>
-  </div>
-</nav>
+
+
+    <div class="topnav-right">
+      <a href="/views/pages/discoverPage.handlebars">Discover</a>
+      <a href="#">Log Out</a>
+    </div>
+  </nav>
 
 
 
@@ -129,7 +132,7 @@ font-size:18pt;
   </form> --}}
   </form>
   <form id="testing" method="GET" action="/playPlaylist/play/5df3fba8b31eabd3dcb347a9">
-  <button type="submit">Play Playlist</button>
+    <button type="submit">Play Playlist</button>
   </form>
 
   <!-- Trigger/Open The Modal -->
@@ -143,11 +146,12 @@ font-size:18pt;
       <span class="close">&times;</span>
       <p class="labelname">Add Playlist Name</p>
       <form action="/playlist/create" method="post">
-        <input type="text" placeholder="Playlist Name" id="playlistName" name="playlistName" class="playlistName"required>
-        <button type="submit"class="myBtn" id="addplaylist">Create playlist</button>
+        <input type="text" placeholder="Playlist Name" id="playlistName" name="playlistName" class="playlistName"
+          required>
+        <button type="submit" class="myBtn" id="addplaylist">Create playlist</button>
         <div>
-  <span style=  "color:red; font-size:x-large;">{{error}}</span>
-</div>
+          <span style="color:red; font-size:x-large;">{{error}}</span>
+        </div>
       </form>
     </div>
   </div>
@@ -162,7 +166,7 @@ font-size:18pt;
     // Get the <span> element that closes the modal
     var span = document.getElementsByClassName("close")[0];
 
-    
+
     // When the user clicks the button, open the modal 
     btn1.onclick = function () {
       modal.style.display = "block";
@@ -180,7 +184,37 @@ font-size:18pt;
         modal.style.display = "none";
       }
     }
+    function playSong(button) {
+      var btn_id = button.id;
+
+    }
   </script>
+
+
+
+
+  <div>
+    <ul class="song-list">
+
+      {{#each userData.userPlaylists}}
+      <li>
+
+        {{this.playlist}}
+
+        <button type="button" class="play_button" name="{{this.playlist}}">Play</button>
+
+      </li>
+      {{/each}}
+      <script>
+        let playList_list = document.getElementsByClassName("play_button");
+        for (let i = 0; i < songList.length; i++) {
+          playList_list[i].setAttribute("id", i)
+          playList_list[i].setAttribute("onclick", "playSong(this)")
+        }
+      </script>
+    </ul>
+  </div>
+
 
 </body>
 

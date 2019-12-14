@@ -349,14 +349,14 @@ module.exports = {
 
         if (Array.isArray(user.playlistIds) && user.playlistIds.length > 0) {
             userObj.userPlaylists = []
-            let userPlaylist = {}
             for (let playlistId of user.playlistIds) {
-                
+                let userPlaylist = {}
+
                 let playlistCollection = await playlists()
                 let playlistObj = await playlistCollection.findOne({ _id: ObjectId(playlistId) })
 
                 if (utils.isNull(playlistObj) !== false) {
-                    
+
                     userPlaylist.playlist = playlistObj.playlistName
 
                     // userObj.songArr = []
