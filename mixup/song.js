@@ -204,6 +204,8 @@ module.exports = {
             throw `No song found`
         }
 
+        songName = songName.toLowerCase()
+
         let searchResult = []
         for (let song of allSongs) {
             if (song.songName.includes(songName)) {
@@ -273,6 +275,8 @@ module.exports = {
         let createdAt = new Date().toLocaleDateString()
 
         const youtubeSongsCollection = await youtubeSongs();
+
+        songName = songName.toLowerCase()
 
         let songObj = {}
         songObj.songURI = songURI
