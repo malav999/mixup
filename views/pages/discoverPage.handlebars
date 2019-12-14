@@ -1,0 +1,24 @@
+
+<ul class="playList-list">
+
+            {{#each allPlayList}}
+            <li>
+                <div class="song-item">
+                <br>
+                    PlaylistName : {{this.playlistName}}
+                    </br>
+                    <br>
+                    UserName : {{this.userName}}
+                    </br>
+                    <br>
+                    Likes : {{this.likes}}
+                    </br>
+                    <br>
+                    Comment : {{this.comments}} 
+                    </br>
+                    
+                </div>
+                -----------------------------------------------
+            </li>
+            {{/each}}
+</ul>
