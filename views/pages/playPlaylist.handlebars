@@ -6,6 +6,7 @@
 
 
 <div>
+    <div id="yt_player"></div>
     <h1>
         {{playlistObj.playlist.playlistName}}
     </h1>
@@ -29,83 +30,119 @@
 </div>
 <button id="Playerbtn">Play</button>
 <script>
+    var currPlaylist;
+    let ctr = 1;
     var player;
     window.onSpotifyWebPlaybackSDKReady =async () => {
         // You can now initialize Spotify.Player and use the SDK
         {{#if accessToken}}
             player = new Spotify.Player({
-            name: 'MixUp Player',
-            getOAuthToken: callback => {
-
-
-                callback('{{accessToken}}');
-            },
-            volume: 0.5
-        });
-
-        player.connect().then(success => {
-            if (success) {
-                console.log('The Web Playback SDK successfully connected to Spotify!');
-            }
-        })
-
-        player.addListener('ready', ({ device_id }) => {
-            console.log('The Web Playback SDK is ready to play music!');
-            console.log('Device ID', device_id);
-        })
-
-        player.addListener('player_state_changed', ({
-            position,
-            duration,
-            track_window: { current_track }
-            }) => {
-            player.getCurrentState().then(state => {
-            if (!state) {
-                     console.error('User is not playing music through the Web Playback SDK');
-                return;
-             }
-
-            let {
-                current_track,
-                next_tracks: [next_track]
-            } = state.track_window;
-
-            console.log("state : " + state)
-            
-            });
-            console.log('Currently Playing', current_track);
-            console.log('Position in Song', position);
-            console.log('Duration of Song', duration);
+                name: 'MixUp Player',
+                getOAuthToken: callback => {
+                    callback('{{accessToken}}');
+                },
+                volume: 0.5
             });
 
+            player.connect().then(success => {
+                if (success) {
+                    console.log('The Web Playback SDK successfully connected to Spotify!');
+                }
+            })
 
+            player.addListener('ready', ({ device_id }) => {
+                console.log('The Web Playback SDK is ready to play music!');
+                console.log('Device ID', device_id);
+            })
 
+            player.addListener('player_state_changed',state => {
+                console.log(state);
+                if(state && state.paused && state.position === 0) {
+                    console.log(ctr);
+                    if(currPlaylist.length>0 && ctr%3 == 0 ) {
+                        let song = currPlaylist[0].getAttribute("name");
+                        currPlaylist[0].parentNode.removeChild(currPlaylist[0])
+                        console.log('spotify listener next song:' + song);
+                        if(song && song.match("spotify")){
+                            playSpotifySong(song);
+                            ctr++;
+                        }
+                        else {
+                            yt_player.loadVideoById({'videoId':song})
+                        }           
+                    }
+                    else {
+                        ctr++;
+                    }
+                }
+                this.state = state;
+            });
         {{/if}}
-
         };
+
+    var yt_player;
+    function onYouTubeIframeAPIReady() {
+        yt_player = new YT.Player('yt_player', {
+            height: '0',
+            width: '0',
+            events: {
+                //'onReady': onPlayerReady,
+                'onStateChange': onPlayerStateChange
+            }
+       });
+    }
+
+    function onPlayerStateChange(event){
+        console.log(event.data);
+        if(event.data == YT.PlayerState.ENDED || event.data == YT.PlayerState.CUED){
+            let song = currPlaylist[0].getAttribute("name");
+            currPlaylist[0].parentNode.removeChild(currPlaylist[0])
+            console.log('youtube listener next song:' + song);
+            if(song && song.match("spotify")){
+                playSpotifySong(song);
+                ctr++;
+            }
+            else {
+                yt_player.loadVideoById({'videoId':song})
+            }       
+        }
+        else if(event.data == YT.PlayerState.PLAYING) {
+            setTimeout(stopVideo, 6000);
+        }
+    }
     
-    var btn = document.getElementById("Playerbtn") 
+    function stopVideo() {
+        yt_player.stopVideo();
+    }
+
+    var btn = document.getElementById("Playerbtn")  
     btn.setAttribute("onclick","playMusic()")
         
     async function playMusic() {
-        var tag = document.getElementsByClassName("songURI")   
         
+        currPlaylist = document.getElementsByClassName("songURI")      
+
+        let song = currPlaylist[0].getAttribute("name");
+        currPlaylist[0].parentNode.removeChild(currPlaylist[0])
+        console.log('Next song:' + song);
+        if(song.match("spotify")){
+            playSpotifySong(song);
+        }
+        else{
+            yt_player.loadVideoById({'videoId':song});
+        }
     }
 
-    async function playSpotifySong(url){
+    function playSpotifySong(url){
         $(document).ready(function () {
                         $.ajax({
                         method: "post",
                         url: "/spotify/play",
                         data: {uri:url},
                         success: function () {
-                           alert("song has been played");
+                           //alert("song has been played");
                         }
-                    }).then(function(){
-                        setTimeout(async function(){
-                            await player.pause()
-                        },10000);   
-                    })
+                    });
                 })
         
     }
@@ -113,54 +150,6 @@
 
 
 
-<!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
-<div id="player"></div>
 
-<script>
-            // 2. This code loads the IFrame Player API code asynchronously.
-            var tag = document.createElement('script');
 
-            tag.src = "https://www.youtube.com/iframe_api";
-            var firstScriptTag = document.getElementsByTagName('script')[0];
-            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-            // 3. This function creates an <iframe> (and YouTube player)
-            //    after the API code downloads.
-            var player;
-            function onYouTubeIframeAPIReady() {
-                player = new YT.Player('player', {
-                    height: '0',
-                    width: '0',
-                    videoId: 'qFkNATtc3mc',
-                    events: {
-                        'onReady': onPlayerReady,
-                        'onStateChange': onPlayerStateChange
-                    }
-                });
-            }
-
-            // 4. The API will call this function when the video player is ready.
-            function onPlayerReady(event) {
-                console.log("yt player ready");
-
-                //event.target.playVideo();
-            }
-
-          
-
-            // 5. The API calls this function when the player's state changes.
-            //    The function indicates that when playing a video (state=1),
-            //    the player should play for six seconds and then stop.
-            var done = false;
-            function onPlayerStateChange(event) {
-                if (event.data == YT.PlayerState.PLAYING && !done) {
-                    setTimeout(stopVideo, 60000);
-                    done = true;
-                }
-            }
-            function stopVideo() {
-                player.stopVideo();
-            }
-</script>
-</script>
 

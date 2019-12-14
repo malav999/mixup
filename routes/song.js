@@ -38,7 +38,7 @@ router.post("/searchSong", async (req, res) => {
         result.forEach(song => {
             tracksObj.push({
                 song: song.songName,
-                uri: song.songURI
+                uri: song.songId
             })
         });
 
