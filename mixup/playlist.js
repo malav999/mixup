@@ -267,7 +267,181 @@ module.exports = {
         }
 
         return playlistArr
-    }
+    },
+
+    // /**
+    //  * Get most liked playlist
+    //  */
+    // async motsLikedPlaylist() {
+    //     let likesCommentsCollection = await likesComments()
+    //     let likes = await likesCommentsCollection.find({}).toArray()
+
+    //     let mostLikedPlaylist = {}
+    //     mostLikedPlaylist.max = 0
+    //     for (let like of likes) {
+    //         if (mostLikedPlaylist.max < like.userIds.length) {
+    //             mostLikedPlaylist.playlistId = like.playlistId
+    //             mostLikedPlaylist.max = like.userIds.length
+    //         } else {
+    //             console.log('No top playlist')
+    //         }
+    //     }
+
+    //     let playlistCollection = await playlists()
+    //     let playlist = await playlistCollection.findOne({ _id: mostLikedPlaylist.playlistId })
+    //     if (utils.isNull(playlist)) {
+    //         console.log(`Playlist not found for playlistId ${sortData[i].playlistId}`)
+    //         throw `Playlist not found with playlistId`
+    //     }
+
+    //     return mostLikedPlaylist
+
+    // },
+
+    // /**
+    //  * Get top five most liked playlist
+    //  */
+    // async topFivePlaylists() {
+    //     let playlistsCollection = await playlists()
+    //     let playlistObj = await playlistsCollection.find({}).toArray()
+
+    //     let likesCommentsCollection = await likesComments()
+    //     let likes = await likesCommentsCollection.find({}).toArray()
+
+    //     let topArr = []
+    //     // Create a new obj with playlistId and max likes
+    //     let mostLikedPlaylist = {}
+    //     // mostLikedPlaylist.max = 0
+
+    //     for (let like of likes) {
+    //         mostLikedPlaylist.playlistId = like.playlistId
+    //         mostLikedPlaylist.max = like.userIds.length
+    //         topArr.push(mostLikedPlaylist)
+    //     }
+
+    //     // Sort likes in ascending order based on the max no of like playlist got
+    //     let sortData = topArr.sort((a, b) => (a.max > b.max) ? 1 : ((b.max > a.max) ? -1 : 0));
+
+    //     let topFive = []
+    //     let playlistCollection = await playlists()
+
+    //     // get top five playlist
+    //     for (let i = 0; i < 5; i++) {
+    //         // get playlist by playlistId
+    //         let playlist = await playlistCollection.findOne({ _id: ObjectID(sortData[i].playlistId) })
+    //         console.log('playlist', playlist)
+
+    //         // if playlist not found throw err
+    //         if (utils.isNull(playlist) === true) {
+    //             console.log(`Playlist not found for playlistId ${sortData[i].playlistId}`)
+    //         }
+    //         topFive.push(playlist)
+    //     }
+
+    //     if (sortData.length > 5) {
+    //         sortData = sortData.slice(0, 5)
+    //     }
+
+    //     // get top five playlist
+    //     for (let playlist of sortData) {
+    //         // get playlist by playlistId
+    //         let playlist = await playlistCollection.findOne({ _id: ObjectID(sortData[i].playlistId) })
+    //         console.log('playlist', playlist)
+
+    //         // if playlist not found throw err
+    //         if (utils.isNull(playlist) === true) {
+    //             console.log(`Playlist not found for playlistId ${sortData[i].playlistId}`)
+    //         }
+    //         topFive.push(playlist)
+    //     }
+
+    //     return topFive
+    // },
+
+
+    /**
+     * Get all playlists details (userName, playlistName, likes & comments)
+     */
+    async topFive() {
+        let playlistCollection = await playlists()
+        let allPlaylists = await playlistCollection.find({}).toArray()
+
+        if (undefined === allPlaylists && !Array.isArray(allPlaylists) && allPlaylists.length === 0) {
+            return []
+        }
+
+        let likesCommentsCollection = await likesComments()
+        let likesCommentsArr = await likesCommentsCollection.find({}).toArray()
+
+        let playlistArr = []
+        let playlistObj = {}
+
+        // let playlistCollection = await playlists()
+        let userCollection = await users()
+
+        for (let playlist of allPlaylists) {
+            let user = await userCollection.findOne({ _id: ObjectID(playlist.userId) })
+
+            if (utils.isNull !== false) {
+                playlistObj.userName = user.firstName
+            }
+
+            playlistObj.playlistName = playlist.playlistName
+
+            let pId = playlist._id.toString()
+            playlistObj.playlistId = pId
+
+            let songCollection = await songs()
+
+            if (Array.isArray(playlist.songs) && playlist.songs.length > 0) {
+                let songArr = []
+                for (let songId of playlist.songs) {
+                    let playlistSong = await songCollection.findOne({ _id: ObjectID(songId) })
+                    if (utils.isNull !== playlistSong) {
+                        songArr.push(playlistSong)
+                    }
+                }
+                playlistObj.songs = songArr
+            }
+
+            if (Array.isArray(likesCommentsArr) && likesCommentsArr.length > 0) {
+                for (let like of likesCommentsArr) {
+
+                    let likesCommentObj = await likesCommentsCollection.findOne({ playlistId: pId })
+
+                    if (utils.isNull(likesCommentObj !== false)) {
+
+                        if (likesCommentObj.playlistId === pId) {
+
+                            if (undefined !== like.userIds && Array.isArray(like.userIds) && like.userIds !== null) {
+                                playlistObj.likes = like.userIds.length
+                            }
+
+                            if (Array.isArray(likesCommentObj.comments) && likesCommentObj.comments.length > 0) {
+                                let comments = []
+
+                                for (let comm of likesCommentObj.comments) {
+                                    comments.push(comm.content)
+                                }
+
+                                playlistObj.comments = comments
+                            }
+                        }
+                    }
+                }
+            }
+
+            playlistArr.push(playlistObj)
+        }
+
+        let sortData = playlistArr.sort((a, b) => (a.likes > b.likes) ? 1 : ((b.likes > a.likes) ? -1 : 0));
+
+        if (sortData.length > 5) {
+            sortData = sortData.slice(0, 5)
+        }
+
+        return sortData
+    },
 
 
 };

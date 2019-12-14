@@ -3,16 +3,16 @@ const router = express.Router();
 const mixup = require("../mixup");
 const playlistData = mixup.playlist;
 
-router.use("/", async (req, res, next) => {
-    let userId = req.session.userId;
-    if (!userId) {
-        //user is not logged in
-        res.redirect('/user/signin');
-    }
-    else {
-        next();
-    }
-});
+// router.use("/", async (req, res, next) => {
+//     let userId = req.session.userId;
+//     if (!userId) {
+//         //user is not logged in
+//         res.redirect('/user/signin');
+//     }
+//     else {
+//         next();
+//     }
+// });
 
 // to get all playlist 
 router.get("/getall", async (req, res) => {
@@ -20,6 +20,17 @@ router.get("/getall", async (req, res) => {
         console.log(1)
         const playlists = await playlistData.getAllPlaylistsDetails();
         res.json(playlists);
+    } catch (e) {
+        console.log('err', e)
+        res.json(e)
+    }
+});
+
+router.get("/topFive", async (req, res) => {
+    try {
+        const topFivePlaylists = await playlistData.topFive();
+        console.log('topFivePlaylists', topFivePlaylists)
+        res.json(topFivePlaylists);
     } catch (e) {
         console.log('err', e)
         res.json(e)

@@ -359,7 +359,7 @@ module.exports = {
 
                     userPlaylist.playlist = playlistObj.playlistName
                     userPlaylist.playlistId = playlistObj._id.toString()
-                    
+
                 }
 
                 let likesCommentsCollection = await likesComments()
