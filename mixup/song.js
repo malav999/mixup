@@ -259,12 +259,12 @@ module.exports = {
      * @param {*} songURI 
      * @param {*} songId 
      */
-    async addSongToYouTube(songName, songURI, songId) {
+    async addSongToYouTube(songName, songURI, songId, platform) {
 
         utils.isString(songURI, `songURI ${songURI}`)
         utils.isString(songName, `songName ${songName}`)
         utils.isString(songId, `songId ${songId}`)
-
+        utils.isString(platform, `platform ${platform}`)
         let createdAt = new Date().toLocaleDateString()
 
         const youtubeSongsCollection = await youtubeSongs();
@@ -273,6 +273,7 @@ module.exports = {
         songObj.songURI = songURI
         songObj.songName = songName
         songObj.songId = songId
+        songObj.platform = platform
         songObj.createdAt = createdAt
 
         let insertInfo = await youtubeSongsCollection.insertOne(songObj)
@@ -281,7 +282,20 @@ module.exports = {
         const newId = insertInfo.insertedId;
 
         // // Get song by recently created song id
-        const song = await this.getSongBySongId(newId);
+        const song = await this.getYoutubeSongBySongId(newId);
         return song
-    }
+    },
+
+    /**
+     * Get a specific song
+     * @param {*} id 
+     */
+    async getYoutubeSongBySongId(id) {
+        if (!id) throw "You must provide an id to search for";
+        const youtubeSongsCollection = await youtubeSongs();
+        const song = await youtubeSongsCollection.findOne({ _id: ObjectID(id) });
+        console.log(song)
+        return song;
+    },
+
 };
