@@ -359,17 +359,7 @@ module.exports = {
 
                     userPlaylist.playlist = playlistObj.playlistName
                     userPlaylist.playlistId = playlistObj._id.toString()
-                    // userObj.songArr = []
-
-                    // for (let songId of playlistObj.songs) {
-                    //     console.log(2)
-                    //     let songCollection = await songs()
-                    //     let songObj = await songCollection.findOne({ _id: ObjectId(songId) })
-                    //     console.log('songObj', songObj)
-                    //     if (utils.isNull(songObj) !== false) {
-                    //         userObj.songArr.push(songObj)
-                    //     }
-                    // }
+                    
                 }
 
                 let likesCommentsCollection = await likesComments()
