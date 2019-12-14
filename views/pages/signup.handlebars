@@ -1,176 +1,76 @@
-{{!-- <!DOCTYPE html>
-<html lang="en">
+<div class="limiter">
+    <div class="container-login100">
+        <div class="wrap-login100">
+            <form class="signup100-form validate-form" id="signup-form" method="POST" action="/user/signup">
+                <span class="signup100-form-title p-b-34">
+                    MixUp
+                </span>
+                <br>
 
-<head>
-    <title>MixUp</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" type="text/css" href="/public/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="/public/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/public/css/util.css">
-    <link rel="stylesheet" type="text/css" href="/public/css/main.css">
-</head>
+                <div class="wrap-input100 rs1-wrap-input100 validate-input m-b-20">
+                    <label for="firstName" class="login100-form-title p-b-34">First Name</label>
+                    <input type="text" class="input100 form-control" id="firstName" name="firstName"
+                        placeholder="First Name" required>
+                    <span class="focus-input100"></span>
+                </div>
 
-<body>
+                <div class="wrap-input100 rs2-wrap-input100 validate-input m-b-20">
+                    <label for="lastName" class="login100-form-title p-b-34">Last Name</label>
+                    <input type="text" class="input100 form-control" id="lastName" name="lastName"
+                        placeholder="Last Name" required>
+                    <span class="focus-input100"></span>
+                </div>
+                <div class="wrap-input100 rs3-wrap-input100 validate-input m-b-20">
+                    <label for="age" class="login100-form-title p-b-34">Age</label>
+                    <input type="number" class="input100 form-control" id="age" name="age" placeholder="Age">
+                    <span class="focus-input100"></span>
+                </div>
+                <div class="wrap-input100 rs4-wrap-input100 validate-input m-b-20">
+                    <label for="email" class="login100-form-title p-b-34">Email</label>
+                    <input type="email" class="input100 form-control" id="email" name="email" placeholder="Email"
+                        required>
+                    <span class="focus-input100"></span>
+                </div>
 
-    <div class="limiter">
-        <div class="container-login100">
-            <div class="wrap-login100">
-                <form class="signup100-form validate-form" id="signup-form" method="POST" action="/user/signup">
-                    <span class="signup100-form-title p-b-34">
-                        MixUp
-                    </span>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <div class="wrap-input100 rs1-wrap-input100 validate-input m-b-20">
-                        <input class="input100" type="text" id="firstName" name="firstName" placeholder="First Name"
-                            value="{{post.firstName}}">
-                        <span class="focus-input100"></span>
-                    </div>
-                    <div class="wrap-input100 rs2-wrap-input100 validate-input m-b-20">
-                        <input class="input100" type="text" name="lastName" id="lastName" value="{{post.lastName}}"
-                            placeholder="Last Name"><br>
-                        <span class="focus-input100"></span>
-                    </div>
-                    <label for="gender">Gender:</label>
-                    <input type="radio" name="gender" class="gender" value="male" value={{post.gender}}> Male<br>
-                    <input type="radio" name="gender" class="gender" value="female" value={{post.gender}}> Female<br>
-                    <input type="radio" name="gender" class="gender" value="other" value={{post.gender}}> Other<br>
+                <div class="wrap-input100 rs5-wrap-input100 validate-input m-b-20">
+                    <label for="password" class="login100-form-title p-b-34">Password</label>
+                    <input type="password" class="input100 form-control" id="password" name="password"
+                        placeholder="Password" required>
+                    <span class="focus-input100"></span>
+                </div>
+                <div class="wrap-input100 rs6-wrap-input100 validate-input m-b-20">
+                    <label for="confirmPassword" class="login100-form-title p-b-34">Confirm Password</label>
+                    <input type="password" class="input100 form-control" id="confirmPassword" name="confirmPassword"
+                        placeholder="Confirm Password" required>
+                    <span class="focus-input100"></span>
+                </div>
+                <span style="color:red; font-size:x-large;">{{error}}</span>
 
-                    <div class="wrap-input100 rs3-wrap-input100 validate-input m-b-20">
-                        <label for="dob">D.O.B:</label>
-                        <input class="input100" type="date" name="dob" id="dob" value="{{post.dob}}"><br>
-                        <span class="focus-input100"></span>
-                    </div>
+                <div class="container-login100-form-btn">
+                    <button class="login100-form-btn" type="submit">
+                        Sign in
+                    </button>
+                    <script>
+                        var password = document.getElementById("password")
+                            , confirmPassword = document.getElementById("confirmPassword");
 
-                    <div class="wrap-input100 rs4-wrap-input100 validate-input m-b-20">
-                        <input class="input100" type="text" id="email" name="email" placeholder="Email"
-                            value={{post.email}}>
-                        <span class="focus-input100"></span>
-                    </div>
-                    <div class="wrap-input100 rs5-wrap-input100 validate-input m-b-20">
-                        <input class="input100" type="password" name="password" id="password" placeholder="Password"
-                            value={{post.password}}>
-                        <span class="focus-input100"></span>
-                    </div>
-                    <div class="wrap-input100 rs6-wrap-input100 validate-input m-b-20">
-                        <input class="input100" type="password" name="confirmPassword" id="confirmPassword"
-                            placeholder="Confirm Password" value={{post.confirmPassword}}>
-                        <span class="focus-input100"></span>
-                    </div>
-                    <div class="container-login100-form-btn">
-                        <button class="login100-form-btn">
-                            Sign in
-                        </button>
-                    </div>
+                        function validatePassword() {
+                            if (password.value != confirmPassword.value) {
+                                confirmPassword.setCustomValidity("Passwords Don't Match");
+                            } else {
+                                confirmPassword.setCustomValidity('');
+                            }
+                        }
 
-                    {{#if hasErrors}}
-                    <ul class="error-list">
-                        {{#each errors}}
-                        <li>
-                            {{this}}
-                        </li>
-                        {{/each}}
-                    </ul>
-                    {{/if}}
-                </form>
-                <div class="login100-more" style="background-image: url('/public/images/bg-01.jpg');"></div>
-            </div>
+                        password.onchange = validatePassword;
+                        confirmPassword.onkeyup = validatePassword;
+                    </script>
+                </div>
+
+
+            </form>
+            <div class="login100-more" style="background-image: url('/public/images/bg-01.jpg');"></div>
         </div>
     </div>
-    <script src="/public/jquery/jquery-3.2.1.min.js"></script>
-    <script src="/public/bootstrap/js/popper.js"></script>
-    <script src="/public/bootstrap/js/bootstrap.min.js"></script>
-    </body> --}}
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <title>MixUp</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" 
-    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="/public/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="/public/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-   
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/public/css/util.css">
-    <link rel="stylesheet" type="text/css" href="/public/css/main.css">
-</head>
-
-<body>
-
-    <div class="limiter">
-        <div class="container-login100">
-            <div class="wrap-login100">
-                <form class="signup100-form validate-form" id="signup-form" method="POST" action="/user/signup">
-                    <span class="signup100-form-title p-b-34">
-                        MixUp
-                    </span>
-                    <br>
-                    <br>
-                    <br>
-                    <br> <br>
-                    <br>
-                    <br>
-                    <br>
-                     <br>
-                    <br>
-
-                    <div class="wrap-input100 rs1-wrap-input100 validate-input m-b-20">
-      <input type="text" class="input100 form-control" id="firstName" name="firstName" placeholder="First Name" required>
-      <span class="focus-input100"></span>
-    </div>
-
-    <div class="wrap-input100 rs2-wrap-input100 validate-input m-b-20">
-      <input type="text" class="input100 form-control" id="lastName" name="lastName" placeholder="Last Name" required>
-      <span class="focus-input100"></span>
-    </div>
-    <div class="wrap-input100 rs3-wrap-input100 validate-input m-b-20">
-      <input type="number" class="input100 form-control" id="age" name="age" placeholder="Age">
-      <span class="focus-input100"></span>
-    </div>
-             <div class="wrap-input100 rs4-wrap-input100 validate-input m-b-20">
-      <input type="email" class="input100 form-control" id="email" name="email" placeholder="Email" required>
-      <span class="focus-input100"></span>
-    </div>
-
-    <div class="wrap-input100 rs5-wrap-input100 validate-input m-b-20">
-      <input type="password" class="input100 form-control" id="password" name="password" placeholder="Password" required>
-      <span class="focus-input100"></span>
-    </div>
-    <div class="wrap-input100 rs6-wrap-input100 validate-input m-b-20">
-      <input type="password" class="input100 form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required>
-      <span class="focus-input100"></span>
-    </div>
-    <span style=  "color:red; font-size:x-large;">{{error}}</span>
-   
-                    <div class="container-login100-form-btn">
-                        <button class="login100-form-btn" type="submit">
-                            Sign in
-                        </button>
-                    </div>
-   
-
-                </form>
-                <div class="login100-more" style="background-image: url('/public/images/bg-01.jpg');"></div>
-            </div>
-        </div>
-    </div>
-    <script src="/public/jquery/jquery-3.2.1.min.js"></script>
-    <script src="/public/bootstrap/js/popper.js"></script>
-    <script src="/public/bootstrap/js/bootstrap.min.js"></script>
-
-</body>
+</div>

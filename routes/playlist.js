@@ -61,10 +61,15 @@ router.get("/savePlaylist", async (req, res) => {
     } catch (e) {
         res.render('pages/createPlaylist', { error: e });
     }
+
+
+
+
 })
 
 router.use("*", async (req, res) => {
     res.status(404).render('pages/errorAfterLogin', { title: "400 Error" });
+
 })
 
 module.exports = router;

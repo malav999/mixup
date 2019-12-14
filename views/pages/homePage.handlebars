@@ -6,10 +6,6 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <style>
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-    }
-
     /* The Modal (background) */
     .modal {
       display: none;
@@ -45,7 +41,7 @@
 
     /* The Close Button */
     .close {
-      color: #aaaaaa;
+      color: #221f1f;
       float: right;
       font-size: 28px;
       font-weight: bold;
@@ -61,14 +57,14 @@
     .myBtn {
       top:100px;
       position: absolute;
-      background-color: #4CAF50;
+      background-color: #2E76CF;
       border: none;
       color: white;
       padding: 15px 32px;
       text-align: center;
       text-decoration: none;
       display: inline-block;
-      font-size: 16px;
+      font-size: 20px;
       margin: 4px 2px;
       cursor: pointer;
     }
@@ -112,6 +108,64 @@
     .topnav-right {
       float: right;
     }
+
+    /* Float four columns side by side */
+    .column {
+      float: left;
+      width: 25%;
+
+      padding: 0 px;
+    }
+
+    /* Remove extra left and right margins, due to padding */
+    .row {
+      margin: 0 -5px;
+    }
+
+    /* Clear floats after the columns */
+    .row:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    /* Responsive columns */
+    @media screen and (max-width: 600px) {
+      .column {
+        width: 100%;
+        display: block;
+        margin-bottom: 20px;
+      }
+    }
+
+    /* Style the counter cards */
+    .card {
+      top: 80px;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+      padding: 16px;
+      text-align: center;
+      background-color: #f1f1f1;
+    }
+
+    .playlt {
+      color: #000;
+      font-size: large;
+    }
+
+    .a2 {
+      float: left;
+      text-align: center;
+      padding-left: 20px;
+    }
+
+    label[for="playlistName"] {
+      display: none;
+    }
+
+    .errorspan {
+      color: red;
+      font-size: x-large;
+    }
   </style>
 </head>
 
@@ -131,13 +185,21 @@
   {{!-- <form id="youtubeForm" method="GET" action="/homePage/youtube">
     <button id="youtubebtn">youtube Player</button>
   </form> --}}
-  </form>
+  {{!-- </form>
   <form id="testing" method="GET" action="/playPlaylist/play/5df3fba8b31eabd3dcb347a9">
     <button type="submit">Play Playlist</button>
-  </form>
+  </form> --}}
 
   <!-- Trigger/Open The Modal -->
-  <button id="myBtn" class="myBtn">Create Playlist</button>
+  <div>
+    <div><button id="myBtn" class="myBtn">Create Playlist</button></div>
+
+    <div>
+      <p class="errorspan">{{error}}</p>
+    </div>
+  </div>
+
+
 
   <!-- The Modal -->
   <div id="myModal" class="modal">
@@ -145,14 +207,14 @@
     <!-- Modal content -->
     <div class="modal-content">
       <span class="close">&times;</span>
+
       <p class="labelname">Add Playlist Name</p>
+
       <form action="/playlist/create" method="post">
+        <label for="playlistName">Playlist Name</label>
         <input type="text" placeholder="Playlist Name" id="playlistName" name="playlistName" class="playlistName"
           required>
         <button type="submit" class="myBtn" id="addplaylist">Create playlist</button>
-        <div>
-          <span style="color:red; font-size:x-large;">{{error}}</span>
-        </div>
       </form>
     </div>
   </div>
@@ -188,34 +250,40 @@
   </script>
 
 
-
-
   <div>
+
     <ul class="song-list">
       <form id="play_btn_form" method="GET">
         {{#each userData.userPlaylists}}
-
-        <label>{{this.playlist}}</label>
-        <button type="submit" class="play_button" name="{{this.playlistId}}">Play</button>
-        <br>
-
+        <div class="row">
+          <div class="column">
+            <div class="card">
+              <p class="playlt a2">{{this.playlist}}</p>
+              <button type="submit" class="play_button btn btn-light a2" name="{{this.playlistId}}">Play</button>
+            </div>
+          </div>
+        </div>
         {{/each}}
       </form>
-      <script>
-        function playSong(button) {
-          console.log(button.name)
-          var btn_id = button.name;
-          var myForm = document.getElementById("play_btn_form");
-          myForm.setAttribute("action", "/playPlaylist/play/" + btn_id)
-
-        }
-        let playList_list = document.getElementsByClassName("play_button");
-        for (let i = 0; i < playList_list.length; i++) {
-          playList_list[i].setAttribute("onclick", "playSong(this)")
-        }
-      </script>
-
+      <br>
     </ul>
+  </div>
+
+  <script>
+    function playSong(button) {
+      console.log(button.name)
+      var btn_id = button.name;
+      var myForm = document.getElementById("play_btn_form");
+      myForm.setAttribute("action", "/playPlaylist/play/" + btn_id)
+
+    }
+    let playList_list = document.getElementsByClassName("play_button");
+    for (let i = 0; i < playList_list.length; i++) {
+      playList_list[i].setAttribute("onclick", "playSong(this)")
+    }
+  </script>
+
+  </ul>
   </div>
 
 

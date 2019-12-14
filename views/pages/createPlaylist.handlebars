@@ -1,168 +1,163 @@
-<head>
-    <link rel="stylesheet" type="text/css" href="/public/css/main.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-</head>
-
-<body>
-    <div>
-        <nav class="topnav">
+<div>
+    <nav class="topnav">
 
 
-            <div class="topnav-right">
-                <a href="/views/pages/discoverPage.handlebars">Discover</a>
-                <a href="#">Log Out</a>
-            </div>
-        </nav>
-
-
-
-        <script>
-            $(document).ready(function () {
-                var spotifySearch = $("#Spotify");
-                var searchBar = $('searchBar')
-
-
-                $(spotifySearch).click(function () {
-
-                    $.ajax({
-                        method: 'post',
-                        data: JSON.stringify({ "searchBar": searchBar }),
-                        dataType: "json",
-                        success: function (obj) {
-                            var search_result = obj;
-                            var hassongs = true;
-                        },
-                        error: function (message) {
-
-                            var hassongs = false;
-                        }
-                    })
-                })
-            })
-        </script>
-
-        <script>
-            function Search(button) {
-                var btn_id = button.id;
-                var form = document.getElementById("myForm");
-                if (btn_id == "Spotify") {
-                    form.setAttribute("action", "/spotify/search")
-                }
-                if (btn_id == "YouTube") {
-                    form.setAttribute("action", "/song/searchSong")
-                }
-            }
-        </script>
-
-
-        <div class="wrap">
-            <div class="search">
-                <form id="myForm" method="post">
-                    <input type="text" id="searchBar" name="searchBar" class="searchTerm" placeholder="Search" />
-            </div>
-            <button class="btn btn-primary btn-lg" id="Spotify" name="Spotify" onclick="Search(this)">Spotify</button>
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp; &nbsp;
-            <button class="btn btn-primary btn-lg" type="submit" id="YouTube" name="YouTube"
-                onclick="Search(this)">YouTube</button>
-            </form>
+        <div class="topnav-right">
+            <a href="/views/pages/discoverPage.handlebars">Discover</a>
+            <a href="#">Log Out</a>
         </div>
-    </div>
+    </nav>
 
 
 
     <script>
-        function addSong(button) {
-            btn_id = button.id;
-            let songList = document.getElementsByClassName("song_button");
-            for (let i = 0; i < songList.length; i++) {
-                if (songList[i].id == btn_id) {
+        $(document).ready(function () {
+            var spotifySearch = $("#Spotify");
+            var searchBar = $('searchBar')
 
 
-                    let songURI = document.getElementById(btn_id).value;
+            $(spotifySearch).click(function () {
 
+                $.ajax({
+                    method: 'post',
+                    data: JSON.stringify({ "searchBar": searchBar }),
+                    dataType: "json",
+                    success: function (obj) {
+                        var search_result = obj;
+                        var hassongs = true;
+                    },
+                    error: function (message) {
 
-                    console.log(songURI);
-                    //console.log(songList[i].name);
+                        var hassongs = false;
+                    }
+                })
+            })
+        })
+    </script>
 
-
-
-
-                    $(document).ready(function () {
-
-                        $.ajax({
-                            url: '/song/addSong',
-                            method: 'post',
-                            data: { "songURI": songURI, "songName": songList[i].name },
-                            dataType: "json",
-                            success: function (obj) {
-                                alert("success")
-                            },
-                            statusCode: {
-                                400: function () {
-                                    alert('error');
-                                }
-                            }
-                            //error: function (obj) {
-                            //  alert("error")
-
-                            //}
-                        })
-
-                    })
-                }
+    <script>
+        function Search(button) {
+            var btn_id = button.id;
+            var form = document.getElementById("myForm");
+            if (btn_id == "Spotify") {
+                form.setAttribute("action", "/spotify/search")
+            }
+            if (btn_id == "YouTube") {
+                form.setAttribute("action", "/song/searchSong")
             }
         }
     </script>
 
-    <div>
 
-        <ul class="song-list">
+    <div class="wrap">
+        <div class="search">
+            <form id="myForm" method="post">
+                <label for="searchBar">Search</label>
+                <input type="text" id="searchBar" name="searchBar" class="searchTerm" placeholder="Search" />
+        </div>
+        <div class="rowbtn">
+            <button class="btnsp" id="Spotify" name="Spotify" onclick="Search(this)">Spotify</button>
 
-            {{#each songs}}
-            <li>
-                <div class="song-item">
-                    <br>
+            <button class="btnsp" type="submit" id="YouTube" name="YouTube" onclick="Search(this)">YouTube</button>
+        </div>
 
-                    <p class="song a1"> {{this.song}}</p>
-                    <button type="button" class="song_button a1 btn btn-light" name="{{this.song}}"
-                        value="{{this.uri}}">Add</button>
-                    </br>
-                </div>
-
-            </li>
-            {{/each}}
-
-            <script>
-                let songList = document.getElementsByClassName("song_button");
-                for (let i = 0; i < songList.length; i++) {
-                    songList[i].setAttribute("id", i)
-                    songList[i].setAttribute("onclick", "addSong(this)")
-                }
-
-
-            </script>
-        </ul>
-    </div>
-
-
-
-
-    {{!-- Save play list button to go back to home page after creating a new playlist --}}
-    <div>
-        {{#if error}}
-        <span style="color:red; font-size:x-large;">{{error}}</span>
-        {{/if}}
-        <form method="GET" action="/playlist/savePlaylist">
-            <button class="btn btn-primary btn-lg" type="submit">
-                Save playlist
-            </button>
         </form>
-
     </div>
-</body>
+</div>
+
+
+
+<script>
+    function addSong(button) {
+        btn_id = button.id;
+        let songList = document.getElementsByClassName("song_button");
+        for (let i = 0; i < songList.length; i++) {
+            if (songList[i].id == btn_id) {
+
+
+                let songURI = document.getElementById(btn_id).value;
+
+
+                console.log(songURI);
+                //console.log(songList[i].name);
+
+
+
+
+                $(document).ready(function () {
+
+                    $.ajax({
+                        url: '/song/addSong',
+                        method: 'post',
+                        data: { "songURI": songURI, "songName": songList[i].name },
+                        dataType: "json",
+                        success: function (obj) {
+                            alert("success")
+                        },
+                        statusCode: {
+                            400: function () {
+                                alert('error');
+                            }
+                        }
+                        //error: function (obj) {
+                        //  alert("error")
+
+                        //}
+                    })
+
+                })
+            }
+        }
+    }
+</script>
+
+<div>
+
+    <ul class="song-list">
+        <div class="row">
+            <div class="column">
+                <div class="card">
+                    {{#each songs}}
+                    <li>
+                        <div class="song-item">
+                            <br>
+
+                            <p class="song a1"> {{this.song}}</p>
+                            <button type="button" class="song_button a1 btn btn-light" name="{{this.song}}"
+                                value="{{this.uri}}">Add</button>
+                            </br>
+                        </div>
+
+                    </li>
+
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+        <script>
+            let songList = document.getElementsByClassName("song_button");
+            for (let i = 0; i < songList.length; i++) {
+                songList[i].setAttribute("id", i)
+                songList[i].setAttribute("onclick", "addSong(this)")
+            }
+
+
+        </script>
+    </ul>
+</div>
+
+
+
+
+{{!-- Save play list button to go back to home page after creating a new playlist --}}
+<div>
+    {{#if error}}
+    <span style="color:red; font-size:x-large;">{{error}}</span>
+    {{/if}}
+    <form method="GET" action="/playlist/savePlaylist">
+        <button class="btnsp" type="submit">
+            Save playlist
+        </button>
+    </form>
+
+</div>

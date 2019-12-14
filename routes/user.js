@@ -15,6 +15,7 @@ router.get("/get", async (req, res) => {
 });
 
 router.get("/signin", async (req, res) => {
+<<<<<<< Updated upstream
   if(!req.session.userId){
     res.render('pages/login');
   }
@@ -22,6 +23,10 @@ router.get("/signin", async (req, res) => {
     res.render('pages/homePage');
   }
   
+=======
+
+  res.render('pages/login')
+>>>>>>> Stashed changes
 
 })
 

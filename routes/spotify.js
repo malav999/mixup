@@ -163,42 +163,42 @@ router.post("/search", async (req, res) => {
         json: true
     };
 
-    try{
+    try {
         await rp.get(trackGet, async function (error, response, body) {
 
             let answer = await response.body;
             console.log(answer);
             if (!answer.error) {
                 let tracksArr = answer.tracks.items;
-    
+
                 let tracksObj = []
-    
+
                 tracksArr.forEach(song => {
-    
+
                     tracksObj.push({
                         song: song.name,
                         uri:  song.uri
                     })
-    
-    
-    
+
+
+
                 });
-    
-    
+
+
                 res.status(200).render("pages/createPlaylist", { songs: tracksObj })
             }
-            
+
             // res.send(`<ul><li> ${tracksObj.names}</li ></ul > `)
-    
-    
-    
+
+
+
         });
-    }catch(e){
+    } catch (e) {
         console.log(e.statusCode)
         res.status(e.statusCode)
     }
 
-    
+
 
 
 
@@ -303,7 +303,7 @@ router.post("/play/", async (req, res) => {
 //---------------------------------------------Play song on spotify-----------------------------------------------------------------------*/  
 
 router.use("*", async (req, res) => {
-    res.status(404).render('pages/errorAfterLogin',{title: "400 Error"});
+    res.status(404).render('pages/errorAfterLogin', { title: "400 Error" });
 })
 
 module.exports = router;
