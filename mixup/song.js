@@ -21,6 +21,7 @@ module.exports = {
         let songURI = req.body.songURI
         let songName = req.body.songName
         let playlistId = req.session.playlistId
+        let platform = req.body.platform
 
         utils.isString(userId, `userId ${userId}`)
         utils.isString(playlistId, `playlistId ${playlistId}`)
@@ -33,6 +34,10 @@ module.exports = {
         newSong.songURI = songURI
         newSong.playlistId = playlistId
         newSong.createdAt = new Date().toLocaleDateString()
+
+        if (undefined !== platform && platform !== null && typeof (platform) === "string") {
+            newSong.platform = platform
+        }
 
         const songCollection = await songs();
 

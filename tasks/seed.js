@@ -74,7 +74,8 @@ async function main() {
 		},
 		body: {
 			songURI: youtubeSong1.songURI,
-			songName: youtubeSong1.songName
+			songName: youtubeSong1.songName,
+			platform: youtubeSong1.platform
 		}
 	}
 
@@ -85,7 +86,8 @@ async function main() {
 		},
 		body: {
 			songURI: youtubeSong2.songURI,
-			songName: youtubeSong2.songName
+			songName: youtubeSong2.songName,
+			platform: youtubeSong2.platform
 		}
 	}
 
@@ -96,7 +98,8 @@ async function main() {
 		},
 		body: {
 			songURI: youtubeSong3.songURI,
-			songName: youtubeSong3.songName
+			songName: youtubeSong3.songName,
+			platform: youtubeSong3.platform
 		}
 	}
 
@@ -107,7 +110,8 @@ async function main() {
 		},
 		body: {
 			songURI: youtubeSong4.songURI,
-			songName: youtubeSong4.songName
+			songName: youtubeSong4.songName,
+			platform: youtubeSong4.platform
 		}
 	}
 
