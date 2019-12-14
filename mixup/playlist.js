@@ -8,6 +8,7 @@ const songData = require('./song');
 const ObjectID = require('mongodb').ObjectID;
 const utils = require('./utils');
 const success = 'success'
+let likesComments = mongoCollections.likesComments;
 
 module.exports = {
 
@@ -190,43 +191,83 @@ module.exports = {
         return playlists;
     },
 
-    // /**
-    //  * Create song
-    //  * @param {*} req 
-    //  */
-    // async addSong(req) {
-    //     // let userId = req.body.userId
-    //     let songURI = req.body.songURI
-    //     let songName = req.body.songName
-    //     let playlistId = req.body.playlistId
+    /**
+     * Get all playlists details (userName, playlistName, likes & comments)
+     */
+    async getAllPlaylistsDetails() {
+        let playlistCollection = await playlists()
+        let allPlaylists = await playlistCollection.find({}).toArray()
 
-    //     // utils.isString(userId, `userId ${userId}`)
-    //     utils.isString(playlistId, `playlistId ${playlistId}`)
-    //     utils.isString(songURI, `songURI ${songURI}`)
-    //     utils.isString(songName, `songName ${songName}`)
+        if (undefined === allPlaylists && !Array.isArray(allPlaylists) && allPlaylists.length === 0) {
+            return []
+        }
 
-    //     // let newSong = {}
-    //     // newSong.songName = songName
-    //     // newSong.songURI = songURI
-    //     // // remove userId
-    //     // // newSong.userId = userId
-    //     // // newSong.playlistId = playlistId
-    //     // newSong.createdAt = new Date().toLocaleDateString()
+        let likesCommentsCollection = await likesComments()
+        let likesCommentsArr = await likesCommentsCollection.find({}).toArray()
 
-    //     const playlistCollection = await playlists();
-    //     let playlist = await playlistCollection.findOne({ _id: playlistId })
+        let playlistArr = []
+        let playlistObj = {}
 
-    //     playlist.song = {
-    //         songName: songName,
-    //         songURI: songURI
-    //     }
+        // let playlistCollection = await playlists()
+        let userCollection = await users()
 
-    //     const updateUserPlaylist = await playlistCollection.updateOne({ _id: ObjectID(userId) }, { $set: playlist });
-    //     if (updateUserPlaylist.modifiedCount === 0) {
-    //         throw "could not update song successfully";
-    //     }
+        for (let playlist of allPlaylists) {
+            let user = await userCollection.findOne({ _id: ObjectID(playlist.userId) })
 
-    //     return await playlistData.getPlaylistById(playlistId);
-    // },
+            if (utils.isNull !== false) {
+                playlistObj.userName = user.firstName
+            }
+
+            playlistObj.playlistName = playlist.playlistName
+
+            let pId = playlist._id.toString()
+            playlistObj.playlistId = pId
+
+            let songCollection = await songs()
+
+            if (Array.isArray(playlist.songs) && playlist.songs.length > 0) {
+                let songArr = []
+                for (let songId of playlist.songs) {
+                    let playlistSong = await songCollection.findOne({ _id: ObjectID(songId) })
+                    if (utils.isNull !== playlistSong) {
+                        songArr.push(playlistSong)
+                    }
+                }
+                playlistObj.songs = songArr
+            }
+
+            if (Array.isArray(likesCommentsArr) && likesCommentsArr.length > 0) {
+                for (let like of likesCommentsArr) {
+
+                    let likesCommentObj = await likesCommentsCollection.findOne({ playlistId: pId })
+
+                    if (utils.isNull(likesCommentObj !== false)) {
+
+                        if (likesCommentObj.playlistId === pId) {
+
+                            if (undefined !== like.userIds && Array.isArray(like.userIds) && like.userIds !== null) {
+                                playlistObj.likes = like.userIds.length
+                            }
+
+                            if (Array.isArray(likesCommentObj.comments) && likesCommentObj.comments.length > 0) {
+                                let comments = []
+
+                                for (let comm of likesCommentObj.comments) {
+                                    comments.push(comm.content)
+                                }
+
+                                playlistObj.comments = comments
+                            }
+                        }
+                    }
+                }
+            }
+
+            playlistArr.push(playlistObj)
+        }
+
+        return playlistArr
+    }
+
 
 };
