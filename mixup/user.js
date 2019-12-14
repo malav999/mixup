@@ -358,7 +358,7 @@ module.exports = {
                 if (utils.isNull(playlistObj) !== false) {
 
                     userPlaylist.playlist = playlistObj.playlistName
-
+                    userPlaylist.playlistId = playlistObj._id.toString()
                     // userObj.songArr = []
 
                     // for (let songId of playlistObj.songs) {

@@ -184,10 +184,6 @@
         modal.style.display = "none";
       }
     }
-    function playSong(button) {
-      var btn_id = button.id;
-
-    }
   </script>
 
 
@@ -195,23 +191,29 @@
 
   <div>
     <ul class="song-list">
+      <form id="play_btn_form" method="GET">
+        {{#each userData.userPlaylists}}
 
-      {{#each userData.userPlaylists}}
-      <li>
+        <label>{{this.playlist}}</label>
+        <button type="submit" class="play_button" name="{{this.playlistId}}">Play</button>
+        <br>
 
-        {{this.playlist}}
-
-        <button type="button" class="play_button" name="{{this.playlist}}">Play</button>
-
-      </li>
-      {{/each}}
+        {{/each}}
+      </form>
       <script>
+        function playSong(button) {
+          console.log(button.name)
+          var btn_id = button.name;
+          var myForm = document.getElementById("play_btn_form");
+          myForm.setAttribute("action", "/playPlaylist/play/" + btn_id)
+
+        }
         let playList_list = document.getElementsByClassName("play_button");
-        for (let i = 0; i < songList.length; i++) {
-          playList_list[i].setAttribute("id", i)
+        for (let i = 0; i < playList_list.length; i++) {
           playList_list[i].setAttribute("onclick", "playSong(this)")
         }
       </script>
+
     </ul>
   </div>
 
