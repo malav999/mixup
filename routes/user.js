@@ -54,7 +54,7 @@ router.post("/signin", async (req, res) => {
 router.get("/APILogIn", async (req, res, next) => {
   let userId = req.session.userId;
   if (!userId) {
-    res.redirect("/user/signin");
+    res.redirect("/playlist/create");
   }
   else {
     next();

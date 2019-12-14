@@ -32,7 +32,6 @@ router.post("/create", async (req, res) => {
 //to save a playlist and go back to homepage
 router.get("/savePlaylist", async (req, res) => {
 
-<<<<<<< Updated upstream
     try{
         await playlistData.checkPlaylistLength(req.session.playlistId);
         req.session.playlistId = null;
@@ -46,14 +45,9 @@ router.get("/savePlaylist", async (req, res) => {
    
 })
 
-
-router.use("*", async (req, res) => {
-    res.status(404).json({ error: "Page not found" });
-=======
 router.use("*", async(req,res)=>{
         res.status(404).render('pages/errorAfterLogin',{title: "400 Error"});
      
->>>>>>> Stashed changes
 })
 
 module.exports = router;

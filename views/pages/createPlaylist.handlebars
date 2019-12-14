@@ -132,7 +132,7 @@
 
 
 
-{{!-- <div>
+ <div>
     <div>
         <form id="myForm" method="post">
             <input type="text" id="searchBar" name="searchBar" />
@@ -143,33 +143,7 @@
 
 
 
-    {{!-- <script>
-
-        $(document).ready(function () {
-            var spotifySearch = $("#Spotify");
-            var searchBar = $('searchBar')
-
-
-            $(spotifySearch).click(function () {
-
-                $.ajax({
-                    method: 'post',
-                    data: JSON.stringify({ "searchBar": searchBar }),
-                    dataType: "json",
-                    success: function (obj) {
-                        var search_result = obj;
-                        var hassongs = true;
-                    },
-                    error: function (message) {
-
-                        var hassongs = false;
-                    }
-                })
-            })
-        })
-
-
-    </script> --}}
+    
     <script>
         function addSong(button) {
             btn_id = button.id;
@@ -238,7 +212,6 @@
 
             </script>
         </ul>
-<<<<<<< Updated upstream
 
 
     </div>
@@ -256,18 +229,3 @@
     </button>
 </form>
 </div>
-=======
-    </div> --}}
-    {{!-- <div>
-        {{playlistname}}
-        <ul class="added-songs">
-            {{#each songs}}
-            <li>
-                {{this}}
-            </li>
-            <button type="button" id="add" name="add">Add</button>
-            {{/each}}
-        </ul>
-    </div> --}}
-</div>
->>>>>>> Stashed changes

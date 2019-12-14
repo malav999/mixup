@@ -1,11 +1,10 @@
 
 
 <script src="https://sdk.scdn.co/spotify-player.js"></script>
-
 <script>
     window.onSpotifyWebPlaybackSDKReady = () => {
         // You can now initialize Spotify.Player and use the SDK
-        { { #if accessToken} }
+        {{#if accessToken}}
         var player = new Spotify.Player({
             name: 'MixUp Player',
             getOAuthToken: callback => {
@@ -27,9 +26,7 @@
             console.log('Device ID', device_id);
         })
 
-        {
-            {
-                /if}}
-            };
+        {{/if}}
+    };
 
 </script>

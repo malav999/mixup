@@ -5,6 +5,7 @@ const songRoutes = require("./song")
 const homePageRoutes = require("./homePage")
 const likesCommentsRoutes = require("./likesComments")
 const createPlaylistRoutes = require("./createPlaylist")
+const playPlaylistRoutes = require("./playPlaylist");
 
 
 const constructorMethod = app => {
@@ -15,6 +16,7 @@ const constructorMethod = app => {
   app.use("/homePage", homePageRoutes);
   app.use("/likesComments", likesCommentsRoutes);
   app.use("/createPlaylist", createPlaylistRoutes);
+  app.use("/playPlaylist", playPlaylistRoutes);
   app.use("*", (req, res) => {
     res.status(404).render('pages/error',{title: "400 Error"});
   });

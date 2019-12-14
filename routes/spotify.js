@@ -97,7 +97,7 @@ router.get("/authorized", async (req, res) => {
             try {
                 let addTokens = await userData.addSpotifyTokens(userId, access_token, refresh_token, timeAdded);
                 //add a thing to do here after tokens are successfully added
-                res.redirect('/homePage/homePage')
+                res.redirect('/playlist/create')
             } catch (e) {
                 //handle error correctly
                 console.log(e);
