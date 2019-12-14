@@ -176,7 +176,7 @@ router.post("/search", async (req, res) => {
                 tracksArr.forEach(song => {
 
                     tracksObj.push({
-                        song: song.name,
+                        song: song.name + " by " + song.artists[0].name,
                         uri:  song.uri
                     })
 
