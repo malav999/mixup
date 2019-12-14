@@ -681,3 +681,16 @@ font-style: normal;
 .saveplaylist{
   float:right;
 }
+
+.song{
+  border: 2px solid #666666;
+  margin-top: -1px; /* Prevent double borders */
+  background-color: #f6f6f6;
+ 
+}
+
+.a1{
+  float: left;
+  padding-left: 20px;
+  
+}
