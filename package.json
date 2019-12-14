@@ -20,7 +20,8 @@
     "querystring": "~0.2.0",
     "request": "~2.83.0",
     "request-promise": "^4.2.5",
-    "xss": "^1.0.6"
+    "xss": "^1.0.6",
+    "cryptiles": ">=4.1.2"
   },
   "scripts": {
     "seed": "node ./tasks/seed.js",
