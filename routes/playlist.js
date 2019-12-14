@@ -15,11 +15,11 @@ const playlistData = mixup.playlist;
 // });
 
 // to get all playlist 
+
 router.get("/getall", async (req, res) => {
     try {
-        console.log(1)
         const playlists = await playlistData.getAllPlaylistsDetails();
-        res.json(playlists);
+        res.render('pages/discoverPage',{allPlayList : playlists});
     } catch (e) {
         console.log('err', e)
         res.json(e)
@@ -61,10 +61,6 @@ router.get("/savePlaylist", async (req, res) => {
     } catch (e) {
         res.render('pages/createPlaylist', { error: e });
     }
-
-
-
-
 })
 
 router.use("*", async (req, res) => {

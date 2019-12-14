@@ -59,7 +59,8 @@ module.exports = {
         // If insertion fails, err
         if (insertInfo.insertedCount === 0) throw "Could not add playlist";
 
-        user.playlistIds.push(insertInfo.insertedId)
+        let playlistId = insertInfo.insertedId.toString()
+        user.playlistIds.push(playlistId)
 
         // update playlist id in user
         const updateUserPlaylist = await userCollection.updateOne({ _id: ObjectID(userId) }, { $set: user });
@@ -209,12 +210,13 @@ module.exports = {
         let likesCommentsArr = await likesCommentsCollection.find({}).toArray()
 
         let playlistArr = []
-        let playlistObj = {}
 
         // Get users db collection
         let userCollection = await users()
+        
 
         for (let playlist of allPlaylists) {
+            let playlistObj = {}
             // Get user by userId
             let user = await userCollection.findOne({ _id: ObjectID(playlist.userId) })
 
@@ -224,10 +226,10 @@ module.exports = {
             }
 
             playlistObj.playlistName = playlist.playlistName
-
+            
             let pId = playlist._id.toString()
             playlistObj.playlistId = pId
-
+            
             // Get songs db collection
             let songCollection = await songs()
 
@@ -250,11 +252,12 @@ module.exports = {
             // Get likes and comments
             if (Array.isArray(likesCommentsArr) && likesCommentsArr.length > 0) {
                 for (let like of likesCommentsArr) {
-
                     // Get likes and comments by playlistId
                     let likesCommentObj = await likesCommentsCollection.findOne({ playlistId: pId })
+
                     // Check if the like comment object exist
-                    if (utils.isNull(likesCommentObj !== false)) {
+                    if (likesCommentObj!== undefined && likesCommentObj !== null) {
+
                         // if likeComment obj playlistId is equal to given playlist 
                         // get the number of likes
                         if (likesCommentObj.playlistId === pId) {
@@ -276,6 +279,7 @@ module.exports = {
                     }
                 }
             }
+
             // add whole object to playlist arr
             playlistArr.push(playlistObj)
         }
