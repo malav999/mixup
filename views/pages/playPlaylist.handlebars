@@ -32,6 +32,7 @@
 <script>
     var currPlaylist;
     let ctr = 1;
+    let songCtr = 0;
     var player;
     window.onSpotifyWebPlaybackSDKReady =async () => {
         // You can now initialize Spotify.Player and use the SDK
@@ -95,8 +96,9 @@
     function onPlayerStateChange(event){
         console.log(event.data);
         if(event.data == YT.PlayerState.ENDED || event.data == YT.PlayerState.CUED){
-            let song = currPlaylist[0].getAttribute("name");
-            currPlaylist[0].parentNode.removeChild(currPlaylist[0])
+            let song = currPlaylist[songCtr].getAttribute("name");
+            //currPlaylist[0].parentNode.removeChild(currPlaylist[0])
+            songCtr++;
             console.log('youtube listener next song:' + song);
             if(song && song.match("spotify")){
                 playSpotifySong(song);
@@ -119,11 +121,12 @@
     btn.setAttribute("onclick","playMusic()")
         
     async function playMusic() {
-        
+        songCtr = 0;
         currPlaylist = document.getElementsByClassName("songURI")      
 
-        let song = currPlaylist[0].getAttribute("name");
-        currPlaylist[0].parentNode.removeChild(currPlaylist[0])
+        let song = currPlaylist[songCtr].getAttribute("name");
+        songCtr++;
+        //currPlaylist[0].parentNode.removeChild(currPlaylist[0])
         console.log('Next song:' + song);
         if(song.match("spotify")){
             playSpotifySong(song);
