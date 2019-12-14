@@ -15,19 +15,12 @@ router.get("/get", async (req, res) => {
 });
 
 router.get("/signin", async (req, res) => {
-<<<<<<< Updated upstream
-  if(!req.session.userId){
+  if (!req.session.userId) {
     res.render('pages/login');
   }
-  else{
+  else {
     res.render('pages/homePage');
   }
-  
-=======
-
-  res.render('pages/login')
->>>>>>> Stashed changes
-
 })
 
 router.get("/signup", async (req, res) => {
