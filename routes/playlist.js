@@ -3,7 +3,6 @@ const router = express.Router();
 const mixup = require("../mixup");
 const playlistData = mixup.playlist;
 
-
 router.use("/", async (req, res, next) => {
     let userId = req.session.userId;
     if (!userId) {
@@ -15,6 +14,18 @@ router.use("/", async (req, res, next) => {
     }
 });
 
+// to get all playlist 
+router.get("/getall", async (req, res) => {
+    try {
+        console.log(1)
+        const playlists = await playlistData.getAllPlaylistsDetails();
+        res.json(playlists);
+    } catch (e) {
+        console.log('err', e)
+        res.json(e)
+    }
+});
+
 router.post("/create", async (req, res) => {
     try {
         const playlist = await playlistData.createPlaylist(req);
@@ -23,7 +34,7 @@ router.post("/create", async (req, res) => {
         }
         res.render('pages/createPlaylist');
     } catch (e) {
-        res.render('pages/homePage',{error:e});
+        res.render('pages/homePage', { error: e });
         console.log('err', e)
         // res.json(e)
     }
@@ -32,22 +43,17 @@ router.post("/create", async (req, res) => {
 //to save a playlist and go back to homepage
 router.get("/savePlaylist", async (req, res) => {
 
-    try{
+    try {
         await playlistData.checkPlaylistLength(req.session.playlistId);
         req.session.playlistId = null;
         res.redirect("/homePage/homePage");
-    }catch(e){
-        res.render('pages/createPlaylist', {error: e});
+    } catch (e) {
+        res.render('pages/createPlaylist', { error: e });
     }
-    
-
-    
-   
 })
 
-router.use("*", async(req,res)=>{
-        res.status(404).render('pages/errorAfterLogin',{title: "400 Error"});
-     
+router.use("*", async (req, res) => {
+    res.status(404).render('pages/errorAfterLogin', { title: "400 Error" });
 })
 
 module.exports = router;

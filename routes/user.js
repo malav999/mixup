@@ -15,8 +15,13 @@ router.get("/get", async (req, res) => {
 });
 
 router.get("/signin", async (req, res) => {
+  if(!req.session.userId){
+    res.render('pages/login');
+  }
+  else{
+    res.render('pages/homePage');
+  }
   
-  res.render('pages/login')
 
 })
 
@@ -54,7 +59,7 @@ router.post("/signin", async (req, res) => {
 router.get("/APILogIn", async (req, res, next) => {
   let userId = req.session.userId;
   if (!userId) {
-    res.redirect("/playlist/create");
+    res.redirect("/user/login");
   }
   else {
     next();
