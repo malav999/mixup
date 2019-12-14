@@ -61,8 +61,8 @@
                 if(state && state.paused && state.position === 0) {
                     console.log(ctr);
                     if(currPlaylist.length>0 && ctr%3 == 0 ) {
-                        let song = currPlaylist[0].getAttribute("name");
-                        currPlaylist[0].parentNode.removeChild(currPlaylist[0])
+                        let song = currPlaylist[songCtr].getAttribute("name");
+                        songCtr++;
                         console.log('spotify listener next song:' + song);
                         if(song && song.match("spotify")){
                             playSpotifySong(song);
@@ -97,7 +97,6 @@
         console.log(event.data);
         if(event.data == YT.PlayerState.ENDED || event.data == YT.PlayerState.CUED){
             let song = currPlaylist[songCtr].getAttribute("name");
-            //currPlaylist[0].parentNode.removeChild(currPlaylist[0])
             songCtr++;
             console.log('youtube listener next song:' + song);
             if(song && song.match("spotify")){
@@ -126,7 +125,6 @@
 
         let song = currPlaylist[songCtr].getAttribute("name");
         songCtr++;
-        //currPlaylist[0].parentNode.removeChild(currPlaylist[0])
         console.log('Next song:' + song);
         if(song.match("spotify")){
             playSpotifySong(song);
