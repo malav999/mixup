@@ -1,63 +1,70 @@
-
-
-
-<ul class="playList-list">
+ <ul class="playList-list">
 
  
-                <div class="song-item">
+                <div class="song-item card_container_style">
             
             {{#each allPlayList}}
-            
-                <br>
-                    PlaylistName : {{this.playlistName}}
-                    </br>
-                    <br>
-                    UserName : {{this.userName}}
-                    </br>
-                    <form method="get" action="/likesComments/addLike/{{this.playlistId}}">
-                    <br>
-                    Likes : {{this.likes}} <button id="like">Like</button>
-                    </br>
-                    </form>
-                    <form method="post" action="/likesComments/addComment/{{this.playlistId}}">  
-                    <br>
-                    Comment : {{this.comments}} 
-                    </br>
-                    <br>
-                        <input type="text" id="content" name="content"/>
-                        <button type="submit" id="comment">Comment</button>
-                    </br>
-                    </form>
-                <form method="get" action= "/user/addPlaylist/{{this.playlistId}}">
-                    <button class="playlist_add">Add to my profile</button>    
+            <div class="card cmt_card_style">
+                <div>
+                    <label>PlaylistName : {{this.playlistName}}</label> 
+                </div>
+                <div>
+                    <label>UserName : {{this.userName}}</label>    
+                </div>
+                <form method="get" action="/likesComments/addLike/{{this.playlistId}}">
+                    <div style="display: flex; flex-direction:row"> 
+                        <div>
+                            <label>Likes : {{this.likes}}</label >  
+                        </div>
+                        <div> 
+                            <button style="color:blue" id="like">Like</button>
+                        </div>
+                    </div>
                 </form>
+                    <form method="post" action="/likesComments/addComment/{{this.playlistId}}">  
+                    <div>
+                        <label>Comment : {{this.comments}}</label>    
+                    </div>
+                    <div>
+                        
+                        <div class="input-group mb-3">
+                            <input type="text" id="content" name="content" class="form-control" placeholder="Comment" aria-label="Add comment" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                 <button  id="comment"  class="btn btn-outline-secondary" type="submit">Comment</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <form method="get" action= "/user/addPlaylist/{{this.playlistId}}">
+                    <button  style="color:blue" class="playlist_add">Add to my profile</button>    
+                </form>
+                </div>
                 {{/each}}
                 
                 </div>
                 
                 <p>-------------------------------------------------------------------------</p>
             
-            
 </ul>
 <script>
-    
-    
+
+
     var btn = document.getElementsByClassName("playList_add");
-    
-        for(let i = 0 ; i < btn.length ; i++){
-            btn[i].setAttribute("id",i);
-            btn[i].setAttribute("onclick","onclickSubmit(this)"); 
-        }
-             
-    function onclickSubmit(button){  
-         var btn = document.getElementsByClassName("playList_add");  
-        for(let i = 0 ; i < btn.length ; i++){
+
+    for (let i = 0; i < btn.length; i++) {
+        btn[i].setAttribute("id", i);
+        btn[i].setAttribute("onclick", "onclickSubmit(this)");
+    }
+
+    function onclickSubmit(button) {
+        var btn = document.getElementsByClassName("playList_add");
+        for (let i = 0; i < btn.length; i++) {
             console.log("button : " + btn[i]);
-            if(btn[i].id == button.id){
+            if (btn[i].id == button.id) {
                 var playlistid = document.getElementById(btn[i].id);
                 console.log(playlistid.name)
                 let plist_id = playlistid.getAttribute("name");
-            
+
             }
         }
     }

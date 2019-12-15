@@ -694,3 +694,17 @@ label[for="searchBar"] {
   display: none;
 }
 
+.cmt_card_style{
+  background-color: #f1f1f1 !important;
+  width: 70%;
+  align-self: center;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.card_container_style{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+}

@@ -135,7 +135,8 @@ module.exports = {
             // add newly created comment obj to likes-comments
             commentData.comments.push(commentObj)
             await commentCollection.updateOne({ _id: ObjectID(commentData._id) }, { $set: commentData })
-
+let abc = await this.getLikesCommentsById(commentData._id)
+            console.log('',abc)
             return await this.getLikesCommentsById(commentData._id)
         }
 
@@ -155,7 +156,8 @@ module.exports = {
         // If insertion fails, err
         if (insertInfo.insertedCount === 0) throw "Could not add like-comment";
         const newId = insertInfo.insertedId;
-
+        let abc = await this.getLikesCommentsById(newId)
+        console.log('',abc)
         return this.getLikesCommentsById(newId)
     },
 
