@@ -7,7 +7,6 @@
 
 <div>
     <div id="yt_player"></div>
-
     <h1>
         {{playlistObj.playlist.playlistName}}
     </h1>
@@ -19,147 +18,139 @@
             <br>
 
             <label class="song a1"> {{this.songName}}</label>
-            <label class="songURI" name="{{this.songURI}}"></label>
+            <label class ="songURI"  name="{{this.songURI}}"></label>      
         </div>
 
 
     </li>
     {{/each}}
+
+
+
 </div>
 <button id="Playerbtn">Play</button>
-</div>
-
-
-
-
-
-
-
 <script>
     var currPlaylist;
     let ctr = 1;
     let songCtr = 0;
     var player;
-    window.onSpotifyWebPlaybackSDKReady = async () => {
+    window.onSpotifyWebPlaybackSDKReady =async () => {
         // You can now initialize Spotify.Player and use the SDK
-        { { #if accessToken} }
-        player = new Spotify.Player({
-            name: 'MixUp Player',
-            getOAuthToken: callback => {
-                callback('{{accessToken}}');
-            },
-            volume: 0.5
-        });
+        {{#if accessToken}}
+            player = new Spotify.Player({
+                name: 'MixUp Player',
+                getOAuthToken: callback => {
+                    callback('{{accessToken}}');
+                },
+                volume: 0.5
+            });
 
-        player.connect().then(success => {
-            if (success) {
-                console.log('The Web Playback SDK successfully connected to Spotify!');
-            }
-        })
+            player.connect().then(success => {
+                if (success) {
+                    console.log('The Web Playback SDK successfully connected to Spotify!');
+                }
+            })
 
-        player.addListener('ready', ({ device_id }) => {
-            console.log('The Web Playback SDK is ready to play music!');
-            console.log('Device ID', device_id);
-        })
+            player.addListener('ready', ({ device_id }) => {
+                console.log('The Web Playback SDK is ready to play music!');
+                console.log('Device ID', device_id);
+            })
 
-        player.addListener('player_state_changed', state => {
-            console.log(state);
-            if (state && state.paused && state.position === 0) {
-                console.log(ctr);
-                if (currPlaylist.length > 0 && ctr % 3 == 0) {
-                    let song = currPlaylist[songCtr].getAttribute("name");
-                    songCtr++;
-                    console.log('spotify listener next song:' + song);
-                    if (song && song.match("spotify")) {
-                        playSpotifySong(song);
-                        ctr++;
+            player.addListener('player_state_changed',state => {
+                console.log(state);
+                if(state && state.paused && state.position === 0) {
+                    console.log(ctr);
+                    if(currPlaylist.length>0 && ctr%3 == 0 ) {
+                        let song = currPlaylist[songCtr].getAttribute("name");
+                        songCtr++;
+                        console.log('spotify listener next song:' + song);
+                        if(song && song.match("spotify")){
+                            playSpotifySong(song);
+                            ctr++;
+                        }
+                        else {
+                            yt_player.loadVideoById({'videoId':song})
+                        }           
                     }
                     else {
-                        yt_player.loadVideoById({ 'videoId': song })
+                        ctr++;
                     }
-                }
-                else {
-                    yt_player.loadVideoById({ 'videoId': song })
-                }
-            }
-            else {
-                ctr++;
-            }
-        }
-            this.state = state;
-    });
-    {
-        {
-            /if}}
+                }
+                this.state = state;
+            });
+        {{/if}}
         };
 
-        var yt_player;
-        function onYouTubeIframeAPIReady() {
-            yt_player = new YT.Player('yt_player', {
-                height: '0',
-                width: '0',
-                events: {
-                    //'onReady': onPlayerReady,
-                    'onStateChange': onPlayerStateChange
-                }
-            });
+    var yt_player;
+    function onYouTubeIframeAPIReady() {
+        yt_player = new YT.Player('yt_player', {
+            height: '0',
+            width: '0',
+            events: {
+                //'onReady': onPlayerReady,
+                'onStateChange': onPlayerStateChange
+            }
+       });
+    }
+
+    function onPlayerStateChange(event){
+        console.log(event.data);
+        if(event.data == YT.PlayerState.ENDED || event.data == YT.PlayerState.CUED){
+            let song = currPlaylist[songCtr].getAttribute("name");
+            songCtr++;
+            console.log('youtube listener next song:' + song);
+            if(song && song.match("spotify")){
+                playSpotifySong(song);
+                ctr++;
+            }
+            else {
+                yt_player.loadVideoById({'videoId':song})
+            }       
         }
+        else if(event.data == YT.PlayerState.PLAYING) {
+            setTimeout(stopVideo, 6000);
+        }
+    }
+    
+    function stopVideo() {
+        yt_player.stopVideo();
+    }
 
-        function onPlayerStateChange(event) {
-            console.log(event.data);
-            if (event.data == YT.PlayerState.ENDED || event.data == YT.PlayerState.CUED) {
-                let song = currPlaylist[songCtr].getAttribute("name");
-                //currPlaylist[0].parentNode.removeChild(currPlaylist[0])
-                songCtr++;
-                console.log('youtube listener next song:' + song);
-                if (song && song.match("spotify")) {
-                    playSpotifySong(song);
-                    ctr++;
-                }
+    var btn = document.getElementById("Playerbtn")  
+    btn.setAttribute("onclick","playMusic()")
+        
+    async function playMusic() {
+        songCtr = 0;
+        currPlaylist = document.getElementsByClassName("songURI")      
 
-                function stopVideo() {
-                    yt_player.stopVideo();
-                }
+        let song = currPlaylist[songCtr].getAttribute("name");
+        songCtr++;
+        console.log('Next song:' + song);
+        if(song.match("spotify")){
+            playSpotifySong(song);
+        }
+        else{
+            yt_player.loadVideoById({'videoId':song});
+        }
+    }
 
-                let song = currPlaylist[songCtr].getAttribute("name");
-                songCtr++;
-                //currPlaylist[0].parentNode.removeChild(currPlaylist[0])
-                console.log('Next song:' + song);
-                if (song.match("spotify")) {
-                    playSpotifySong(song);
-                }
-                else {
-                    yt_player.loadVideoById({ 'videoId': song });
-                }
-            }
-
-            async function playMusic() {
-                songCtr = 0;
-                currPlaylist = document.getElementsByClassName("songURI")
-
-                let song = currPlaylist[songCtr].getAttribute("name");
-                songCtr++;
-                //currPlaylist[0].parentNode.removeChild(currPlaylist[0])
-                console.log('Next song:' + song);
-                if (song.match("spotify")) {
-                    playSpotifySong(song);
-                }
-                else {
-                    yt_player.loadVideoById({ 'videoId': song });
-                }
-            }
-
-            function playSpotifySong(url) {
-                $(document).ready(function () {
-                    $.ajax({
+    function playSpotifySong(url){
+        $(document).ready(function () {
+                        $.ajax({
                         method: "post",
                         url: "/spotify/play",
-                        data: { uri: url },
+                        data: {uri:url},
                         success: function () {
-                            //alert("song has been played");
+                           //alert("song has been played");
                         }
                     });
                 })
-
-            }           
+        
+    }
 </script>
+
+
+
+
+
+
