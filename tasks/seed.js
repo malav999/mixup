@@ -128,12 +128,13 @@ async function main() {
 			platform: youtubeSong1.platform
 		}
 	}
+	let hillId = malavPlaylist._id.toString()
 
 	let pId = malavPlaylist._id.toString()
-	let malavSongObj = {
+	let patricksongs = {
 		session: {
-			playlistId: pId,
-			userId: mId,
+			playlistId: hillId,
+			userId: hId,
 		},
 		body: {
 			songURI: youtubeSong1.songURI,
@@ -178,17 +179,17 @@ async function main() {
 		}
 	}
 
-	await song.addSong(malavSongObj)
-	await song.addSong(malavSongObj2)
+	await song.addSong(patricksongs)
+	// await song.addSong()
 	await song.addSong(malavSongObj3)
 	await song.addSong(malavSongObj4)
 
 	let malavLikeObj = {
 		params: {
-			pId: pId,
+			pId: hillId,
 		},
 		session: {
-			userId: mId
+			userId: hId
 		}
 	}
 
@@ -219,10 +220,10 @@ async function main() {
 			content: 'This playlist is amazing'
 		},
 		session:{
-			userId: mahirId,
+			userId: hId,
 		},
 		params:{
-			pId: pId,
+			pId: hillId,
 		}
 	}
 
