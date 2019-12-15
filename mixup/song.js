@@ -208,7 +208,7 @@ module.exports = {
 
         let searchResult = []
         for (let song of allSongs) {
-            if (song.songName.includes(songName)) {
+            if (song.songName.toLowerCase().includes(songName)) {
                 searchResult.push(song)
             }
         }

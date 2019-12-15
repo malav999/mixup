@@ -29,6 +29,8 @@
 
 </div>
 <button id="Playerbtn">Play</button>
+<button id="Nextbtn">Next</button>
+
 <script>
     var currPlaylist;
     let ctr = 1;
@@ -59,18 +61,20 @@
             player.addListener('player_state_changed',state => {
                 console.log(state);
                 if(state && state.paused && state.position === 0) {
-                    console.log(ctr);
+                    console.log("spotify listener ctr: " + ctr);
                     if(currPlaylist.length>0 && ctr%3 == 0 ) {
-                        let song = currPlaylist[songCtr].getAttribute("name");
                         songCtr++;
+                        let song = currPlaylist[songCtr].getAttribute("name");
+                        //songCtr++;
                         console.log('spotify listener next song:' + song);
                         if(song && song.match("spotify")){
                             playSpotifySong(song);
-                            ctr++;
+                            
                         }
                         else {
                             yt_player.loadVideoById({'videoId':song})
-                        }           
+                        }
+                        ctr++;         
                     }
                     else {
                         ctr++;
@@ -94,10 +98,11 @@
     }
 
     function onPlayerStateChange(event){
-        console.log(event.data);
+        console.log("Youtube listener event.data: "+event.data);
         if(event.data == YT.PlayerState.ENDED || event.data == YT.PlayerState.CUED){
-            let song = currPlaylist[songCtr].getAttribute("name");
             songCtr++;
+            let song = currPlaylist[songCtr].getAttribute("name");
+            //songCtr++;
             console.log('youtube listener next song:' + song);
             if(song && song.match("spotify")){
                 playSpotifySong(song);
@@ -116,15 +121,42 @@
         yt_player.stopVideo();
     }
 
-    var btn = document.getElementById("Playerbtn")  
+    var btn = document.getElementById("Playerbtn") 
+    var nxtBtn = document.getElementById("Nextbtn") 
     btn.setAttribute("onclick","playMusic()")
-        
+    nxtBtn.setAttribute("onclick","playNext()")
+
+    function playNext(){
+        let song = currPlaylist[songCtr].getAttribute("name");
+        console.log("playNext: current song = "+song);
+        if(song.match("spotify")){
+            // stop spotify player
+            player.seek(0).then(() => {
+                player.pause().then(() => {
+                    console.log('spotify Paused! and seeked to 0');
+                });
+            });
+        }
+        else{
+            yt_player.stopVideo();
+        }
+        //songCtr++;
+        //if(songCtr<currPlaylist.length){
+        //    let song = currPlaylist[songCtr].getAttribute("name");
+        //    if(song.match("spotify")){
+        //        playSpotifySong(song);
+        //    }
+           
+        //}   
+    }
+
     async function playMusic() {
         songCtr = 0;
+        ctr = 0;
         currPlaylist = document.getElementsByClassName("songURI")      
 
         let song = currPlaylist[songCtr].getAttribute("name");
-        songCtr++;
+        //songCtr++;
         console.log('Next song:' + song);
         if(song.match("spotify")){
             playSpotifySong(song);

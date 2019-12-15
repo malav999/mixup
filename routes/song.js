@@ -47,7 +47,7 @@ router.post("/searchSong", async (req, res) => {
 
     } catch (e) {
         console.log('err', e)
-        res.json(e)
+        res.render('pages/createPlaylist', { error: e});
     }
 
 });
