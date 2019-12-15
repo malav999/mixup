@@ -14,7 +14,7 @@ router.get("/get", async (req, res) => {
   }
 });
 
-//to get user and user playlist's details
+//to get another user's playlist
 router.post("/addPlaylist", async (req, res) => {
   try {
     const user = await userData.addPlaylistToUser(req);
