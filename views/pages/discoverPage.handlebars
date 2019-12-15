@@ -14,17 +14,25 @@
                     <br>
                     UserName : {{this.userName}}
                     </br>
+                    <form method="get" action="/likesComments/addLike/{{this.playlistId}}">
                     <br>
-                    Likes : {{this.likes}}
-                    </br>   
+                    Likes : {{this.likes}} <button id="like">Like</button>
+                    </br>
+                    </form>
+                    <form method="get" action="/likesComments/addComment/{{this.playlistId}}">  
                     <br>
                     Comment : {{this.comments}} 
                     </br>
+                    <br>
+                        <input type="text"/>
+                        <button id="comment">Comment</button>
+                    </br>
+                    </form>
                 <form method="get" action= "/user/addPlaylist/{{this.playlistId}}">
                     <button class="playlist_add">Add to my profile</button>    
                 </form>
                 {{/each}}
-                <>
+                
                 </div>
                 
                 <p>-------------------------------------------------------------------------</p>

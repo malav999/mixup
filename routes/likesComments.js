@@ -15,22 +15,22 @@ const likesCommentsData = mixup.likesComments;
 //     }
 // });
 
-router.post("/addLike", async (req, res) => {
+router.get("/addLike/:pId", async (req, res) => {
     try {
         const likesComments = await likesCommentsData.addLike(req);
         console.log('likesComments', likesComments)
-        res.json(likesComments);
+        res.redirect("/playlist/getall");
     } catch (e) {
         console.log('err', e)
         res.json(e)
     }
 });
 
-router.post("/addComment", async (req, res) => {
+router.get("/addComment/:pId", async (req, res) => {
     try {
         const likesComments = await likesCommentsData.addComment(req);
         console.log('likesComments', likesComments)
-        res.json(likesComments);
+        res.redirect("/playlist/getall");
     } catch (e) {
         console.log('err', e)
         res.json(e)

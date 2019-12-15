@@ -16,15 +16,16 @@ module.exports = {
      * @param {*} req
      */
     async addLike(req) {
-        let playlistId = req.body.playlistId
-        let userId = req.body.userId
+        let playlistId = req.params.pId;
+        let userId = req.session.userId;
 
         utils.isString(playlistId, `playlistId ${playlistId}`)
         utils.isString(userId, `userId ${userId}`)
 
         let likesCommentsCollection = await likesComments();
         // get likes data by playlistId
-        let likeData = await likesCommentsCollection.findOne({ playlistId: playlistId })
+
+        let likeData = await likesCommentsCollection.findOne({ "playlistId": ObjectID(playlistId)})
 
         // If any user has already liked or commented on a specified playlist then the data will already exits
         // Add the given userId to like
@@ -107,8 +108,8 @@ module.exports = {
      * @param {*} req
      */
     async addComment(req) {
-        let playlistId = req.body.playlistId
-        let userId = req.body.userId
+        let playlistId = req.params.pId
+        let userId = req.session.userId
         let userName = req.body.userName
         let content = req.body.content
 
