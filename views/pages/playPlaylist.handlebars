@@ -5,31 +5,45 @@
 
 
 
-<div>
-    <div id="yt_player"></div>
-    <h1>
-        {{playlistObj.playlist.playlistName}}
-    </h1>
-    {{#each playlistObj.songArr}}
+<div style="
+    display: flex;
+    flex-direction: column;
+">
+<div style="
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;" class="card">
+    <div>
+        <div id="yt_player"></div>
+       
+        <br>
+        <h1 class="playlistName2">
+            {{playlistObj.playlist.playlistName}}
+        </h1>
+        {{#each playlistObj.songArr}}
 
-    <li>
+            <li class="list-group list-group-flush">
 
-        <div class="play_list-song-item">
-            <br>
+                <div class="play_list-song-item" style="flex-direction: column;display: flex;">
+                    <br>
+                 
+                   <h2><label class="song a1"> {{this.songName}}</label></h2> 
 
-            <label class="song a1"> {{this.songName}}</label>
-            <label class ="songURI"  name="{{this.songURI}}"></label>      
-        </div>
-
-
-    </li>
-    {{/each}}
-
-
-
+                   <h2><label class="songURI" name="{{this.songURI}}"></label></h2> 
+                </div>
+            </li>
+        {{/each}}
+    </div>
 </div>
-<button id="Playerbtn">Play</button>
-<button id="Nextbtn">Next</button>
+<div style="
+    display: flex;
+    justify-content: center;
+"><div style="display: flex; flex-direction:row; justify-content:space-evenly;     width: 100%;"> 
+    <div><button id="Playerbtn" class="myBtn">Play</button></div>
+   <div> <button id="Nextbtn" class="myBtn">Next</button></div></div>>
+</div>
+</div>
+
 
 <script>
     var currPlaylist;
