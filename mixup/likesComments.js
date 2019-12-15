@@ -110,12 +110,13 @@ module.exports = {
     async addComment(req) {
         let playlistId = req.params.pId
         let userId = req.session.userId
-        // let userName = req.body.userName
         let content = req.params.content
 
         utils.isString(playlistId, `playlistId ${playlistId}`)
         utils.isString(userId, `userId ${userId}`)
         utils.isString(content, `content ${content}`)
+        let userCollection = await users()
+        let user = await userCollection.findOne({ _id: ObjectID(userId) })
 
         let commentCollection = await likesComments()
         // Get like-comment object by playlistId
@@ -129,14 +130,8 @@ module.exports = {
             let commentObj = {}
             commentObj.userId = userId
             commentObj.content = content
-
-            let userCollection = await users()
-            let user = await userCollection.findOne({ _id: ObjectID(userId) })
-
-            if (user) {
-                commentObj.name = user.firstName
-            }
-
+            commentObj.name = user.firstName
+            
             // add newly created comment obj to likes-comments
             commentData.comments.push(commentObj)
             await commentCollection.updateOne({ _id: ObjectID(commentData._id) }, { $set: commentData })
@@ -149,7 +144,7 @@ module.exports = {
         newFeeds.playlistId = playlistId
         newFeeds.comments = [{
             userId: userId,
-            name: userName,
+            name: user.firstName,
             content: content
         }]
         newFeeds.createdAt = new Date().toLocaleDateString()
