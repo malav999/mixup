@@ -250,7 +250,7 @@ iframe {
   display: -ms-flexbox;
   display: flex;
   flex-wrap: wrap;
-  padding: 100px 65px 40px 65px;
+  padding: 20px 65px 40px 65px;
 }
 .signup100-form-title {
   font-family: Poppins-Regular;
