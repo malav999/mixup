@@ -14,11 +14,12 @@ router.get("/get", async (req, res) => {
   }
 });
 
-//to get another user's playlist
-router.post("/addPlaylist", async (req, res) => {
+//to get user and user playlist's details
+router.get("/addPlaylist/:pId", async (req, res) => {
   try {
-    const user = await userData.addPlaylistToUser(req);
-    res.json(user);
+    const user = await userData.addPlaylistToUser(req,req.params.pId);
+    
+    res.redirect('/homePage/homePage');
   } catch (e) {
     console.log('err', e)
     res.json(e)

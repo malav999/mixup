@@ -1,9 +1,13 @@
 
+
+
 <ul class="playList-list">
 
-            {{#each allPlayList}}
-            <li>
+ 
                 <div class="song-item">
+            
+            {{#each allPlayList}}
+            
                 <br>
                     PlaylistName : {{this.playlistName}}
                     </br>
@@ -12,13 +16,42 @@
                     </br>
                     <br>
                     Likes : {{this.likes}}
-                    </br>
+                    </br>   
                     <br>
                     Comment : {{this.comments}} 
                     </br>
-                    
+                <form method="get" action= "/user/addPlaylist/{{this.playlistId}}">
+                    <button class="playlist_add">Add to my profile</button>    
+                </form>
+                {{/each}}
+                <>
                 </div>
-                -----------------------------------------------
-            </li>
-            {{/each}}
+                
+                <p>-------------------------------------------------------------------------</p>
+            
+            
 </ul>
+<script>
+    
+    
+    var btn = document.getElementsByClassName("playList_add");
+    
+        for(let i = 0 ; i < btn.length ; i++){
+            btn[i].setAttribute("id",i);
+            btn[i].setAttribute("onclick","onclickSubmit(this)"); 
+        }
+             
+    function onclickSubmit(button){  
+         var btn = document.getElementsByClassName("playList_add");  
+        for(let i = 0 ; i < btn.length ; i++){
+            console.log("button : " + btn[i]);
+            if(btn[i].id == button.id){
+                var playlistid = document.getElementById(btn[i].id);
+                console.log(playlistid.name)
+                let plist_id = playlistid.getAttribute("name");
+            
+            }
+        }
+    }
+
+</script>
