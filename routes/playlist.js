@@ -4,16 +4,16 @@ const mixup = require("../mixup");
 const userData = mixup.user;
 const playlistData = mixup.playlist;
 
-// router.use("/", async (req, res, next) => {
-//     let userId = req.session.userId;
-//     if (!userId) {
-//         //user is not logged in
-//         res.redirect('/user/signin');
-//     }
-//     else {
-//         next();
-//     }
-// });
+router.use("/", async (req, res, next) => {
+    let userId = req.session.userId;
+    if (!userId) {
+        //user is not logged in
+        res.redirect('/user/signin');
+    }
+    else {
+        next();
+    }
+});
 
 // to get all playlist 
 
