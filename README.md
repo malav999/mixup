@@ -35,22 +35,6 @@ Step 3: npm start - To start the server at http://localhost:3000
 3. While creating a new playlist, search bar is provided with two buttons to search either on Youtube or Spotify. Youtube search has been limited to 20 songs with static data seeded in the database. A list is given below for the same.
 
 4. For testing purposes and convenience, youtube audio will end in 1 minute interval and the next song in the playlist will be played. Spotify music can be controlled using any other device with same account.
-    
-
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-
-
-## Authors
-
-
 
 
 

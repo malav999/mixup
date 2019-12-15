@@ -59,6 +59,12 @@ module.exports = {
         firstName = firstName.toUpperCase()
         lastName = lastName.toUpperCase()
 
+        if(req.body.yes === 1){
+        accessToken = req.body.accessToken
+        refreshToken = req.body.refreshToken
+        sTokenTimeAdded = req.body.sTokenTimeAdded
+        }
+
         // Create new user object
         let newUser = {}
         newUser.firstName = firstName

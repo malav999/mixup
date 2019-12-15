@@ -7,7 +7,7 @@ const user = mixup.user
 
 async function main() {
 	const db = await dbConnection();
-	// await db.dropDatabase();
+	await db.dropDatabase();
 
 	let youtubeSong1 = await song.addSongToYouTube("Addicted", "https://www.youtube.com/watch?v=2M-2BFS6Jxc", "2M-2BFS6Jxc", "youtube");
 	const youtubeSong2 = await song.addSongToYouTube("All too well", "https://www.youtube.com/watch?v=Fd_AtH0yVqU", "Fd_AtH0yVqU", "youtube");
@@ -70,15 +70,31 @@ async function main() {
 		}
 	}
 
+	let userPatrickObj = {
+		body: {
+			firstName: 'patrick',
+			lastName: 'hill',
+			email: 'phill@gmail.com',
+			password: 'hello1234',
+			age: 35,
+			accessToken:'BQB5NlSw0iHNqtxL7L6U0rBIwFG44xXuWYR3XSrxwhxMTBu8kDF91Ti7oR6yoAVfBSMIHiZ3pUzVgqvO2kQ1QWXbb5Oqgak10JQnGXu__g6mM1SjrIhZi7h9uabga7u-gUrykrzleLKAQYI7T1uOlZ4aGzK9-vm_MK8SAbFK0fLudshJw0F0FABCyWi_Ecw',
+			refreshToken: 'AQARyOlu6UCkS1Ug-3TkF-V4TnIelhImomkq3c2nxzmD3Ao7DWypEZnJaDfbwzbV5ZBAs8Ak6kH0olM-TbfsY5kxXf7xPRkjr2nxDHPjhgMwrvd6pGOZZ_2MzH3F8jXYTO8',
+			sTokenTimeAdded:'1576379748584',
+			yes : 1
+		}
+	}
+
 	let malav = await user.addUser(userMalavObj)
 	let mahir = await user.addUser(userMahirObj)
 	let aneri = await user.addUser(userAneriObj)
 	let dhruval = await user.addUser(userDhruvalObj)
+	let phill = await user.addUser(userPatrickObj)
 
 	let mId = malav.user._id.toString()
 	let mahirId = mahir.user._id.toString()
 	let aId = aneri.user._id.toString()
 	let dId = dhruval.user._id.toString()
+	let hId = phill.user._id.toString()
 
 	let malavPlaylistObj = {
 		session: {
@@ -89,6 +105,29 @@ async function main() {
 		}
 	}
 	const malavPlaylist = await playlist.createPlaylist(malavPlaylistObj)
+
+	let phillPlaylistObj = {
+		session: {
+			userId: hId
+		},
+		body: {
+			playlistName: 'Rock'
+		}
+	}
+	const hillPlaylist = await playlist.createPlaylist(phillPlaylistObj)
+
+	let phillPlaylistId = phillPlaylistObj._id
+	let phillSongObj = {
+		session: {
+			playlistId: phillPlaylistId,
+			userId: hId,
+		},
+		body: {
+			songURI: youtubeSong1.songURI,
+			songName: youtubeSong1.songName,
+			platform: youtubeSong1.platform
+		}
+	}
 
 	let pId = malavPlaylist._id.toString()
 	let malavSongObj = {
@@ -145,22 +184,28 @@ async function main() {
 	await song.addSong(malavSongObj4)
 
 	let malavLikeObj = {
-		body: {
-			playlistId: pId,
+		params: {
+			pId: pId,
+		},
+		session: {
 			userId: mId
 		}
 	}
 
 	let mahirLikeObj = {
-		body: {
-			playlistId: pId,
+		params: {
+			pId: pId,
+		},
+		session: {
 			userId: mahirId
 		}
 	}
 
 	let dhruvalLikeObj = {
-		body: {
-			playlistId: pId,
+		params: {
+			pId: pId,
+		},
+		session: {
 			userId: dId
 		}
 	}
@@ -171,25 +216,18 @@ async function main() {
 
 	let mahirCommentsObj = {
 		body: {
-			playlistId: pId,
-			userId: mahirId,
-			userName: mahir.user.firstName,
 			content: 'This playlist is amazing'
-		}
-	}
-
-	let malavCommentsObj = {
-		body: {
-			playlistId: pId,
-			userId: mId,
-			userName: malav.user.firstName,
-			content: 'Oh is it? :) Thanks'
+		},
+		session:{
+			userId: mahirId,
+		},
+		params:{
+			pId: pId,
 		}
 	}
 
 	await likesComments.addComment(mahirCommentsObj)
-	await likesComments.addComment(malavCommentsObj)
-
+	
 	console.log('Done seeding database');
 	await db.close();
 }
