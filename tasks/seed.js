@@ -50,11 +50,35 @@ async function main() {
 		}
 	}
 
+	let userDhruvalObj = {
+		body: {
+			firstName: 'Dhruval',
+			lastName: 'Thakkar',
+			email: 'Dhruval@gmail.com',
+			password: 'dhruval',
+			age: 23
+		}
+	}
+
+	let userAneriObj = {
+		body: {
+			firstName: 'Aneri',
+			lastName: 'Shah',
+			email: 'Aneri@gmail.com',
+			password: 'aneri',
+			age: 23
+		}
+	}
+
 	let malav = await user.addUser(userMalavObj)
 	let mahir = await user.addUser(userMahirObj)
+	let aneri = await user.addUser(userAneriObj)
+	let dhruval = await user.addUser(userDhruvalObj)
 
 	let mId = malav.user._id.toString()
 	let mahirId = mahir.user._id.toString()
+	let aId = aneri.user._id.toString()
+	let dId = dhruval.user._id.toString()
 
 	let malavPlaylistObj = {
 		session: {
@@ -127,9 +151,25 @@ async function main() {
 		}
 	}
 
-	let malavLikes = await likesComments.addLike(malavLikeObj)
+	let mahirLikeObj = {
+		body: {
+			playlistId: pId,
+			userId: mahirId
+		}
+	}
 
-	let malavCommentsObj = {
+	let dhruvalLikeObj = {
+		body: {
+			playlistId: pId,
+			userId: dId
+		}
+	}
+
+	await likesComments.addLike(malavLikeObj)
+	await likesComments.addLike(mahirLikeObj)
+	await likesComments.addLike(dhruvalLikeObj)
+
+	let mahirCommentsObj = {
 		body: {
 			playlistId: pId,
 			userId: mahirId,
@@ -138,7 +178,17 @@ async function main() {
 		}
 	}
 
-	let malavComments = await likesComments.addComment(malavCommentsObj)
+	let malavCommentsObj = {
+		body: {
+			playlistId: pId,
+			userId: mId,
+			userName: malav.user.firstName,
+			content: 'Oh is it? :) Thanks'
+		}
+	}
+
+	await likesComments.addComment(mahirCommentsObj)
+	await likesComments.addComment(malavCommentsObj)
 
 	console.log('Done seeding database');
 	await db.close();
