@@ -407,7 +407,7 @@ module.exports = {
 
         user.playlistIds.push(playlistId)
 
-        const updatedInfo = await userCollection.updateOne({ _id: ObjectID(playlistId) }, { $set: user });
+        const updatedInfo = await userCollection.updateOne({ _id: ObjectID(userId) }, { $set: user });
 
         if (updatedInfo.modifiedCount === 0) {
             throw "Could not update playlist successfully";
