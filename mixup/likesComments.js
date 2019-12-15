@@ -110,7 +110,7 @@ module.exports = {
     async addComment(req) {
         let playlistId = req.params.pId
         let userId = req.session.userId
-        let content = req.params.content
+        let content = req.body.content
 
         utils.isString(playlistId, `playlistId ${playlistId}`)
         utils.isString(userId, `userId ${userId}`)
