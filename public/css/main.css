@@ -656,6 +656,13 @@ font-size:18pt;
  border: #000;
  width:400px;
 }
+.playlistName2{
+  font-size:18pt;
+   height:48px;
+   color: #2E76CF;
+   border: #000;
+   width:400px;
+  }
 .labelname{
 font-size: large;
 font-style: normal;
