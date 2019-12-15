@@ -15,20 +15,15 @@ This web application can be used to create and play cross-platform playlists usi
 
 Steps to take once file is downloaded on the local machine:
 
-Install all npm package modules
-Step 1: npm install
+Step 1: npm install - Install all npm package modules   
+Step 2: npm run seed - To populate the database with data   
+Step 3: npm start - To start the server at http://localhost:3000 
 
-To populate the database with data
-Step 2: npm run seed
-
-To start the server at http://localhost:3000 
-Step 3: npm start
 
 ## Running the tests
 
-1. In order to test the application, we've created a user with the following credentials:
-
-   Email: phill@gmail.com
+1. In order to test the application, we've created a user with the following credentials:   
+   Email: phill@gmail.com   
    Password: hello1234
 
    This user already contains valid access and refresh token for Spotify so authentication with spotify is not required for this particular test. 
