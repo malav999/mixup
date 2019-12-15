@@ -28,12 +28,8 @@ router.get("/homePage", async (req, res) => {
     if (!userId) {
         res.render("pages/login.handlebars")
     }
-
-
-
     try {
         const user = await userData.getUserDetailsById(req.session.userId);
-        console.log(user);
         res.render("pages/homePage.handlebars", { userData: user })
     } catch (e) {
         console.log('err', e)
@@ -45,15 +41,15 @@ router.get("/homePage", async (req, res) => {
 
 })
 
-router.post("/homePage", async (req, res) => {
-    let playlistname = req.body.playlistName;
+// router.post("/homePage", async (req, res) => {
+//     let playlistname = req.body.playlistName;
 
-    if (playlistname)
-        res.render("pages/createPlaylist", { playlistName: playlistname })
-    else {
-        alert("Enter playlist name");
-    }
-})
+//     if (playlistname)
+//         res.render("pages/createPlaylist", { playlistName: playlistname })
+//     else {
+//         alert("Enter playlist name");
+//     }
+// })
 
 
 

@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const mixup = require("../mixup");
+const mixup = require("../mixup"); 
+const userData = mixup.user;
 const playlistData = mixup.playlist;
 
 // router.use("/", async (req, res, next) => {
@@ -45,7 +46,8 @@ router.post("/create", async (req, res) => {
         }
         res.render('pages/createPlaylist');
     } catch (e) {
-        res.render('pages/homePage', { error: e });
+        const user = await userData.getUserDetailsById(req.session.userId);
+        res.render('pages/homePage', { userData: user ,error: e });
         console.log('err', e)
         // res.json(e)
     }

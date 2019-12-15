@@ -4,20 +4,25 @@ Create and play cross-platform playlists using two music streaming services, Spo
 
 ### Prerequisites
 
-The user will need a Spotify premium account in order to play songs on Spotify API.
+1. Spotify API requires Google chrome web browser.
+2. The user will need a Spotify 'premium account' in order to play songs on Spotify API and access     our website. 
+3. Please pause all advertisment and pop up blocker extensions on the web browser.
+4. 
 
 ### Installing
 
 Steps to take once file is downloaded on local machine:
 
 Install all npm package modules
-step 1: npm install
-To seed the database with data
-step 2: npm run seed 
+Step 1: npm install
+To populate the database with data
+Step 2: npm run seed
+To start server at http://localhost:3000 
+Step 3: npm start
 
 ## Running the tests
 
-Explain how to run the automated tests for this system
+
 
 ### Break down into end to end tests
 
