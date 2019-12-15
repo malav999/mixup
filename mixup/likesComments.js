@@ -25,7 +25,7 @@ module.exports = {
         let likesCommentsCollection = await likesComments();
         // get likes data by playlistId
 
-        let likeData = await likesCommentsCollection.findOne({ "playlistId": ObjectID(playlistId)})
+        let likeData = await likesCommentsCollection.findOne({ "playlistId": ObjectID(playlistId) })
 
         // If any user has already liked or commented on a specified playlist then the data will already exits
         // Add the given userId to like
@@ -34,7 +34,7 @@ module.exports = {
             likeData.userIds.push(userId)
 
             // Update likes
-            await likesCommentsCollection.updateOne({ _id: ObjectID(likeData._id) }, likeData)
+            await likesCommentsCollection.updateOne({ _id: ObjectID(likeData._id) }, { $set: likeData })
 
             return await this.getLikesCommentsById(likeData._id)
         }
@@ -110,31 +110,36 @@ module.exports = {
     async addComment(req) {
         let playlistId = req.params.pId
         let userId = req.session.userId
-        let userName = req.body.userName
-        let content = req.body.content
+        // let userName = req.body.userName
+        let content = req.params.content
 
         utils.isString(playlistId, `playlistId ${playlistId}`)
-        utils.isString(userName, `userName ${userName}`)
         utils.isString(userId, `userId ${userId}`)
         utils.isString(content, `content ${content}`)
 
         let commentCollection = await likesComments()
         // Get like-comment object by playlistId
-        let commentData = await commentCollection.findOne({ playlistId: playlistId })
+        let commentData = await commentCollection.findOne({ "playlistId": ObjectID(playlistId) })
 
         // If any user has already liked or commented on a specified playlist then the data will already exits
         // update comment obj
         if (commentData) {
+
             // Create a new comment object
-            let commentObj = {
-                userId: userId,
-                name: userName,
-                content: content
+            let commentObj = {}
+            commentObj.userId = userId
+            commentObj.content = content
+
+            let userCollection = await users()
+            let user = await userCollection.findOne({ _id: ObjectID(userId) })
+
+            if (user) {
+                commentObj.name = user.firstName
             }
 
             // add newly created comment obj to likes-comments
             commentData.comments.push(commentObj)
-            await commentCollection.updateOne({ _id: ObjectID(commentData._id) }, commentData)
+            await commentCollection.updateOne({ _id: ObjectID(commentData._id) }, { $set: commentData })
 
             return await this.getLikesCommentsById(commentData._id)
         }
