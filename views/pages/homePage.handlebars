@@ -55,8 +55,7 @@
     }
 
     .myBtn {
-      top:100px;
-      position: absolute;
+      position: relative;
       background-color: #2E76CF;
       border: none;
       color: white;
@@ -66,6 +65,8 @@
       display: inline-block;
       font-size: 20px;
       margin: 4px 2px;
+      height: 50px;
+      width: 300px;
       cursor: pointer;
     }
 
@@ -140,7 +141,7 @@
 
     /* Style the counter cards */
     .card {
-      top: 80px;
+
       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
       padding: 16px;
       text-align: center;
@@ -180,193 +181,110 @@
     </div>
   </nav>
 
-
-
-  {{!-- <form id="youtubeForm" method="GET" action="/homePage/youtube">
-    <button id="youtubebtn">youtube Player</button>
-  </form> --}}
-  {{!-- </form>
-  <form id="testing" method="GET" action="/playPlaylist/play/5df3fba8b31eabd3dcb347a9">
-    <button type="submit">Play Playlist</button>
-  </form> --}}
-
-  <!-- Trigger/Open The Modal -->
   <div>
-    <div><button id="myBtn" class="myBtn">Create Playlist</button></div>
-
-    <div>
-      <p class="errorspan">{{error}}</p>
-    </div>
-  </div>
-
-
-
-  <!-- The Modal -->
-  <div id="myModal" class="modal">
-
-    <!-- Modal content -->
-    <div class="modal-content">
-      <span class="close">&times;</span>
-
-      <p class="labelname">Add Playlist Name</p>
-
-      <form action="/playlist/create" method="post">
-        <label for="playlistName">Playlist Name</label>
-        <input type="text" placeholder="Playlist Name" id="playlistName" name="playlistName" class="playlistName"
-          required>
-        <button type="submit" class="myBtn" id="addplaylist">Create playlist</button>
-      </form>
-    </div>
-  </div>
-
-  <script>
-    // Get the modal
-    var modal = document.getElementById("myModal");
-
-    // Get the button that opens the modal
-    var btn1 = document.getElementById("myBtn");
-    var btn2 = document.getElementById("addplaylist");
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
-
-
-    // When the user clicks the button, open the modal 
-    btn1.onclick = function () {
-      modal.style.display = "block";
-    }
-    //will call the create playlist route
-
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function () {
-      modal.style.display = "none";
-    }
-
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function (event) {
-      if (event.target == modal) {
-        modal.style.display = "none";
-      }
-    }
-  </script>
-
-
-  <div>
-
-    <ul class="song-list">
-      <form id="play_btn_form" method="GET">
-        {{#each userData.userPlaylists}}
-        <div class="row">
-          <div class="column">
-            <div class="card">
-              <p class="playlt a2">{{this.playlist}}</p>
-              <button type="submit" class="play_button btn btn-light a2" name="{{this.playlistId}}">Play</button>
-            </div>
+    {{!-- top item --}}
+    <div style="height: 10%;width: 100%;text-align: left;">
+      <!-- Trigger/Open The Modal -->
+      <div style="padding-left: 5%;padding-top: 5%">
+        <div style="line-height: normal;display: flex;flex-direction:column;">
+          <div style="height: 50px">
+            <button id="myBtn" class="myBtn">Create Playlist</button>
+          </div>
+          <div>
+            <p class=" errorspan">{{error}}</p>
           </div>
         </div>
-        {{/each}}
+
+        <!-- The Modal -->
+        <div id="myModal" class="modal">
+
+          <!-- Modal content -->
+          <div class="modal-content">
+            <span class="close">&times;</span>
+
+            <p class="labelname">Add Playlist Name</p>
+
+            <form action="/playlist/create" method="post">
+              <label for="playlistName">Playlist Name</label>
+              <input type="text" placeholder="Playlist Name" id="playlistName" name="playlistName" class="playlistName"
+                required>
+              <button type="submit" class="myBtn" id="addplaylist">Create playlist</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        // Get the modal
+        var modal = document.getElementById("myModal");
+
+        // Get the button that opens the modal
+        var btn1 = document.getElementById("myBtn");
+        var btn2 = document.getElementById("addplaylist");
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+
+        // When the user clicks the button, open the modal 
+        btn1.onclick = function () {
+          modal.style.display = "block";
+        }
+        //will call the create playlist route
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+          modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        }
+      </script>
+    </div>
+    {{!-- bottom item --}}
+    <div>
+
+
+      <form id="play_btn_form" method="GET" style="display: flex;justify-content: center">
+        <ul class="song-list" style="display: flex;flex-direction: row;flex-wrap: wrap;width: 90%;">
+          {{#each userData.userPlaylists}}
+          <div style="padding: 5px;">
+            <div class="card" style="margin-top: 10px;">
+              <div class="">
+                <div class="" style="flex-direction: column;display: flex;">
+                  <p class="playlt a2">{{this.playlist}}</p>
+                  <button type="submit" class="play_button btn btn-light a2" name="{{this.playlistId}}">Play</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          {{/each}}
+        </ul>
       </form>
       <br>
+
+    </div>
+    <script>
+      function playSong(button) {
+        console.log(button.name)
+        var btn_id = button.name;
+        var myForm = document.getElementById("play_btn_form");
+        myForm.setAttribute("action", "/playPlaylist/play/" + btn_id)
+
+      }
+      let playList_list = document.getElementsByClassName("play_button");
+      for (let i = 0; i < playList_list.length; i++) {
+        playList_list[i].setAttribute("onclick", "playSong(this)")
+      }
+    </script>
+
     </ul>
-  </div>
-
-  <script>
-    function playSong(button) {
-      console.log(button.name)
-      var btn_id = button.name;
-      var myForm = document.getElementById("play_btn_form");
-      myForm.setAttribute("action", "/playPlaylist/play/" + btn_id)
-
-    }
-    let playList_list = document.getElementsByClassName("play_button");
-    for (let i = 0; i < playList_list.length; i++) {
-      playList_list[i].setAttribute("onclick", "playSong(this)")
-    }
-  </script>
-
-  </ul>
   </div>
 
 
 </body>
 
 </html>
-
-
-
-{{!-- <main> --}}
-
-
-
-{{!-- <script src="https://sdk.scdn.co/spotify-player.js"></script>
-  <script>
-    window.onSpotifyWebPlaybackSDKReady = () => {
-      // You can now initialize Spotify.Player and use the SDK
-      { { #if accessToken} }
-      var player = new Spotify.Player({
-        name: 'MixUp Player',
-        getOAuthToken: callback => {
-
-
-          callback('{{accessToken}}');
-        },
-        volume: 0.5
-      });
-
-      player.connect().then(success => {
-        if (success) {
-          console.log('The Web Playback SDK successfully connected to Spotify!');
-        }
-      })
-
-      player.addListener('ready', ({ device_id }) => {
-        console.log('The Web Playback SDK is ready to play music!');
-        console.log('Device ID', device_id);
-      })
-
-      {
-        {
-          /if}}
-        };
-  </script>
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-  <button id="sPlayBtn" class="Spotify">click me to play</button>
-
-
-
-
-  <script>
-        $(document).ready(function () {
-          var playBtn = $("#sPlayBtn");
-          $(playBtn).click(function () {
-            $.ajax({
-              method: 'GET',
-              url: '/spotify/play/spotify:album:6Fr2rQkZ383FcMqFyT7yPr',
-              success: function () {
-                console.log("song played successfully");
-              },
-              error: function (message) {
-                window.location.href = "http://localhost:3000/user/signin";
-              }
-            })
-          })
-        })
-  </script>
-
-
-
-  
-
-</main> --}}

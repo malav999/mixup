@@ -49,7 +49,16 @@
     </script>
 
 
-    <div class="wrap">
+
+</div>
+<div style="
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+">
+    <div class="" style="
+    margin-top: 10px;
+">
         <div class="search">
             <form id="myForm" method="post">
                 <label for="searchBar">Search</label>
@@ -63,101 +72,100 @@
 
         </form>
     </div>
-</div>
 
-
-
-<script>
-    function addSong(button) {
-        btn_id = button.id;
-        let songList = document.getElementsByClassName("song_button");
-        for (let i = 0; i < songList.length; i++) {
-            if (songList[i].id == btn_id) {
-
-
-                let songURI = document.getElementById(btn_id).value;
-
-
-                console.log(songURI);
-                //console.log(songList[i].name);
-
-
-
-
-                $(document).ready(function () {
-
-                    $.ajax({
-                        url: '/song/addSong',
-                        method: 'post',
-                        data: { "songURI": songURI, "songName": songList[i].name },
-                        dataType: "json",
-                        success: function (obj) {
-                            alert("success")
-                        },
-                        statusCode: {
-                            400: function () {
-                                alert('error');
-                            }
-                        }
-                        //error: function (obj) {
-                        //  alert("error")
-
-                        //}
-                    })
-
-                })
-            }
-        }
-    }
-</script>
-
-<div>
-
-    <ul class="song-list">
-        <div class="row">
-            <div class="column">
-                <div class="card">
-                    {{#each songs}}
-                    <li>
-                        <div class="song-item">
-                            <br>
-
-                            <p class="song a1"> {{this.song}}</p>
-                            <button type="button" class="song_button a1 btn btn-light" name="{{this.song}}"
-                                value="{{this.uri}}">Add</button>
-                            </br>
-                        </div>
-
-                    </li>
-
-                    {{/each}}
-                </div>
-            </div>
-        </div>
-        <script>
+    <script>
+        function addSong(button) {
+            btn_id = button.id;
             let songList = document.getElementsByClassName("song_button");
             for (let i = 0; i < songList.length; i++) {
-                songList[i].setAttribute("id", i)
-                songList[i].setAttribute("onclick", "addSong(this)")
+                if (songList[i].id == btn_id) {
+
+
+                    let songURI = document.getElementById(btn_id).value;
+
+
+                    console.log(songURI);
+                    //console.log(songList[i].name);
+
+
+
+
+                    $(document).ready(function () {
+
+                        $.ajax({
+                            url: '/song/addSong',
+                            method: 'post',
+                            data: { "songURI": songURI, "songName": songList[i].name },
+                            dataType: "json",
+                            success: function (obj) {
+                                alert("success")
+                            },
+                            statusCode: {
+                                400: function () {
+                                    alert('error');
+                                }
+                            }
+                            //error: function (obj) {
+                            //  alert("error")
+
+                            //}
+                        })
+
+                    })
+                }
             }
+        }
+    </script>
+
+    <div style="display: flex;justify-content: center;height: 10%;width: 100%;text-align: left; margin-top: 10px;">
+
+        <ul class="song-list" style="display: flex; flex-direction: column; width: 30%;">
+
+            {{#each songs}}
+            <div class="card" style="padding: 5px;margin:2px;">
+                <div style="margin-top: 10px;">
+                    <div class="">
+                        <div class="">
+                            <li>
+                                <div class="song-item" style="display: flex;">
+                                    <div style="width: 90%;">
+                                        <p class="song"> {{this.song}}</p>
+                                    </div>
+                                    <div style="color:blue">
+                                        <button type="button" class="song_button" name="{{this.song}}"
+                                            value="{{this.uri}}">Add</button>
+                                    </div>
+                                </div>
+                            </li>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </ul>
+    </div>
+    <script>
+        let songList = document.getElementsByClassName("song_button");
+        for (let i = 0; i < songList.length; i++) {
+            songList[i].setAttribute("id", i)
+            songList[i].setAttribute("onclick", "addSong(this)")
+        }
+
+    </script>
 
 
-        </script>
-    </ul>
-</div>
 
 
+    {{!-- Save play list button to go back to home page after creating a new playlist --}}
+    <div>
+        {{#if error}}
+        <span style="color:red; font-size:x-large;">{{error}}</span>
+        {{/if}}
+        <form method="GET" action="/playlist/savePlaylist">
+            <button class="btnsp" type="submit">
+                Save playlist
+            </button>
+        </form>
 
-
-{{!-- Save play list button to go back to home page after creating a new playlist --}}
-<div>
-    {{#if error}}
-    <span style="color:red; font-size:x-large;">{{error}}</span>
-    {{/if}}
-    <form method="GET" action="/playlist/savePlaylist">
-        <button class="btnsp" type="submit">
-            Save playlist
-        </button>
-    </form>
-
+    </div>
 </div>

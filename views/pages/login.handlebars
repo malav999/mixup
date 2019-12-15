@@ -2,27 +2,23 @@
     <div class="container-login100">
         <div class="wrap-login100">
             <form class="login100-form validate-form" id="login-form" action="/user/signin" method="post">
-                <span class="login100-form-title p-b-34">
+                <label class="login100-form-title p-b-17 p-t-17">
                     MixUp
-                </span>
+                </label>
 
                 <div class=" wrap-input100 rs1-wrap-input100 validate-input m-b-20">
-                    {{!-- <label for="validationDefault01">Email</label> --}}
-                    <label for="email" class="login100-form-title p-b-34">Email</label>
-                    <input type="email" class="input100 form-control" id="email" name="email" placeholder="Email"
-                        required>
+                    <label for="email" class="login100-form-title p-t-17 p-b-17">Email</label>
+                    <input type="email" class="input100 form-control" id="email" name="email" placeholder="Email" required="">
                     <span class="focus-input100"></span>
                 </div>
 
                 <div class="wrap-input100 rs2-wrap-input100 validate-input m-b-20">
-                    <label for="password" class="login100-form-title p-b-34">Password</label>
-                    {{!-- <label for="validationDefault02">Password</label> --}}
-                    <input type="password" class="input100 form-control" id="password" name="password"
-                        placeholder="Password" required>
+                    <label for="password" class="login100-form-title p-b-17 p-t-17">Password</label>
+                    <input type="password" class="input100 form-control" id="password" name="password" placeholder="Password" required="">
                     <span class="focus-input100"></span>
                 </div>
 
-                <span style="color:red; font-size:x-large;">{{error}}</span>
+                <span style="color:red; font-size:x-large;"></span>
 
                 <div class="container-login100-form-btn">
                     <button class="login100-form-btn">
