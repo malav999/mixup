@@ -19,13 +19,13 @@
                     Likes : {{this.likes}} <button id="like">Like</button>
                     </br>
                     </form>
-                    <form method="get" action="/likesComments/addComment/{{this.playlistId}}">  
+                    <form method="post" action="/likesComments/addComment/{{this.playlistId}}">  
                     <br>
                     Comment : {{this.comments}} 
                     </br>
                     <br>
-                        <input type="text"/>
-                        <button id="comment">Comment</button>
+                        <input type="text" id="content" name="content"/>
+                        <button type="submit" id="comment">Comment</button>
                     </br>
                     </form>
                 <form method="get" action= "/user/addPlaylist/{{this.playlistId}}">

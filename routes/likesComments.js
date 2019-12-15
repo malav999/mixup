@@ -26,7 +26,7 @@ router.get("/addLike/:pId", async (req, res) => {
     }
 });
 
-router.get("/addComment/:pId", async (req, res) => {
+router.post("/addComment/:pId", async (req, res) => {
     try {
         const likesComments = await likesCommentsData.addComment(req);
         console.log('likesComments', likesComments)
