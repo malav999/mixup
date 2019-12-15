@@ -14,6 +14,18 @@ router.get("/get", async (req, res) => {
   }
 });
 
+//to get user and user playlist's details
+router.post("/addPlaylis", async (req, res) => {
+  try {
+    const user = await userData.addPlaylistToUser(req);
+    res.json(user);
+  } catch (e) {
+    console.log('err', e)
+    res.json(e)
+  }
+});
+
+
 router.get("/signin", async (req, res) => {
   if (!req.session.userId) {
     res.render('pages/login');
@@ -47,10 +59,10 @@ router.post("/signin", async (req, res) => {
     //add userid in req.session 
     req.session.userId = user
     let spotifyStatus = await userData.checkSpotifyTokens(user);
-    if(spotifyStatus == true){
+    if (spotifyStatus == true) {
       res.redirect('/homePage/homePage');
     }
-    else{
+    else {
       res.redirect("/user/APILogIn");
     }
   } catch (e) {
@@ -76,7 +88,7 @@ router.get("/APILogIn", async (req, res) => {
 })
 
 //to log out the user
-router.get("/logout", async(req,res)=>{
+router.get("/logout", async (req, res) => {
   req.session.destroy();
   res.redirect("/user/signin")
 });

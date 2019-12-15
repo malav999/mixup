@@ -386,4 +386,34 @@ module.exports = {
         return userObj;
     },
 
+    /**
+     * Add playlist to another user
+     * @param {*} req 
+     */
+    async addPlaylistToUser(req) {
+        let userId = req.session.userId
+        let playlistId = req.body.playlistId
+
+        utils.isString(userId, `userId ${userId}`)
+        utils.isString(playlistId, `playlistId ${playlistId}`)
+
+        let userCollection = await users()
+        let user = await userCollection.findOne({ _id: ObjectID(userId) })
+
+        if (undefined === user && user === null) {
+            console.log(`User not found for userId ${userId}`)
+            throw `User not found`
+        }
+
+        user.playlistIds.push(playlistId)
+
+        const updatedInfo = await userCollection.updateOne({ _id: ObjectID(playlistId) }, { $set: user });
+
+        if (updatedInfo.modifiedCount === 0) {
+            throw "Could not update playlist successfully";
+        }
+
+        return this.getUserById(user._id)
+    }
+
 };
